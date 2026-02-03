@@ -1,10 +1,10 @@
 # Estado Atual do Projeto
-> Última atualização: 2026-02-03 (/init-engram)
+> Última atualização: 2026-02-03 (/learn após /init-engram)
 
 ## Status Geral
-- **Fase**: Produção v2.0.0 — pronto para uso
-- **Saúde**: 🟢 Saudável
-- **Próximo Marco**: Testar em projetos reais + evoluir com feedback
+- **Fase**: Produção v2.0.0 — testado e pronto para uso
+- **Saúde**: 🟢 Saudável (Health Score 100%)
+- **Próximo Marco**: Testar em projetos reais de produção
 
 ## Identidade
 **Engram v2** — Sistema metacircular de memória persistente para Claude Code.
@@ -70,9 +70,11 @@ genesis → evolui componentes → ciclo recomeça
 /init-engram, /status, /plan, /commit, /review, /priorities, /learn, /create, /spawn, /doctor, /curriculum, /export, /import
 
 ## O Que Mudou Recentemente
-- [2026-02-03] Engram v2.0.0 — primeira versão pública | Impacto: ALTO
-- [2026-02-03] Sistema metacircular funcionando | Impacto: ALTO
-- [2026-02-03] /init-engram completado | Impacto: ALTO
+- [2026-02-03] /learn executado — tracking de uso funcionando | Impacto: MÉDIO
+- [2026-02-03] Commit feat(engram) — 61 arquivos, 6002 linhas | Impacto: ALTO
+- [2026-02-03] Skill python-scripts criado via genesis | Impacto: MÉDIO
+- [2026-02-03] Knowledge files populados com dados reais | Impacto: ALTO
+- [2026-02-03] /init-engram completado com health 100% | Impacto: ALTO
 
 ## Dívidas Técnicas
 | Item | Severidade | Descrição |
@@ -84,8 +86,20 @@ genesis → evolui componentes → ciclo recomeça
 ## Bloqueios Conhecidos
 Nenhum bloqueio ativo.
 
+## Métricas de Uso (desta sessão)
+| Componente | Ativações | Status |
+|------------|-----------|--------|
+| engram-genesis | 2 | 🟢 Ativo |
+| engram-evolution | 2 | 🟢 Ativo |
+| python-scripts | 1 | 🟢 Novo |
+| project-analyzer | 1 | 🟢 Ativo |
+| architect | 0 | ⚪ Não usado |
+| db-expert | 0 | ⚪ Não usado |
+| domain-analyst | 0 | ⚪ Não usado |
+
 ## Contexto Para Próxima Sessão
-- O projeto está funcional e pronto para uso
-- Testar em projetos reais de diferentes stacks
-- Coletar feedback via /learn para evoluir o sistema
+- Sistema 100% funcional, testado com /init-engram + /learn + /commit
+- Próximo passo: testar em projeto real (Next.js ou Python)
+- Agents (architect, db-expert, domain-analyst) ainda não foram usados — testar
 - Considerar adicionar mais templates em templates/stacks/
+- __pycache__/ foi commitado — considerar adicionar ao .gitignore

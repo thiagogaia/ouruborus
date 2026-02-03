@@ -67,6 +67,24 @@
 
 ---
 
+## EXP-008: Ciclo Completo /init-engram + /learn + /commit
+- **Contexto**: Primeira inicialização completa do Engram em um projeto
+- **Stack**: /init-engram, /learn, /commit
+- **Abordagem**: 1) /init-engram popula knowledge files 2) Gera skills específicos 3) /commit com mensagem semântica 4) /learn registra uso e evolui
+- **Resultado**: Sucesso — health 100%, 61 arquivos commitados, tracking funcionando
+- **Data**: 2026-02-03
+
+---
+
+## EXP-009: Registrar Co-ativações de Skills
+- **Contexto**: Quero saber quais skills são usados juntos para detectar oportunidades de composição
+- **Stack**: co_activation.py
+- **Abordagem**: `co_activation.py --log-session --skills skill1,skill2,skill3 --project-dir .`
+- **Resultado**: Sucesso — sessão registrada para análise futura
+- **Data**: 2026-02-03
+
+---
+
 ## Regras da Library
 - Máximo 50 experiências (descartar as mais antigas se necessário)
 - Cada experiência: máximo 10 linhas

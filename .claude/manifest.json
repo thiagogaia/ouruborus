@@ -1,7 +1,7 @@
 {
   "engram_version": "2.0.0",
   "installed_at": "2026-02-03T16:22:02-03:00",
-  "last_updated": "2026-02-03T16:28:18.942931",
+  "last_updated": "2026-02-03T16:32:27.996003",
   "components": {
     "skills": {
       "engram-genesis": {
@@ -9,8 +9,8 @@
         "source": "core",
         "created_at": "2026-02-03T16:22:02-03:00",
         "updated_at": "2026-02-03T16:22:02-03:00",
-        "activations": 1,
-        "last_used": "2026-02-03T16:27:00-03:00",
+        "activations": 2,
+        "last_used": "2026-02-03T16:32:26.167052",
         "health": "active"
       },
       "engram-evolution": {
@@ -18,8 +18,8 @@
         "source": "core",
         "created_at": "2026-02-03T16:22:02-03:00",
         "updated_at": "2026-02-03T16:22:02-03:00",
-        "activations": 1,
-        "last_used": "2026-02-03T16:27:00-03:00",
+        "activations": 2,
+        "last_used": "2026-02-03T16:32:26.798760",
         "health": "active"
       },
       "python-scripts": {
@@ -27,8 +27,8 @@
         "source": "genesis",
         "created_at": "2026-02-03T16:27:10.837879",
         "updated_at": "2026-02-03T16:27:10.837879",
-        "activations": 0,
-        "last_used": null,
+        "activations": 1,
+        "last_used": "2026-02-03T16:32:27.434496",
         "health": "active"
       },
       "project-analyzer": {
@@ -36,8 +36,8 @@
         "source": "seed",
         "created_at": "2026-02-03T16:28:18.942919",
         "updated_at": "2026-02-03T16:28:18.942919",
-        "activations": 0,
-        "last_used": null,
+        "activations": 1,
+        "last_used": "2026-02-03T16:32:27.995996",
         "health": "active"
       }
     },
