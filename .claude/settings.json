@@ -1,0 +1,19 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run:*)",
+      "Bash(npx:*)",
+      "Bash(docker compose:*)",
+      "Bash(git add:*)", "Bash(git status:*)", "Bash(git commit:*)",
+      "Bash(git log:*)", "Bash(git diff:*)", "Bash(git branch:*)",
+      "Bash(cat:*)", "Bash(ls:*)", "Bash(find:*)", "Bash(grep:*)",
+      "Bash(head:*)", "Bash(tail:*)", "Bash(wc:*)", "Bash(mkdir:*)",
+      "Bash(echo:*)", "Bash(python3:*)",
+      "Read", "Write", "Edit", "Glob", "Grep"
+    ],
+    "deny": [
+      "Bash(rm -rf /)*",
+      "Read(.env)", "Read(.env.local)", "Read(.env.production)"
+    ]
+  }
+}
