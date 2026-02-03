@@ -1,5 +1,5 @@
 # Estado Atual do Projeto
-> Última atualização: 2026-02-03 (/learn após /init-engram)
+> Última atualização: 2026-02-03 (/learn sessão de análise arquitetural)
 
 ## Status Geral
 - **Fase**: Produção v2.0.0 — testado e pronto para uso
@@ -70,11 +70,11 @@ genesis → evolui componentes → ciclo recomeça
 /init-engram, /status, /plan, /commit, /review, /priorities, /learn, /create, /spawn, /doctor, /curriculum, /export, /import
 
 ## O Que Mudou Recentemente
+- [2026-02-03] Análise arquitetural profunda: subagentes e orquestração | Impacto: MÉDIO
+- [2026-02-03] Documentação das vantagens do modelo sequencial | Impacto: MÉDIO
 - [2026-02-03] /learn executado — tracking de uso funcionando | Impacto: MÉDIO
 - [2026-02-03] Commit feat(engram) — 61 arquivos, 6002 linhas | Impacto: ALTO
 - [2026-02-03] Skill python-scripts criado via genesis | Impacto: MÉDIO
-- [2026-02-03] Knowledge files populados com dados reais | Impacto: ALTO
-- [2026-02-03] /init-engram completado com health 100% | Impacto: ALTO
 
 ## Dívidas Técnicas
 | Item | Severidade | Descrição |
@@ -86,20 +86,20 @@ genesis → evolui componentes → ciclo recomeça
 ## Bloqueios Conhecidos
 Nenhum bloqueio ativo.
 
-## Métricas de Uso (desta sessão)
+## Métricas de Uso (acumulado)
 | Componente | Ativações | Status |
 |------------|-----------|--------|
 | engram-genesis | 2 | 🟢 Ativo |
-| engram-evolution | 2 | 🟢 Ativo |
+| engram-evolution | 3 | 🟢 Ativo |
 | python-scripts | 1 | 🟢 Novo |
-| project-analyzer | 1 | 🟢 Ativo |
+| project-analyzer | 2 | 🟢 Ativo |
 | architect | 0 | ⚪ Não usado |
 | db-expert | 0 | ⚪ Não usado |
 | domain-analyst | 0 | ⚪ Não usado |
 
 ## Contexto Para Próxima Sessão
-- Sistema 100% funcional, testado com /init-engram + /learn + /commit
-- Próximo passo: testar em projeto real (Next.js ou Python)
-- Agents (architect, db-expert, domain-analyst) ainda não foram usados — testar
+- Sistema 100% funcional, Health Score 100%
+- Análise arquitetural concluída: modelo sequencial é vantagem deliberada
+- Agents (architect, db-expert, domain-analyst) marcados como stale mas são novos — testar em próxima sessão
+- Próximo passo: testar em projeto real (Next.js ou Python) para validar o ciclo completo
 - Considerar adicionar mais templates em templates/stacks/
-- __pycache__/ foi commitado — considerar adicionar ao .gitignore
