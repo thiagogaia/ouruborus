@@ -1,9 +1,9 @@
 {
   "version": "1.0",
   "meta": {
-    "saved_at": "2026-02-03T21:34:28.051531",
-    "node_count": 61,
-    "edge_count": 97
+    "saved_at": "2026-02-03T21:50:51.248717",
+    "node_count": 68,
+    "edge_count": 106
   },
   "nodes": {
     "a52ceda2": {
@@ -1222,6 +1222,184 @@
         "created_at": "2026-02-03T21:34:28.051400",
         "decay_rate": 0.01
       }
+    },
+    "78161cc1": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "Feature",
+        "BrainDomain"
+      ],
+      "props": {
+        "title": "feat(brain): implement organizational brain with graph and embeddings",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-feat-brain-implement-organizational-brain-with-gra-78161cc1.md",
+        "summary": "feat(brain): implement organizational brain with graph and embeddings Complete implementation of the organizational memory system: Files changed: .claude/brain/README.md, .claude/brain/brain.py, .c...",
+        "commit_hash": "d94adec4",
+        "date": "2026-02-03",
+        "commit_type": "feat",
+        "scope": "brain",
+        "files_count": 10
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.139124",
+        "created_at": "2026-02-03T21:50:42.139124",
+        "decay_rate": 0.01
+      }
+    },
+    "7463a6ea": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "Documentation",
+        "KnowledgeDomain"
+      ],
+      "props": {
+        "title": "docs(knowledge): add brain architecture ADRs and update state",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-docs-knowledge-add-brain-architecture-adrs-and-upd-7463a6ea.md",
+        "summary": "docs(knowledge): add brain architecture ADRs and update state - ADR-008: Git-Native Architecture with Knowledge Graph Files changed: .claude/evolution-activations.json, .claude/knowledge/context/CU...",
+        "commit_hash": "5da6535c",
+        "date": "2026-02-03",
+        "commit_type": "docs",
+        "scope": "knowledge",
+        "files_count": 6
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.139813",
+        "created_at": "2026-02-03T21:50:42.139813",
+        "decay_rate": 0.01
+      }
+    },
+    "6b1212bc": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "Feature",
+        "EngramgenesisDomain"
+      ],
+      "props": {
+        "title": "feat(engram-genesis): add backup migration system for /init-engram",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-feat-engram-genesis-add-backup-migration-system-fo-6b1212bc.md",
+        "summary": "feat(engram-genesis): add backup migration system for /init-engram Implements intelligent backup detection, analysis and migration: Files changed: .claude/commands/init-engram.md, .claude/settings....",
+        "commit_hash": "c76aa256",
+        "date": "2026-02-03",
+        "commit_type": "feat",
+        "scope": "engram-genesis",
+        "files_count": 5
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.139980",
+        "created_at": "2026-02-03T21:50:42.139980",
+        "decay_rate": 0.01
+      }
+    },
+    "95f0b5bb": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "Documentation",
+        "KnowledgeDomain"
+      ],
+      "props": {
+        "title": "docs(knowledge): record architectural analysis on orchestration model",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-docs-knowledge-record-architectural-analysis-on-or-95f0b5bb.md",
+        "summary": "docs(knowledge): record architectural analysis on orchestration model - Document analysis of sequential vs parallel execution model Files changed: .claude/evolution-activations.json, .claude/knowle...",
+        "commit_hash": "6d7c3077",
+        "date": "2026-02-03",
+        "commit_type": "docs",
+        "scope": "knowledge",
+        "files_count": 4
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.140111",
+        "created_at": "2026-02-03T21:50:42.140111",
+        "decay_rate": 0.01
+      }
+    },
+    "1dd0c7c3": {
+      "labels": [
+        "Episode",
+        "Commit"
+      ],
+      "props": {
+        "title": "chore: add .gitignore and update knowledge after /learn",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-chore-add-gitignore-and-update-knowledge-after-lea-1dd0c7c3.md",
+        "summary": "chore: add .gitignore and update knowledge after /learn - Add .gitignore for __pycache__, IDE files, env files Files changed: .claude/evolution-activations.json, .claude/knowledge/context/CURRENT_S...",
+        "commit_hash": "774b6c58",
+        "date": "2026-02-03",
+        "commit_type": "chore",
+        "scope": null,
+        "files_count": 10
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.140240",
+        "created_at": "2026-02-03T21:50:42.140240",
+        "decay_rate": 0.01
+      }
+    },
+    "5fe44cd3": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "Feature",
+        "EngramDomain"
+      ],
+      "props": {
+        "title": "feat(engram): complete /init-engram with populated knowledge and new skill",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-feat-engram-complete-init-engram-with-populated-kn-5fe44cd3.md",
+        "summary": "feat(engram): complete /init-engram with populated knowledge and new skill - Populate all 6 knowledge files with real project data: Files changed: .claude/.engram-version, .claude/agents/architect....",
+        "commit_hash": "264072a6",
+        "date": "2026-02-03",
+        "commit_type": "feat",
+        "scope": "engram",
+        "files_count": 10
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.140359",
+        "created_at": "2026-02-03T21:50:42.140359",
+        "decay_rate": 0.01
+      }
+    },
+    "be4a3ab1": {
+      "labels": [
+        "Episode",
+        "Commit"
+      ],
+      "props": {
+        "title": "a",
+        "author": "@thiagogaia",
+        "content_path": "memory/episodes/2026-02-03-a-be4a3ab1.md",
+        "summary": "a Files changed: N/A",
+        "commit_hash": "bbcc8777",
+        "date": "2026-02-03",
+        "commit_type": "other",
+        "scope": null,
+        "files_count": 0
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-03T21:50:42.140486",
+        "created_at": "2026-02-03T21:50:42.140486",
+        "decay_rate": 0.01
+      }
     }
   },
   "edges": [
@@ -1229,777 +1407,743 @@
       "src": "a52ceda2",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.978967"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "a52ceda2",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979047"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "ee7eb926",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979181"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "ee7eb926",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979204"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "49d27394",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979316"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "49d27394",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979333"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "442d2f41",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979428"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "442d2f41",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979449"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "a4d710c9",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979550"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "a4d710c9",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979566"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "3234b3e3",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979661"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "3234b3e3",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979677"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "bcec1e40",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979773"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "bcec1e40",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979791"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "e57d240c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979902"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "e57d240c",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.979950"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "7b1fcb34",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980036"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "7b1fcb34",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980060"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "2638f530",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980139"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "2638f530",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980159"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "9310bbae",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980251"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "9310bbae",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980288"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "ed9c6f35",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.980944"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "507ab390",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981029"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "507ab390",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981040"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "2477137c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981114"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "7f1b7fc0",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981197"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "7f1b7fc0",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981209"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "582c6d8e",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981297"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "582c6d8e",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981306"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "4c95e120",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981389"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "4c95e120",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981398"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "f37972df",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981481"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "f37972df",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981489"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "83389b13",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981572"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "83389b13",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981580"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "b7eeca3f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981655"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "b7eeca3f",
       "tgt": "domain-testing",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981665"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "aa7df3e8",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981744"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "aa7df3e8",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981753"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "bc660740",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981831"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "bc660740",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981839"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "130b74cb",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981918"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "130b74cb",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.981927"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "be485898",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982011"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "03f48948",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982092"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "03f48948",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982100"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "4c8fe0fb",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982177"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "4c8fe0fb",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982185"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "76918b1d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982273"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "76918b1d",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982281"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "805185e1",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982365"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "805185e1",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982373"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "4d3e2c93",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982452"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "4d3e2c93",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982458"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "006a5881",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982542"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "006a5881",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982550"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "166da41d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982630"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "46a30545",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982713"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "46a30545",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982719"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "e1d6fff2",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982793"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "e1d6fff2",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982800"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "7a135a62",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982875"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "7a135a62",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982882"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "0c94c63e",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.982958"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "1ae74437",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983042"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "1ae74437",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983049"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "e6447296",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983125"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "635af67f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983312"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "635af67f",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983318"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "55501c4b",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983669"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "55501c4b",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983680"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "848cbb2d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983770"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "848cbb2d",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983787"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "43f7e06f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983870"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "43f7e06f",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983885"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "3b9b10fd",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983971"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "3b9b10fd",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.983985"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "6f740934",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984073"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "6f740934",
       "tgt": "domain-testing",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984087"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "02a48240",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984172"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "02a48240",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984186"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "c8be5372",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984266"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "c8be5372",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984276"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "69c0e925",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984358"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "69c0e925",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984375"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "c3ac2a3a",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984461"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "c3ac2a3a",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984473"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "96f2c2d1",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984561"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "96f2c2d1",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984574"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "389d2742",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:27.984701"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "50ec5f8c",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:28.050982"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "50ec5f8c",
       "tgt": "domain-database",
       "type": "BELONGS_TO",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:28.051009"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "c0408c0f",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:28.051147"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "28e6f731",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:28.051267"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "a1516559",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:28.051381"
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "13ef8a7c",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.5,
-      "props": {},
-      "created_at": "2026-02-03T21:34:28.051479"
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "78161cc1",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "7463a6ea",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "7463a6ea",
+      "tgt": "domain-infra",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "6b1212bc",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "6b1212bc",
+      "tgt": "domain-database",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "95f0b5bb",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "1dd0c7c3",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "5fe44cd3",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "be4a3ab1",
+      "tgt": "person-thiagogaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
     }
   ]
 }

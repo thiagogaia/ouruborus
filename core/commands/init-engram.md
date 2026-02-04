@@ -131,11 +131,68 @@ Preencher knowledge files com dados reais:
 - **Se houve migração**: manter experiências do backup
 - Caso contrário: criar vazia (será populada pelo /learn)
 
-## Fase 5: Health Check
+## Fase 5: Popular Cérebro Organizacional
+
+O cérebro em `.claude/brain/` deve ser populado com conhecimento existente.
+
+### 5.1 Verificar venv do Brain
+```bash
+# Verifica se venv existe e ativa
+if [[ -d ".claude/brain/.venv" ]]; then
+    source .claude/brain/.venv/bin/activate
+fi
+```
+
+### 5.2 Popular com conhecimento existente
+
+Processar ADRs, conceitos de domínio, patterns e commits:
+```bash
+python3 .claude/brain/populate.py all
+```
+
+Isso irá:
+- Extrair ADRs do ADR_LOG.md
+- Extrair conceitos do DOMAIN.md (glossário, regras, entidades)
+- Extrair patterns do PATTERNS.md
+- Processar últimos 7000 commits do git (memória episódica)
+
+### 5.3 Gerar Embeddings para Busca Semântica
+```bash
+python3 .claude/brain/embeddings.py build
+```
+
+### 5.4 Verificar Saúde do Cérebro
+```bash
+python3 .claude/brain/cognitive.py health
+```
+
+Se `status: healthy`, continuar. Se não, seguir recomendações.
+
+### 5.5 Reportar ao Dev
+```
+🧠 Cérebro Organizacional Populado
+══════════════════════════════════
+
+Memórias criadas:
+  📋 [X] ADRs (decisões arquiteturais)
+  📚 [Y] Conceitos (glossário + regras)
+  🔄 [Z] Patterns (padrões aprovados)
+  📝 [W] Commits (memória episódica)
+
+Total: [N] nós, [M] arestas
+Grau médio: [G] (conectividade)
+Embeddings: [E] vetores gerados
+
+Status: 🟢 Saudável
+```
+
+---
+
+## Fase 6: Health Check
 
 Executar `/doctor` para validar a instalação completa.
 
-## Fase 6: Cleanup e Relatório Final
+## Fase 7: Cleanup e Relatório Final
 
 1. **Se houve backup na Fase 0**, execute cleanup:
 ```bash
@@ -157,6 +214,7 @@ python3 .claude/skills/engram-genesis/scripts/migrate_backup.py --project-dir . 
 ✅ Componentes gerados: X skills, Y agents
 ✅ Migrados do backup: Z items
 ✅ Knowledge populado: 6 arquivos
+✅ Cérebro populado: N nós, M arestas, E embeddings
 ✅ Health check: PASSED
 
 🗑️  Backups removidos (migração concluída)
@@ -168,4 +226,5 @@ Próximos passos sugeridos:
 
 Use /status para ver o estado atual.
 Use /learn após cada sessão para retroalimentar.
+Use .claude/brain/maintain.sh health para ver saúde do cérebro.
 ```

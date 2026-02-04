@@ -2,8 +2,9 @@
 set -euo pipefail
 
 # ═══════════════════════════════════════════════════════════════
-# 🐍 Engram v2 — Auto-Installer (Metacircular)
+# 🐍 Engram v3 — Auto-Installer (Metacircular)
 #    Sistema de memória persistente para Claude Code
+#    Com Cérebro Organizacional (grafo + embeddings)
 # ═══════════════════════════════════════════════════════════════
 # Uso:
 #   ./setup.sh                  → instala no diretório atual
@@ -12,15 +13,16 @@ set -euo pipefail
 #   ./setup.sh --update /proj   → atualiza core sem tocar knowledge
 #   ./setup.sh --uninstall /proj → remove Engram
 #
-# O que faz (v2 — metacircular):
+# O que faz (v3 — com cérebro organizacional):
 #   1. Detecta a stack do projeto automaticamente
 #   2. Instala o DNA (schemas) + Genesis (motor de auto-geração)
 #   3. Instala seeds universais + Evolution (motor de evolução)
-#   4. Gera CLAUDE.md customizado e settings.json
-#   5. O /init-engram usa genesis para gerar o RESTO sob demanda
+#   4. Instala Brain (cérebro organizacional com grafo + embeddings)
+#   5. Gera CLAUDE.md customizado e settings.json
+#   6. O /init-engram popula o cérebro e gera componentes sob demanda
 # ═══════════════════════════════════════════════════════════════
 
-VERSION="2.0.0"
+VERSION="3.0.0"
 
 # ── Argument handling ─────────────────────────────────────────
 

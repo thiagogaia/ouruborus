@@ -37,6 +37,20 @@
 
 - **Feedback Loop**: Ciclo de retroalimentação. No Engram: trabalhar → registrar aprendizado → consultar na próxima vez.
 
+- **Brain (Cérebro Organizacional)**: Sistema de memória com grafo de conhecimento em `.claude/brain/`. Usa NetworkX para nós e arestas, embeddings para busca semântica.
+
+- **Spreading Activation**: Técnica de busca em grafos. A partir de nós semente, propaga ativação pelos vizinhos com decay. Encontra conhecimento relacionado indiretamente.
+
+- **Curva de Ebbinghaus**: Modelo de esquecimento. strength = e^(-decay_rate × dias). Memórias menos acessadas enfraquecem gradualmente.
+
+- **Embeddings**: Representação vetorial de texto para busca semântica. Usa sentence-transformers (local) ou OpenAI API.
+
+- **Consolidação**: Processo cognitivo semanal. Fortalece conexões entre nós co-acessados, detecta padrões emergentes.
+
+- **Decay (Esquecimento)**: Processo cognitivo diário. Aplica curva de Ebbinghaus, marca memórias fracas para possível arquivo.
+
+- **Memory Labels**: Tipos de memória no grafo: Episode (episódica), Concept (semântica), Pattern (procedural), Decision (ADR), Person, Domain.
+
 ## Regras de Negócio
 
 - **RN-001**: Todo componente DEVE seguir seu schema correspondente

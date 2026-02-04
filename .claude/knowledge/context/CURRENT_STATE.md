@@ -1,14 +1,14 @@
 # Estado Atual do Projeto
-> Última atualização: 2026-02-03 (Cérebro populado e integrado)
+> Última atualização: 2026-02-03 (/learn após implementação do cérebro)
 
 ## Status Geral
-- **Fase**: v3.1 — Cérebro Organizacional populado e integrado
+- **Fase**: v3.0.0 — Engram com Cérebro Organizacional
 - **Saúde**: 🟢 Saudável (Health Score 100%)
-- **Próximo Marco**: Instalar dependências (networkx, numpy) e testar busca semântica
+- **Próximo Marco**: Testar reinstalação em projeto existente
 
 ## Identidade
-**Engram v2** — Sistema metacircular de memória persistente para Claude Code.
-O sistema que gera a si mesmo (ouroboros).
+**Engram v3** — Sistema metacircular de memória persistente para Claude Code.
+O sistema que gera a si mesmo (ouroboros), agora com cérebro organizacional.
 
 ## Arquitetura Core
 
@@ -32,13 +32,60 @@ engram/
 
 ### Fluxo de Dados
 ```
-setup.sh → instala DNA (schemas) + genesis + evolution + seeds
+setup.sh → instala DNA (schemas) + genesis + evolution + seeds + brain
               ↓
-/init-engram → genesis analisa projeto → gera skills customizados
+/init-engram → genesis analisa projeto → popula cérebro → gera skills
               ↓
-/learn → evolution rastreia uso → propõe melhorias
+/learn → evolution rastreia uso → cria memórias → propõe melhorias
               ↓
 genesis → evolui componentes → ciclo recomeça
+```
+
+### Ciclo Metacircular Completo
+```
+                    ┌─────────────────────────────┐
+                    │       ENGRAM-GENESIS        │
+                    │   (Motor de Auto-Geração)   │
+                    └──────────────┬──────────────┘
+                                   │
+        ┌──────────────────────────┼──────────────────────────┐
+        ▼                          ▼                          ▼
+   ┌─────────┐              ┌─────────────┐            ┌──────────┐
+   │ /create │              │ /init-engram │            │ Gera a   │
+   │         │              │              │            │ si mesmo │
+   └────┬────┘              └──────┬──────┘            └────┬─────┘
+        │                          │                        │
+        ▼                          ▼                        ▼
+   Gera skill,              Popular brain,          Capacidade
+   agent ou                 gerar skills,           metacircular
+   command                  knowledge
+        │                          │                        │
+        └──────────────────────────┼────────────────────────┘
+                                   ▼
+                    ┌─────────────────────────────┐
+                    │      ENGRAM-EVOLUTION       │
+                    │    (Motor de Evolução)      │
+                    └──────────────┬──────────────┘
+                                   │
+        ┌──────────────────────────┼──────────────────────────┐
+        ▼                          ▼                          ▼
+   ┌─────────┐              ┌──────────┐              ┌──────────┐
+   │ /learn  │              │ /doctor  │              │ Propõe   │
+   │         │              │          │              │ melhorias│
+   └────┬────┘              └────┬─────┘              └────┬─────┘
+        │                        │                         │
+        ▼                        ▼                         ▼
+   Rastreia uso,          Verifica saúde,          Merge, split,
+   co-ativações,          inconsistências          archive
+   cria memórias
+        │                        │                         │
+        └────────────────────────┴─────────────────────────┘
+                                 │
+                                 ▼
+                    ┌─────────────────────────────┐
+                    │         RETROALIMENTA       │
+                    │         ENGRAM-GENESIS      │
+                    └─────────────────────────────┘
 ```
 
 ## Componentes Instalados

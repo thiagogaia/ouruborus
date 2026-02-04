@@ -32,6 +32,10 @@
 | Gerar skill python-scripts | ✅ Concluído | 2026-02-03 |
 | Rodar /learn inicial | ✅ Concluído | 2026-02-03 |
 | Commit inicial com 61 arquivos | ✅ Concluído | 2026-02-03 |
+| Implementar cérebro organizacional | ✅ Concluído | 2026-02-03 |
+| Popular cérebro com ADRs/patterns/commits | ✅ Concluído | 2026-02-03 |
+| Integrar brain no /learn e /init-engram | ✅ Concluído | 2026-02-03 |
+| Gerar embeddings para busca semântica | ✅ Concluído | 2026-02-03 |
 
 ## Como Priorizar
 

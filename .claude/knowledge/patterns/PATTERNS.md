@@ -100,6 +100,24 @@
   - Cleanup na Fase 6 após sucesso
 - **Descoberto em**: 2026-02-03
 
+### PAT-012: Venv Isolado para Brain
+- **Contexto**: dependências Python pesadas (torch, sentence-transformers)
+- **Solução**: criar venv em `.claude/brain/.venv`
+  - setup.sh cria e instala deps automaticamente
+  - Scripts do brain ativam venv antes de executar
+  - Evita conflitos com Python do sistema
+  - Permite embeddings locais sem cloud
+- **Exemplo**: `source .claude/brain/.venv/bin/activate && python3 brain.py stats`
+- **Descoberto em**: 2026-02-03
+
+### PAT-013: Integração de Features em Commands Existentes
+- **Contexto**: nova feature que complementa workflow existente
+- **Solução**: adicionar fase ao command existente em vez de criar novo
+  - /init-engram: Fase 5 para popular cérebro
+  - /learn: Fase 4 para criar memórias
+  - Mantém fluxo único e intuitivo
+- **Descoberto em**: 2026-02-03
+
 ## Anti-Padrões
 
 ### ANTI-001: Pular Feedback Loop
