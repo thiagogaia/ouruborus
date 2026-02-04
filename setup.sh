@@ -382,17 +382,83 @@ install_brain_deps() {
     # Check if python3 is available
     if ! command -v python3 &>/dev/null; then
         print_warn "Python3 não encontrado. Dependências do Brain não instaladas."
-        print_warn "Instale manualmente: pip install networkx numpy sentence-transformers"
+        print_warn "Instale Python3 e execute novamente, ou instale manualmente:"
+        print_warn "  pip install networkx numpy sentence-transformers"
         return
     fi
 
+    # Get Python version for venv package name
+    local PYTHON_VERSION
+    PYTHON_VERSION=$(python3 -c 'import sys; print(f"{sys.version_info.major}.{sys.version_info.minor}")' 2>/dev/null || echo "3")
+
+    # Function to check if we're on Debian/Ubuntu (includes WSL)
+    is_debian_based() {
+        [[ -f /etc/debian_version ]] || [[ -f /etc/lsb-release ]] || grep -qi "ubuntu\|debian" /etc/os-release 2>/dev/null
+    }
+
+    # Function to install python3-venv on Debian/Ubuntu
+    install_venv_package() {
+        local PKG="python${PYTHON_VERSION}-venv"
+        print_step "Tentando instalar ${PKG} automaticamente..."
+
+        if command -v sudo &>/dev/null; then
+            # Try with sudo
+            if sudo -n true 2>/dev/null; then
+                # Passwordless sudo available
+                sudo apt-get update -qq 2>/dev/null
+                sudo apt-get install -y -qq "$PKG" 2>/dev/null && return 0
+            else
+                # Need password - ask user
+                print_step "Precisamos de permissão para instalar ${PKG}..."
+                sudo apt-get update -qq 2>/dev/null
+                sudo apt-get install -y "$PKG" 2>/dev/null && return 0
+            fi
+        fi
+
+        # Try without sudo (rootless container or already root)
+        if [[ $EUID -eq 0 ]]; then
+            apt-get update -qq 2>/dev/null
+            apt-get install -y -qq "python${PYTHON_VERSION}-venv" 2>/dev/null && return 0
+        fi
+
+        return 1
+    }
+
     # Create venv if it doesn't exist
     if [[ ! -d "$VENV_DIR" ]]; then
-        python3 -m venv "$VENV_DIR" 2>/dev/null || {
-            print_warn "Não foi possível criar venv. Tente instalar manualmente."
-            return
-        }
+        # First attempt to create venv
+        if ! python3 -m venv "$VENV_DIR" 2>/dev/null; then
+            # Failed - check if we're on Debian/Ubuntu and try to install venv package
+            if is_debian_based; then
+                print_warn "python3-venv não instalado. Tentando instalar..."
+
+                if install_venv_package; then
+                    print_done "python${PYTHON_VERSION}-venv instalado com sucesso"
+                    # Retry venv creation
+                    if ! python3 -m venv "$VENV_DIR" 2>/dev/null; then
+                        print_warn "Ainda não foi possível criar venv após instalação."
+                        print_warn "Execute manualmente: sudo apt install python${PYTHON_VERSION}-venv"
+                        return
+                    fi
+                else
+                    print_warn "Não foi possível instalar python${PYTHON_VERSION}-venv automaticamente."
+                    print_warn "Execute manualmente:"
+                    print_warn "  sudo apt update && sudo apt install python${PYTHON_VERSION}-venv"
+                    print_warn "E depois execute o setup.sh novamente."
+                    return
+                fi
+            else
+                # Not Debian-based, give generic instructions
+                print_warn "Não foi possível criar venv."
+                print_warn "Instale o pacote venv do seu sistema e execute novamente."
+                print_warn "Ou instale as dependências globalmente:"
+                print_warn "  pip install networkx numpy sentence-transformers"
+                return
+            fi
+        fi
     fi
+
+    print_done "Virtual environment criado"
 
     # Install dependencies in venv
     (
