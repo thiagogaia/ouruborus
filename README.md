@@ -12,7 +12,7 @@
 <p align="center">
   <img src="https://img.shields.io/badge/version-3.0.0-6366f1?style=flat-square" alt="Version"/>
   <img src="https://img.shields.io/badge/brain-organizational-8b5cf6?style=flat-square" alt="Brain"/>
-  <img src="https://img.shields.io/badge/seeds-8-a78bfa?style=flat-square" alt="Seeds"/>
+  <img src="https://img.shields.io/badge/seeds-6-a78bfa?style=flat-square" alt="Seeds"/>
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License"/>
 </p>
 
@@ -39,8 +39,8 @@ Ouroborus transforms Claude Code into an agent that **learns from each session**
 | Recall | None | **Spreading activation retrieval** |
 | Forgetting | None | **Ebbinghaus decay curve** |
 | Consolidation | None | **Automatic connection strengthening** |
-| Multi-project | One at a time | **Batch install multiple projects** |
-| Seeds | 6 | **8 (+ 3 specialist agents)** |
+| Multi-project | One at a time | **Batch install via batch-setup.sh** |
+| Seeds | 6 | **6 seeds + 3 specialist agents** |
 
 ## How it works
 
@@ -84,12 +84,15 @@ git clone https://github.com/your-user/engram.git ~/engram
 ```bash
 cd ~/engram
 ./setup.sh /path/to/your/project
+```
 
-# Or install in multiple projects at once:
-./setup.sh ~/project1 ~/project2 ~/project3
+For multiple projects at once, use the batch wrapper:
+
+```bash
+./batch-setup.sh ~/project1 ~/project2 ~/project3
 
 # Batch mode (no prompts, for CI/CD):
-./setup.sh --batch ~/project1 ~/project2
+./batch-setup.sh -y ~/project1 ~/project2
 ```
 
 The installer detects your stack automatically:
@@ -126,6 +129,7 @@ Claude uses the **genesis skill** to analyze your project, generate custom skill
 | `/priorities` | Re-evaluate priorities with ICE Score |
 | `/learn` | **Record knowledge + evolve system + feed brain** |
 | `/commit` | Semantic git commit |
+| `/domain [term]` | Analyze and register domain knowledge |
 | `/create [type] [name]` | Generate new skill, agent, or command |
 | `/spawn [type] [name]` | Fast runtime creation mid-task |
 | `/doctor` | Health check of the Engram installation |
@@ -213,7 +217,7 @@ your-project/
     │   ├── command.schema.md
     │   └── knowledge.schema.md
     │
-    ├── skills/                        # 🎯 Capabilities (8 seeds)
+    ├── skills/                        # 🎯 Capabilities (6 seeds)
     │   ├── engram-genesis/            #    Self-generation engine
     │   ├── engram-evolution/          #    Self-evolution engine
     │   ├── engram-factory/            #    Runtime orchestration
@@ -229,7 +233,7 @@ your-project/
     │   ├── db-expert.md               #    Database optimization
     │   └── domain-analyst.md          #    Domain discovery
     │
-    ├── commands/                      # ⚡ Slash commands (14)
+    ├── commands/                      # ⚡ Slash commands (15)
     │
     └── knowledge/                     # 📚 Knowledge files
         ├── context/CURRENT_STATE.md
@@ -264,15 +268,24 @@ During `/learn`, the evolution skill:
 
 ## CLI Options
 
+### setup.sh (single project)
+
 ```bash
 ./setup.sh                          # Install in current directory
 ./setup.sh /path/to/project         # Install in specific directory
-./setup.sh proj1 proj2 proj3        # Install in multiple directories
-./setup.sh --batch ~/proj1 ~/proj2  # Batch mode (no prompts)
-./setup.sh --update proj1 proj2     # Update core, keep knowledge
+./setup.sh --update /path/to/project  # Update core, keep knowledge
 ./setup.sh --uninstall .            # Remove Engram cleanly
 ./setup.sh --help                   # Show help
 ./setup.sh --version                # Show version
+```
+
+### batch-setup.sh (multiple projects)
+
+```bash
+./batch-setup.sh proj1 proj2 proj3      # Install in multiple directories
+./batch-setup.sh -y ~/proj1 ~/proj2     # Batch mode (no prompts, for CI/CD)
+./batch-setup.sh --update proj1 proj2   # Update core in multiple projects
+./batch-setup.sh --uninstall proj1 proj2  # Remove from multiple projects
 ```
 
 ## Brain Maintenance
