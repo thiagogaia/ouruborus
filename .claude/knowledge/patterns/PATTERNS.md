@@ -1,5 +1,5 @@
 # Padrões do Projeto
-> Última atualização: 2026-02-04 (/learn commit bfc9ef1)
+> Última atualização: 2026-02-04 (/learn commit c7a67be)
 
 ## Padrões Aprovados
 
@@ -421,3 +421,13 @@
   ```
 - **Anti-padrão**: skill definido mas sem instrução de quando usar (fica dormindo)
 - **Descoberto em**: 2026-02-04 (commit bfc9ef1 - /domain)
+
+### PAT-033: Single Responsibility para Scripts Shell
+- **Contexto**: script shell acumula funcionalidades além do propósito original
+- **Solução**: cada script faz uma coisa bem feita (Unix philosophy)
+  - Script principal: operação unitária (ex: `setup.sh` instala UM projeto)
+  - Script wrapper: orquestra múltiplas chamadas (ex: `batch-setup.sh` chama setup.sh N vezes)
+  - Nunca misturar lógica de loop/batch com lógica de negócio
+- **Anti-padrão**: feature creep em scripts core (adicionar batch, arrays, progress ao setup.sh)
+- **Exemplo**: `setup.sh` revertido de 958 → 783 linhas; `batch-setup.sh` criado com 177 linhas
+- **Descoberto em**: 2026-02-04 (commit bbcf725 - refactor setup)

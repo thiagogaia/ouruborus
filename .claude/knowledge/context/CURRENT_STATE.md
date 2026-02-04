@@ -1,10 +1,10 @@
 # Estado Atual do Projeto
-> Ultima atualizacao: 2026-02-04 (/learn commit bfc9ef1 - feat domain)
+> Ultima atualizacao: 2026-02-04 (/learn commit c7a67be - docs readme)
 
 ## Status Geral
 - **Fase**: v3.0.0 — Engram com Cérebro Organizacional (estável)
 - **Saúde**: 🟢 Saudável (Health Score 100%)
-- **Cérebro**: 132 nós, 206 arestas (crescimento +5 desde último /learn)
+- **Cérebro**: 134 nós, 208 arestas, 134 embeddings
 - **Próximo Marco**: Testar em projeto real Next.js ou Python
 
 ## Identidade
@@ -118,6 +118,12 @@ genesis → evolui componentes → ciclo recomeça
 /init-engram, /status, /plan, /commit, /review, /priorities, /learn, /create, /spawn, /doctor, /curriculum, /export, /import, /recall, **/domain**
 
 ## O Que Mudou Recentemente
+- [2026-02-04] **ADR-012 + PAT-033 + EXP-020**: Separação setup.sh / batch-setup.sh (SRP) | Impacto: ALTO
+- [2026-02-04] **README corrigido (commit c7a67be)**: Seeds 8→6, batch docs, /domain, CLI split | Impacto: MÉDIO
+- [2026-02-04] **setup.sh revertido (commit bbcf725)**: 958→783 linhas, batch extraído | Impacto: ALTO
+- [2026-02-04] **batch-setup.sh criado**: 177 linhas, wrapper para múltiplos projetos | Impacto: MÉDIO
+- [2026-02-04] **Embeddings regenerados**: 134/134 nós com vetores (busca semântica OK) | Impacto: MÉDIO
+- [2026-02-04] **cognitive.py verificado**: health, consolidate, decay — todos funcionais | Impacto: BAIXO
 - [2026-02-04] **/domain command criado (commit bfc9ef1)**: Command para análise de domínio + instrução proativa no CLAUDE.md | Impacto: ALTO
 - [2026-02-04] **CLAUDE.md expandido**: Seção "Quando Usar Domain-Expert Automaticamente" com 6 triggers | Impacto: ALTO
 - [2026-02-04] **domain-expert ativado**: Primeira ativação do skill (sessão de análise) | Impacto: MÉDIO

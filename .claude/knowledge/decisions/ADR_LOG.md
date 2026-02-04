@@ -1,5 +1,5 @@
 # Architecture Decision Records
-> Última atualização: 2026-02-03 (/init-engram)
+> Última atualização: 2026-02-04 (/learn commit c7a67be)
 
 ## ADR-001: Sistema Metacircular
 **Data**: 2026-02-03
@@ -580,6 +580,34 @@ Combinar as melhores ideias de cada projeto:
 - DGM Paper: Sakana AI (2024)
 - BOSS Paper: USC/Google (NeurIPS 2023)
 - Documento completo: `Engram_self_bootstrap_analysis.md`
+
+---
+
+## ADR-012: Separação setup.sh e batch-setup.sh
+**Data**: 2026-02-04 (commit bbcf725)
+**Status**: ✅ Aceito
+**Relacionado**: [[PAT-033]]
+
+### Contexto
+
+O setup.sh acumulou funcionalidade de batch (múltiplos diretórios, `--batch` flag, progress indicator, summary) que aumentou o arquivo em +175 linhas (783 → 958) e misturou lógica de loop com lógica de instalação.
+
+### Decisão
+
+Reverter setup.sh para versão single-project e criar batch-setup.sh como wrapper que chama setup.sh em loop.
+
+### Alternativas Consideradas
+
+1. ❌ **Manter tudo no setup.sh** — Feature creep, viola single responsibility
+2. ❌ **Revert sem batch** — Perde funcionalidade útil para CI/CD
+3. ✅ **Separar em dois scripts** — Cada arquivo faz uma coisa bem feita
+
+### Consequências
+
+- ✅ setup.sh voltou a ser simples e focado (783 linhas)
+- ✅ batch-setup.sh é independente e descartável (177 linhas)
+- ✅ Unix philosophy restaurada
+- ⚠️ Dois arquivos para manter ao invés de um
 
 ---
 

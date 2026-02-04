@@ -1,5 +1,5 @@
 # Experience Library
-> Última atualização: 2026-02-04 (/learn commit 264072a6)
+> Última atualização: 2026-02-04 (/learn commit c7a67be)
 > Soluções reutilizáveis descobertas durante o trabalho
 
 ## EXP-001: Validar Componente Antes de Registrar
@@ -210,6 +210,20 @@
   5. Documentar padrões fundacionais (PAT-028 a PAT-031)
 - **Descoberta**: Commit inicial contém "DNA conceitual" - pesquisa de mercado + gap analysis + proposta arquitetural = base para todas as decisões futuras
 - **Resultado**: 1 ADR, 4 padrões, 8 termos de glossário extraídos
+- **Data**: 2026-02-04
+
+## EXP-020: Reverter Feature para Restaurar Single Responsibility (setup.sh)
+- **Contexto**: setup.sh acumulou batch logic (+175 linhas), violando SRP
+- **Stack**: Bash, Git
+- **Abordagem**:
+  1. `git log --follow setup.sh` para encontrar commit antes da feature
+  2. Comparar versões (`git show <sha>:setup.sh | wc -l`)
+  3. Avaliar o que se perde (batch) vs o que se ganha (simplicidade)
+  4. `git checkout <sha> -- setup.sh` para revert cirúrgico
+  5. Criar wrapper separado (`batch-setup.sh`) com a lógica extraída
+  6. Atualizar README para refletir separação
+- **Descoberta**: Revert cirúrgico de arquivo + criação de wrapper é melhor que refatorar in-place
+- **Resultado**: setup.sh -175 linhas, batch-setup.sh 177 linhas, README corrigido
 - **Data**: 2026-02-04
 
 ---
