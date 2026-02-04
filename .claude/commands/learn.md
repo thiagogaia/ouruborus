@@ -105,6 +105,15 @@ python3 .claude/brain/cognitive.py health
 
 Se `health_score < 0.8`, seguir recomendações exibidas.
 
+### 4.6 Atualizar Embeddings
+
+Regenerar embeddings para habilitar busca semântica com novos nós:
+```bash
+python3 .claude/brain/embeddings.py build 2>/dev/null || echo "⚠️ Embeddings: instale sentence-transformers para busca semântica"
+```
+
+Isso garante que novos conceitos, padrões e episódios sejam encontráveis via `/recall`.
+
 ---
 
 ## Fase 5: Evolução do Sistema

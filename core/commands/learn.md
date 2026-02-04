@@ -44,9 +44,81 @@ Para cada tipo de conhecimento descoberto:
 - Se alguma interação desta sessão foi particularmente bem-sucedida,
   registrar como experiência reutilizável (max 10 linhas por entry)
 
-## Fase 4: Evolução do Sistema ← NOVO
+## Fase 4: Criar Memórias no Cérebro ← NOVO
 
-Ativar skill `engram-evolution` para análise evolutiva:
+O cérebro organizacional em `.claude/brain/` deve ser atualizado com o conhecimento desta sessão.
+
+### 4.1 Processar Novos Commits
+```bash
+# Busca commits desde o último /learn (ou últimos 20 se primeiro run)
+python3 .claude/brain/populate.py commits 20
+```
+
+### 4.2 Criar Memórias Episódicas
+
+Para cada problema resolvido nesta sessão, criar memória via Python:
+
+```python
+import sys
+sys.path.insert(0, '.claude/brain')
+from brain import Brain, get_current_developer
+
+brain = Brain()
+brain.load()
+
+# Exemplo: registrar bug fix
+brain.add_memory(
+    title="Bug: [descrição curta]",
+    content="[O que aconteceu, como foi resolvido, arquivos afetados]",
+    labels=["Episode", "BugFix"],
+    author=get_current_developer(),
+    references=["[[arquivo_relacionado]]"]  # opcional
+)
+
+brain.save()
+```
+
+### 4.3 Criar Memórias Conceituais
+
+Se novos termos ou conceitos foram aprendidos:
+
+```python
+brain.add_memory(
+    title="[Nome do Conceito]",
+    content="[Definição e contexto]",
+    labels=["Concept", "Glossary"],
+    author="@engram"
+)
+```
+
+### 4.4 Rodar Consolidação Leve
+
+Fortalecer conexões acessadas nesta sessão:
+```bash
+python3 .claude/brain/cognitive.py consolidate
+```
+
+### 4.5 Verificar Saúde do Cérebro
+```bash
+python3 .claude/brain/cognitive.py health
+```
+
+Se `health_score < 0.8`, seguir recomendações exibidas.
+
+### 4.6 Atualizar Embeddings
+
+Regenerar embeddings para habilitar busca semântica com novos nós:
+```bash
+python3 .claude/brain/embeddings.py build 2>/dev/null || echo "⚠️ Embeddings: instale sentence-transformers para busca semântica"
+```
+
+Isso garante que novos conceitos, padrões e episódios sejam encontráveis via `/recall`.
+
+---
+
+## Fase 5: Evolução do Sistema
+
+Ativar skill `engram-evolution` para análise evolutiva (se disponível):
 
 1. **Tracking**: Registrar quais skills/agents foram usados nesta sessão
 ```bash
@@ -86,7 +158,7 @@ python3 .claude/skills/engram-evolution/scripts/co_activation.py --project-dir .
      - SIM → propor evolução do existente + archive do runtime
    - Reportar ao dev: "Criei [nome] nesta sessão. Manter ou aposentar?"
 
-## Fase 5: Resumo
+## Fase 6: Resumo
 
 Apresentar:
 - O que foi registrado em cada knowledge file
