@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <defs>
+    <linearGradient id="serpent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#6366f1"/>
+      <stop offset="50%" stop-color="#8b5cf6"/>
+      <stop offset="100%" stop-color="#a78bfa"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#818cf8" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#c4b5fd" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="innerGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#4f46e5"/>
+      <stop offset="100%" stop-color="#7c3aed"/>
+    </linearGradient>
+  </defs>
+  
+  <!-- Glow background -->
+  <circle cx="256" cy="256" r="220" fill="url(#glow)"/>
+  
+  <!-- Ouroboros body - main serpent circle -->
+  <path d="
+    M 256 56
+    C 366.5 56 456 145.5 456 256
+    C 456 366.5 366.5 456 256 456
+    C 145.5 456 56 366.5 56 256
+    C 56 145.5 145.5 56 256 56
+  " stroke="url(#serpent)" stroke-width="36" stroke-linecap="round" fill="none"/>
+  
+  <!-- Serpent scales/segments (subtle texture) -->
+  <path d="M 256 56 C 310 56 360 78 398 114" stroke="#4f46e5" stroke-width="36" stroke-linecap="round" fill="none" opacity="0.6"/>
+  <path d="M 398 114 C 436 152 456 200 456 256" stroke="#5b52e8" stroke-width="36" stroke-linecap="round" fill="none" opacity="0.5"/>
+  
+  <!-- Head of serpent (eating the tail) -->
+  <g transform="translate(256, 56)">
+    <!-- Head shape -->
+    <ellipse cx="0" cy="0" rx="30" ry="22" fill="#6366f1" transform="rotate(-10)"/>
+    <!-- Upper jaw -->
+    <path d="M -25 -8 Q -10 -22 15 -14 Q 8 -8 -5 -4 Z" fill="#7c3aed"/>
+    <!-- Lower jaw biting tail -->
+    <path d="M -25 8 Q -10 22 15 14 Q 8 8 -5 4 Z" fill="#5b52e8"/>
+    <!-- Eye -->
+    <circle cx="-8" cy="-6" r="4" fill="#e0e7ff"/>
+    <circle cx="-8" cy="-6" r="2" fill="#1e1b4b"/>
+    <!-- Eye glow -->
+    <circle cx="-9" cy="-7" r="1" fill="#fff" opacity="0.8"/>
+  </g>
+  
+  <!-- Tail being consumed -->
+  <g transform="translate(256, 56)">
+    <path d="M 15 -5 L 40 -3 Q 50 0 40 3 L 15 5" fill="#a78bfa" opacity="0.7"/>
+    <path d="M 35 -2 L 48 -1 Q 52 0 48 1 L 35 2" fill="#c4b5fd" opacity="0.5"/>
+  </g>
+  
+  <!-- Center: Engram neural node symbol -->
+  <g transform="translate(256, 256)">
+    <!-- Central node -->
+    <circle cx="0" cy="0" r="16" fill="url(#innerGrad)"/>
+    <circle cx="0" cy="0" r="10" fill="#e0e7ff" opacity="0.9"/>
+    <circle cx="0" cy="0" r="5" fill="#6366f1"/>
+    
+    <!-- Neural connections radiating outward -->
+    <!-- Top -->
+    <line x1="0" y1="-16" x2="0" y2="-55" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="0" cy="-58" r="5" fill="#6366f1" opacity="0.5"/>
+    <!-- Top-right -->
+    <line x1="11" y1="-11" x2="39" y2="-39" stroke="#7c3aed" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="42" cy="-42" r="5" fill="#7c3aed" opacity="0.5"/>
+    <!-- Right -->
+    <line x1="16" y1="0" x2="55" y2="0" stroke="#8b5cf6" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="58" cy="0" r="5" fill="#8b5cf6" opacity="0.5"/>
+    <!-- Bottom-right -->
+    <line x1="11" y1="11" x2="39" y2="39" stroke="#a78bfa" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="42" cy="42" r="5" fill="#a78bfa" opacity="0.5"/>
+    <!-- Bottom -->
+    <line x1="0" y1="16" x2="0" y2="55" stroke="#8b5cf6" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="0" cy="58" r="5" fill="#8b5cf6" opacity="0.5"/>
+    <!-- Bottom-left -->
+    <line x1="-11" y1="11" x2="-39" y2="39" stroke="#7c3aed" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="-42" cy="42" r="5" fill="#7c3aed" opacity="0.5"/>
+    <!-- Left -->
+    <line x1="-16" y1="0" x2="-55" y2="0" stroke="#6366f1" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="-58" cy="0" r="5" fill="#6366f1" opacity="0.5"/>
+    <!-- Top-left -->
+    <line x1="-11" y1="-11" x2="-39" y2="-39" stroke="#5b52e8" stroke-width="2.5" opacity="0.6"/>
+    <circle cx="-42" cy="-42" r="5" fill="#5b52e8" opacity="0.5"/>
+    
+    <!-- Secondary connections (smaller) -->
+    <line x1="5" y1="-15" x2="25" y2="-48" stroke="#818cf8" stroke-width="1.5" opacity="0.3"/>
+    <circle cx="27" cy="-51" r="3" fill="#818cf8" opacity="0.3"/>
+    <line x1="-5" y1="15" x2="-25" y2="48" stroke="#818cf8" stroke-width="1.5" opacity="0.3"/>
+    <circle cx="-27" cy="51" r="3" fill="#818cf8" opacity="0.3"/>
+    <line x1="15" y1="5" x2="48" y2="25" stroke="#818cf8" stroke-width="1.5" opacity="0.3"/>
+    <circle cx="51" cy="27" r="3" fill="#818cf8" opacity="0.3"/>
+    <line x1="-15" y1="-5" x2="-48" y2="-25" stroke="#818cf8" stroke-width="1.5" opacity="0.3"/>
+    <circle cx="-51" cy="-27" r="3" fill="#818cf8" opacity="0.3"/>
+  </g>
+</svg>
