@@ -2,7 +2,7 @@
   <img src="logo.svg" width="180" alt="Engram"/>
 </p>
 
-<h1 align="center">Engram v3</h1>
+<h1 align="center">Ouroborus v3</h1>
 
 <p align="center">
   <strong>Self-evolving persistent memory for Claude Code.</strong><br/>
@@ -20,7 +20,7 @@
 
 ## What is it
 
-Engram transforms Claude Code into an agent that **learns from each session**, **remembers across conversations**, and **evolves its own capabilities**. It installs a metacircular system with an **organizational brain** — a knowledge graph with semantic search, cognitive processes, and persistent memory.
+Ouroborus transforms Claude Code into an agent that **learns from each session**, **remembers across conversations**, and **evolves its own capabilities**. It installs a metacircular system with an **organizational brain** — a knowledge graph with semantic search, cognitive processes, and persistent memory.
 
 ### Version History
 
