@@ -4,8 +4,8 @@
 Idioma padrão: Português brasileiro. Código e commits em inglês.
 
 ## Princípio Central: Auto-Alimentação (Ouroboros)
-Este projeto usa Engram v2.0.0 — um sistema metacircular de retroalimentação.
-Toda decisão, padrão, erro corrigido ou insight DEVE ser registrado em `.claude/knowledge/`.
+Este projeto usa Engram v3.0.0 — um sistema metacircular de retroalimentação com cérebro organizacional.
+Toda decisão, padrão, erro corrigido ou insight DEVE ser registrado em `.claude/knowledge/` e no cérebro.
 O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposenta o inútil.
 
 ## Workflow Obrigatório
@@ -17,6 +17,7 @@ O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposen
 4. Se decisão arquitetural: consulte `ADR_LOG.md`
 5. Se lógica de negócio: consulte `DOMAIN.md`
 6. Se tarefa similar já resolvida: consulte `EXPERIENCE_LIBRARY.md`
+7. **Se pergunta sobre arquitetura/domínio: use `/recall`**
 
 ### Ao Codificar
 - Validação de input em todas as APIs
@@ -63,9 +64,41 @@ Referência detalhada em `.claude/skills/engram-factory/references/orchestration
 
 Regras: anunciar antes de criar, máximo 2 por sessão, nunca duplicar, source=runtime.
 
+## Cérebro Organizacional
+
+O projeto possui um cérebro em `.claude/brain/` que armazena memórias do projeto:
+- **ADRs** — Decisões arquiteturais
+- **Conceitos** — Glossário e definições do domínio
+- **Padrões** — Padrões aprovados de código
+- **Episódios** — Commits, bug fixes, eventos
+- **Regras** — Regras de negócio
+
+### Quando Consultar o Cérebro
+
+Use `/recall <pergunta>` automaticamente quando:
+- Pergunta sobre arquitetura: "como funciona X?", "por que Y foi feito assim?"
+- Pergunta sobre domínio: "o que é X?", "qual a regra de Y?"
+- Antes de decisões: verificar se já existe ADR relacionado
+- Debug de problemas: encontrar soluções anteriores similares
+
+### Exemplo de Uso
+
+```bash
+# Via command
+/recall como funciona a autenticação
+
+# Via script direto (se precisar de mais controle)
+python3 .claude/brain/recall.py "autenticação" --type ADR --top 5
+```
+
+### Quando Alimentar o Cérebro
+
+O cérebro é alimentado automaticamente via `/learn`. Execute ao final de cada sessão.
+
 ## Regras de Ouro
 - NUNCA pule o workflow de retroalimentação
 - Priorize legibilidade sobre cleverness
 - Pergunte antes de mudar arquitetura
 - Registre TUDO que pode ser útil no futuro
 - Se não existe skill para algo repetitivo: crie com `/create`
+- **Consulte o cérebro antes de responder perguntas sobre o projeto**
