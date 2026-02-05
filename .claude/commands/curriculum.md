@@ -14,7 +14,7 @@ Isso compara:
 ## Ações Sugeridas
 
 Se faltar skill de framework (e.g. `nextjs-patterns`):
-- Verificar se existe template em `templates/stacks/`
+- Verificar se existe template em `templates/skills/`
 - Se existe: copiar e customizar
 - Se não: `/create skill [nome]` via genesis
 

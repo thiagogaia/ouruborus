@@ -22,7 +22,7 @@ Dev pede uma tarefa
 │  SIM → importar via global_memory.py, adaptar, usar
 │  NÃO ↓
 │
-├─ Existe template de stack em templates/stacks/?
+├─ Existe template de stack em templates/skills/?
 │  SIM → usar como base, customizar, instalar
 │  NÃO ↓
 │

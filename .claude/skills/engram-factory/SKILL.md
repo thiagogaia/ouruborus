@@ -133,7 +133,7 @@ Detecção → Anúncio → Geração → Validação → Uso → Report
 ### Importar/Exportar
 - Import de global: `global_memory.py import-skill --name [nome]`
 - Export para global: `global_memory.py export-skill --name [nome]`
-- Import de template: copiar de `templates/stacks/[stack]/`
+- Import de template: copiar de `templates/skills/[stack]/`
 
 ## Workflow de Criação (detalhado)
 

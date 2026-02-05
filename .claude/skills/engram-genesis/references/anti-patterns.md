@@ -23,7 +23,7 @@
 ✅ "Execute o comando de migration do ORM detectado no projeto"
 
 **Problema:** Skill fica inútil se o projeto mudar de ORM.
-**Exceção:** Skills em `templates/stacks/` são propositalmente específicos.
+**Exceção:** Skills em `templates/skills/` são propositalmente específicos.
 
 ## AP-5: Sem Guardrails
 ❌ Skill que não tem seção "Regras"

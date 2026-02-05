@@ -93,7 +93,7 @@
 
 - **Stale Threshold**: Número de dias sem uso após o qual um componente é considerado stale. Default: 14 dias.
 
-- **Template Stack**: Arquivo `.skill.tmpl` em `templates/stacks/` que serve como ponto de partida para geração de skill customizado por framework.
+- **Template Stack**: Arquivo `.skill.tmpl` em `templates/skills/` que serve como ponto de partida para geração de skill customizado por framework.
 
 - **Voyager**: Projeto NVIDIA/MineDojo de agente que joga Minecraft e constrói sua própria biblioteca de skills. Inspiração para skill library composicional do Engram.
 

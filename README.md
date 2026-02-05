@@ -267,19 +267,19 @@ Two sub-categories:
 
 **`templates/knowledge/`** — Markdown templates with `${DATE}` replaced by setup.sh. Generate the initial files in `.claude/knowledge/`. Used **once** at install time, never again.
 
-**`templates/stacks/`** — Framework-specific skill templates. `analyze_project.py` detects the framework → genesis copies the corresponding `.skill.tmpl` as `SKILL.md` inside a new skill. They work as **pre-built recipes** that genesis customizes.
+**`templates/skills/`** — Framework-specific skill templates. `analyze_project.py` detects the framework → genesis copies the corresponding `.skill.tmpl` as `SKILL.md` inside a new skill. They work as **pre-built recipes** that genesis customizes.
 
 | Stack | Template |
 |-------|----------|
-| Next.js | `templates/stacks/nextjs/` |
-| NestJS | `templates/stacks/nestjs/` |
-| React | `templates/stacks/react/` |
-| Vue / Nuxt | `templates/stacks/vue/` |
-| Express | `templates/stacks/express/` |
-| Django | `templates/stacks/django/` |
-| FastAPI | `templates/stacks/fastapi/` |
-| Laravel | `templates/stacks/laravel/` |
-| Flask | `templates/stacks/flask/` |
+| Next.js | `templates/skills/nextjs/` |
+| NestJS | `templates/skills/nestjs/` |
+| React | `templates/skills/react/` |
+| Vue / Nuxt | `templates/skills/vue/` |
+| Express | `templates/skills/express/` |
+| Django | `templates/skills/django/` |
+| FastAPI | `templates/skills/fastapi/` |
+| Laravel | `templates/skills/laravel/` |
+| Flask | `templates/skills/flask/` |
 
 **Rule**: If it's a pattern that repeats across projects of the **same stack**, it goes in templates.
 

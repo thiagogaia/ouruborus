@@ -358,9 +358,9 @@
 
 ### PAT-029: Templates por Stack como Progressive Customization
 - **Contexto**: skills precisam ser customizados por framework/linguagem
-- **Solução**: biblioteca de templates em `templates/stacks/`:
+- **Solução**: biblioteca de templates em `templates/skills/`:
   ```
-  templates/stacks/
+  templates/skills/
   ├── nextjs/nextjs-patterns.skill.tmpl
   ├── django/django-patterns.skill.tmpl
   ├── fastapi/fastapi-patterns.skill.tmpl
