@@ -106,6 +106,13 @@ def search_brain(
             spread_depth=depth
         )
 
+    # Persist reinforcement — closes the self-feeding loop
+    # Every recall strengthens accessed memories AND saves to disk
+    try:
+        brain.save()
+    except Exception:
+        pass
+
     # Formatar resultados
     formatted = []
     for item in results:
@@ -120,15 +127,8 @@ def search_brain(
                 item_type = t
                 break
 
-        # Encontrar arquivo associado
-        file_path = props.get("file_path")
-        if not file_path:
-            # Tentar inferir do ID
-            node_id = item.get("id", "")
-            if node_id.startswith("decision-"):
-                file_path = f".claude/memory/decisions/{node_id}.md"
-            elif "concept" in labels_list or "Concept" in labels_list:
-                file_path = f".claude/memory/concepts/{node_id}.md"
+        # Get content from in-graph storage (brain-only architecture)
+        node_content = props.get("content", "")
 
         # Collect semantic connections for this node
         semantic_connections = []
@@ -171,8 +171,8 @@ def search_brain(
             "type": item_type,
             "labels": labels_list,
             "summary": props.get("summary", "")[:200],
+            "content": node_content[:2000] if node_content else None,
             "score": round(item.get("score", 0) + connection_boost, 3),
-            "file": file_path if file_path and Path(file_path).exists() else None,
             "author": props.get("author"),
             "connections": semantic_connections[:10]
         })
@@ -218,8 +218,8 @@ def format_human_readable(data: dict) -> str:
             lines.append(f"📋 [{score_bar}] {item['type']}: {item['title']}")
             if item["summary"]:
                 lines.append(f"   {item['summary'][:100]}...")
-            if item["file"]:
-                lines.append(f"   📄 {item['file']}")
+            if item.get("content"):
+                lines.append(f"   📝 {item['content'][:200]}...")
             if item["author"]:
                 lines.append(f"   👤 {item['author']}")
             # Show semantic connections

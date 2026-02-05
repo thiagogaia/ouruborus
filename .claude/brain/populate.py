@@ -320,8 +320,66 @@ def cross_reference_pass(brain: Brain) -> int:
     return count
 
 
+def migrate_content_to_graph(brain: Brain) -> int:
+    """[ONE-TIME] Migrate content from disk (.md files) into graph props.content.
+
+    For each node with content_path, reads the .md from disk, extracts
+    content after the '---' separator, stores it in props.content,
+    and removes content_path.
+
+    Run: python3 populate.py migrate
+    """
+    all_nodes = brain.get_all_nodes()
+    migrated = 0
+
+    for nid, ndata in all_nodes.items():
+        props = ndata.get("props", {})
+
+        # Skip nodes that already have content
+        if props.get("content"):
+            continue
+
+        # Try to read from content_path
+        content_path = props.get("content_path")
+        if content_path:
+            full_path = brain.base_path.parent / content_path
+            if full_path.exists():
+                try:
+                    raw = full_path.read_text(encoding="utf-8")
+                    # Extract content after --- separator
+                    parts = raw.split("---", 1)
+                    content = parts[1].strip() if len(parts) > 1 else raw.strip()
+                    props["content"] = content
+                    # Update summary to 500 chars
+                    props["summary"] = brain._generate_summary(content)
+                    del props["content_path"]
+                    ndata["props"] = props
+                    migrated += 1
+                except Exception as e:
+                    print(f"  Error migrating {nid}: {e}")
+                    continue
+            else:
+                # File doesn't exist, try to use summary as content
+                summary = props.get("summary", "")
+                if summary:
+                    props["content"] = summary
+                if "content_path" in props:
+                    del props["content_path"]
+                ndata["props"] = props
+                migrated += 1
+        else:
+            # No content_path — use summary as content if available
+            summary = props.get("summary", "")
+            if summary and not props.get("content"):
+                props["content"] = summary
+                ndata["props"] = props
+                migrated += 1
+
+    return migrated
+
+
 def populate_adrs(brain: Brain) -> int:
-    """Adiciona ADRs ao cérebro"""
+    """[MIGRATION ONLY] Adiciona ADRs ao cérebro"""
     adr_file = Path(".claude/knowledge/decisions/ADR_LOG.md")
 
     if not adr_file.exists():
@@ -367,7 +425,7 @@ def populate_adrs(brain: Brain) -> int:
 
 
 def populate_domain(brain: Brain) -> int:
-    """Adiciona conceitos de domínio ao cérebro"""
+    """[MIGRATION ONLY] Adiciona conceitos de domínio ao cérebro"""
     domain_file = Path(".claude/knowledge/domain/DOMAIN.md")
 
     if not domain_file.exists():
@@ -413,7 +471,7 @@ def populate_domain(brain: Brain) -> int:
 
 
 def populate_patterns(brain: Brain) -> int:
-    """Adiciona patterns ao cérebro"""
+    """[MIGRATION ONLY] Adiciona patterns ao cérebro"""
     patterns_file = Path(".claude/knowledge/patterns/PATTERNS.md")
 
     if not patterns_file.exists():
@@ -526,7 +584,7 @@ def populate_commits(brain: Brain, max_commits: int = 7000) -> int:
 
 
 def populate_experiences(brain: Brain) -> int:
-    """Adiciona experiências ao cérebro como memória episódica."""
+    """[MIGRATION ONLY] Adiciona experiências ao cérebro como memória episódica."""
     exp_file = Path(".claude/knowledge/experiences/EXPERIENCE_LIBRARY.md")
 
     if not exp_file.exists():
@@ -578,11 +636,13 @@ def main():
     if len(sys.argv) < 2:
         print("Usage: populate.py <command> [args]")
         print("Commands:")
-        print("  all              Process everything")
-        print("  adrs             Process ADRs only")
-        print("  domain           Process domain concepts only")
-        print("  patterns         Process patterns only")
-        print("  experiences      Process experiences only")
+        print("  migrate          [ONE-TIME] Migrate content from disk to in-graph")
+        print("  refresh          Shortcut: commits + cross-refs only")
+        print("  all              Process everything (migration only)")
+        print("  adrs             Process ADRs only (migration only)")
+        print("  domain           Process domain concepts only (migration only)")
+        print("  patterns         Process patterns only (migration only)")
+        print("  experiences      Process experiences only (migration only)")
         print("  commits [N]      Process last N commits (default: 7000)")
         print("  stats            Show current brain stats")
         sys.exit(1)
@@ -595,6 +655,40 @@ def main():
     if cmd == "stats":
         stats = brain.get_stats()
         print(json.dumps(stats, indent=2))
+        return
+
+    if cmd == "migrate":
+        print("\n=== Migrating Content to In-Graph ===")
+        count = migrate_content_to_graph(brain)
+        print(f"Migrated {count} nodes")
+        # Verify
+        all_nodes = brain.get_all_nodes()
+        with_content = sum(1 for n in all_nodes.values() if n.get("props", {}).get("content"))
+        print(f"Nodes with props.content: {with_content}")
+        brain.save()
+        print(json.dumps(brain.get_stats(), indent=2))
+        return
+
+    if cmd == "refresh":
+        # Shortcut: only commits + cross-refs (the only external source)
+        max_commits = 20
+        if len(sys.argv) > 2:
+            try:
+                max_commits = int(sys.argv[2])
+            except:
+                pass
+
+        print(f"\n=== Refresh: Commits (max {max_commits}) + Cross-Refs ===")
+        count = populate_commits(brain, max_commits)
+        print(f"Added {count} commits")
+
+        if count > 0:
+            print(f"\n=== Cross-Reference Pass ===")
+            xref_count = cross_reference_pass(brain)
+            print(f"Created {xref_count} cross-reference edges")
+
+        brain.save()
+        print(json.dumps(brain.get_stats(), indent=2))
         return
 
     total = 0

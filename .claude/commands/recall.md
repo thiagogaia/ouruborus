@@ -64,17 +64,20 @@ O script retorna JSON com:
       "title": "Título da memória",
       "type": "ADR|Concept|Pattern|Episode|...",
       "summary": "Resumo do conteúdo",
-      "score": 0.95,
-      "file": "caminho/para/arquivo.md (se existir)"
+      "content": "Conteúdo completo da memória (até 2000 chars)",
+      "score": 0.95
     }
   ],
   "total": 5
 }
 ```
 
-### Passo 2: Ler Conteúdo Relevante
+### Passo 2: Usar Conteúdo In-Graph
 
-Para cada resultado com `file`, leia o arquivo se precisar de mais contexto.
+Os resultados já incluem o campo `content` com o texto completo da memória (até 2000 chars).
+Não precisa ler nenhum arquivo — tudo está no grafo.
+
+O recall também persiste o reforço (brain.save()), fechando o loop de auto-alimentação.
 
 ### Passo 3: Apresentar ao Dev
 

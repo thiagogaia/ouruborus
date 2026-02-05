@@ -5,7 +5,7 @@ Idioma padrão: Português brasileiro. Código e commits em inglês.
 
 ## Princípio Central: Auto-Alimentação (Ouroboros)
 Este projeto usa Engram v3.0.0 — um sistema metacircular de retroalimentação com cérebro organizacional.
-Toda decisão, padrão, erro corrigido ou insight DEVE ser registrado em `.claude/knowledge/` e no cérebro.
+Toda decisão, padrão, erro corrigido ou insight DEVE ser registrado **direto no cérebro** via `brain.add_memory()`.
 O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposenta o inútil.
 
 ## Workflow Obrigatório
@@ -15,18 +15,17 @@ O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposen
 2. **Consulte o cérebro PRIMEIRO**: rode `python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json` para encontrar ADRs, patterns, experiências e conexões relevantes
 3. Só leia os `.md` completos se o recall não cobrir — os arquivos vão crescer e não caberão no contexto
 
-O cérebro é a fonte primária. Os `.md` são o fallback para quando precisa do texto completo de um ADR ou pattern específico.
+O cérebro é a **fonte única de verdade**. O recall já retorna o conteúdo completo (campo `content`). Não precisa ler .md.
 
 ### Ao Codificar
 - Validação de input em todas as APIs
 - Error handling em todas as rotas
 
 ### Depois de Codificar
-1. Atualize `CURRENT_STATE.md`
-2. Registre padrões novos em `PATTERNS.md`
-3. Registre decisões em `ADR_LOG.md`
-4. Reavalie `PRIORITY_MATRIX.md`
-5. Registre aprendizados de domínio em `DOMAIN.md`
+1. Atualize `CURRENT_STATE.md` (boot file — sempre pequeno)
+2. Registre padrões, decisões, experiências e domínio **direto no cérebro** via `brain.add_memory()`
+3. Reavalie `PRIORITY_MATRIX.md` (boot file)
+4. Execute `/learn` para consolidar
 
 ## Stack
 
@@ -64,15 +63,15 @@ Regras: anunciar antes de criar, máximo 2 por sessão, nunca duplicar, source=r
 
 ## Cérebro Organizacional
 
-O cérebro em `.claude/brain/` é um **grafo de conhecimento com conexões semânticas**.
-Não é uma cópia dos .md — contém informação que os .md não têm:
+O cérebro em `.claude/brain/` é a **fonte única de verdade** — um grafo de conhecimento auto-alimentado.
+Todo conteúdo é armazenado in-graph (props.content). Não depende de .md files para conteúdo.
 - **Conexões entre nós**: quais commits mexeram nos mesmos arquivos, quais patterns se complementam, quais ADRs motivaram quais patterns
 - **Busca semântica**: encontra conhecimento por significado, não só por texto
 - **Spreading activation**: a partir de um resultado, navega conexões para encontrar conhecimento relacionado indiretamente
 
-### IMPORTANTE: O Cérebro é a Fonte Primária
+### IMPORTANTE: O Cérebro é a Fonte Única de Verdade
 
-**Use o cérebro ANTES de ler os .md completos.** Os arquivos de knowledge vão crescer e não caberão no contexto. O cérebro retorna os 10 pedaços mais relevantes de todo o conhecimento.
+**O recall retorna conteúdo completo.** Não precisa ler .md files — o cérebro contém tudo. O recall já retorna o campo `content` com texto completo de cada memória.
 
 ```bash
 # Forma rápida — output JSON parseável
@@ -138,7 +137,13 @@ O campo `connections` nos resultados do recall mostra relações que os .md não
 ### Quando Alimentar o Cérebro
 
 O cérebro é alimentado automaticamente via `/learn`. Execute ao final de cada sessão.
-O `/learn` roda: populate (commits) → consolidate → sleep (5 fases) → health check → embeddings.
+O `/learn` roda: brain.add_memory() (direto) → refresh (commits) → sleep (5 fases in-memory) → health check → embeddings.
+
+O loop de auto-alimentação funciona assim:
+1. `/recall` busca → reforça memórias acessadas → **persiste** (brain.save())
+2. Trabalho acontece → novas memórias via `brain.add_memory()` (zero disk I/O)
+3. `/learn` consolida → sleep in-memory → embeddings mais ricos
+4. Próximo recall acha resultados melhores (memórias reforçadas + novas conexões)
 
 ## Regras de Ouro
 - NUNCA pule o workflow de retroalimentação
@@ -146,4 +151,4 @@ O `/learn` roda: populate (commits) → consolidate → sleep (5 fases) → heal
 - Pergunte antes de mudar arquitetura
 - Registre TUDO que pode ser útil no futuro
 - Se não existe skill para algo repetitivo: crie com `/create`
-- **Cérebro primeiro, .md depois** — sempre rode recall antes de ler arquivos de knowledge inteiros
+- **Cérebro é a fonte única** — rode recall e use o campo `content` direto, sem ler .md

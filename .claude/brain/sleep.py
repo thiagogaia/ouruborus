@@ -147,144 +147,54 @@ def _extract_all_refs(text: str) -> List[str]:
 
 
 def _read_node_content(brain: Brain, props: dict) -> str:
-    """Read full content for a node: try disk file first, fall back to summary.
+    """Read full content for a node from in-graph storage.
 
-    Nodes store rich content in .claude/memory/*.md files (via content_path),
-    but only a 200-char summary in the graph. This function reads the full
-    content from disk so phase_connect() can find all cross-references.
+    Content is stored directly in props.content (brain-only architecture).
+    Falls back to summary for legacy nodes without content.
     """
-    content_path = props.get("content_path")
-    if content_path:
-        full_path = brain.base_path.parent / content_path
-        if full_path.exists():
-            try:
-                return full_path.read_text(encoding="utf-8")
-            except Exception:
-                pass
-    return props.get("summary", "")
+    return props.get("content", "") or props.get("summary", "")
 
 
-def _parse_knowledge_files(brain: Brain) -> Dict[str, List[str]]:
-    """Read canonical .md knowledge files and extract cross-references per entity.
+def _parse_knowledge_from_graph(brain: Brain) -> Dict[str, List[str]]:
+    """Extract cross-references from all nodes' in-graph content.
 
-    The memory files (.claude/memory/*.md) only contain parsed content
-    (context/decision/consequences). But the original .md files have
-    additional fields like "Relacionado: [[ADR-001]], [[PAT-034]]" that
-    contain the richest cross-references.
+    Reads props.content from every node in the graph and extracts
+    ADR/PAT/EXP/wikilink references. Zero disk I/O.
 
     Returns: {node_id: [ref_strings]} mapping graph nodes to their refs.
     """
-    knowledge_dir = brain.base_path.parent / "knowledge"
     refs_by_node: Dict[str, List[str]] = {}
     all_nodes = brain.get_all_nodes()
 
-    # Build lookup: adr_id/pat_id/exp_id -> node_id
-    prop_to_node: Dict[str, str] = {}
-    title_to_node: Dict[str, str] = {}
     for nid, ndata in all_nodes.items():
         props = ndata.get("props", {})
+        content = props.get("content", "")
+        if not content:
+            continue
+
+        # Extract self-ID to exclude self-references
+        self_ids = set()
         for key in ("adr_id", "pat_id", "exp_id", "rule_id"):
             val = props.get(key)
             if val:
-                prop_to_node[val] = nid
+                self_ids.add(val)
         title = props.get("title", "")
-        if title:
-            # Match by prefix: "ADR-001: ..." -> "ADR-001"
-            m = re.match(r'^((?:ADR|PAT|EXP|RN)-\d+)', title)
-            if m:
-                prop_to_node[m.group(1)] = nid
-            title_to_node[title.lower().strip()] = nid
+        m = re.match(r'^((?:ADR|PAT|EXP|RN)-\d+)', title)
+        if m:
+            self_ids.add(m.group(1))
 
-    def _find_node(entity_id: str) -> Optional[str]:
-        """Find graph node for an entity ID like ADR-001."""
-        return prop_to_node.get(entity_id)
-
-    # Parse ADR_LOG.md — split by sections, extract refs per ADR
-    adr_file = knowledge_dir / "decisions" / "ADR_LOG.md"
-    if adr_file.exists():
-        content = adr_file.read_text(encoding="utf-8")
-        sections = re.split(r'\n---\n', content)
-        for section in sections:
-            match = re.search(r'## (ADR-\d+):', section)
-            if not match:
-                continue
-            adr_id = match.group(1)
-            source_node = _find_node(adr_id)
-            if not source_node:
-                continue
-            refs = _extract_all_refs(section)
-            # Exclude self-reference
-            external = [r for r in refs if r != adr_id]
-            if external:
-                refs_by_node[source_node] = refs_by_node.get(source_node, []) + external
-
-    # Parse PATTERNS.md — extract refs per pattern
-    pat_file = knowledge_dir / "patterns" / "PATTERNS.md"
-    if pat_file.exists():
-        content = pat_file.read_text(encoding="utf-8")
-        # Split by ### headers
-        for match in re.finditer(r'### (PAT-\d+[^\n]*)\n(.*?)(?=\n### |\n## |$)', content, re.DOTALL):
-            pat_header = match.group(1)
-            pat_body = match.group(2)
-            pat_id_m = re.match(r'(PAT-\d+)', pat_header)
-            if not pat_id_m:
-                continue
-            pat_id = pat_id_m.group(1)
-            source_node = _find_node(pat_id)
-            if not source_node:
-                continue
-            refs = _extract_all_refs(pat_body)
-            external = [r for r in refs if r != pat_id]
-            if external:
-                refs_by_node[source_node] = refs_by_node.get(source_node, []) + external
-
-    # Parse EXPERIENCE_LIBRARY.md — extract refs per experience
-    exp_file = knowledge_dir / "experiences" / "EXPERIENCE_LIBRARY.md"
-    if exp_file.exists():
-        content = exp_file.read_text(encoding="utf-8")
-        sections = re.split(r'\n---\n', content)
-        for section in sections:
-            match = re.search(r'## (EXP-\d+):', section)
-            if not match:
-                continue
-            exp_id = match.group(1)
-            source_node = _find_node(exp_id)
-            if not source_node:
-                continue
-            refs = _extract_all_refs(section)
-            external = [r for r in refs if r != exp_id]
-            if external:
-                refs_by_node[source_node] = refs_by_node.get(source_node, []) + external
-
-    # Parse CURRENT_STATE.md — refs go to the nodes they mention
-    state_file = knowledge_dir / "context" / "CURRENT_STATE.md"
-    if state_file.exists():
-        content = state_file.read_text(encoding="utf-8")
         refs = _extract_all_refs(content)
-        # These are "mentioned in state" — connect pairs that appear together
-        ref_nodes = []
-        for ref in refs:
-            node = _find_node(ref)
-            if node:
-                ref_nodes.append(node)
-        # Create refs between co-mentioned nodes (they appear in same doc)
-        for i, na in enumerate(ref_nodes[:10]):
-            for nb in ref_nodes[i + 1:11]:
-                if na != nb:
-                    refs_by_node.setdefault(na, [])
-                    # Store as node_id directly (already resolved)
-                    refs_by_node[na].append(f"__node__{nb}")
+        external = [r for r in refs if r not in self_ids]
+        if external:
+            refs_by_node[nid] = external
 
     return refs_by_node
 
 
 def phase_connect(brain: Brain) -> Dict:
-    """Parse all node content and create cross-reference edges.
+    """Parse all node content (in-graph) and create cross-reference edges.
 
-    Two sources of references:
-    1. Memory files on disk (.claude/memory/*.md) — node content
-    2. Canonical .md files (.claude/knowledge/*.md) — includes "Relacionado"
-       fields and other metadata not saved in memory files
+    All content is read from props.content — zero disk I/O.
 
     Creates edge types:
     - REFERENCES: explicit ADR/PAT/EXP/wikilink references
@@ -314,7 +224,7 @@ def phase_connect(brain: Brain) -> Dict:
             stats["references"] += 1
         return True
 
-    # Pass 1a: Explicit references from memory files on disk
+    # Pass 1a: Explicit references from in-graph content
     for nid, ndata in all_nodes.items():
         props = ndata.get("props", {})
         labels = ndata.get("labels", [])
@@ -327,9 +237,9 @@ def phase_connect(brain: Brain) -> Dict:
             if target and target != nid:
                 _create_ref_edge(nid, labels, target)
 
-    # Pass 1b: Cross-references from canonical knowledge files
-    # These contain fields like "Relacionado: [[ADR-001]]" that memory files miss
-    knowledge_refs = _parse_knowledge_files(brain)
+    # Pass 1b: Cross-references from in-graph content
+    # Extracts refs from props.content of all nodes (zero disk I/O)
+    knowledge_refs = _parse_knowledge_from_graph(brain)
     for source_nid, refs in knowledge_refs.items():
         source_node = brain.get_node(source_nid)
         source_labels = source_node.get("labels", []) if source_node else []
@@ -430,7 +340,8 @@ def phase_relate(brain: Brain, threshold: float = 0.75) -> Dict:
         if labels & skip_labels:
             continue
         props = ndata.get("props", {})
-        text = f"{props.get('title', '')} {props.get('summary', '')}"
+        content = props.get("content", "") or props.get("summary", "")
+        text = f"{props.get('title', '')} {content[:500]}"
         if len(text.strip()) > 10:
             texts[nid] = text
 

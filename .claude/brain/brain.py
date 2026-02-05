@@ -278,18 +278,14 @@ class Brain:
         if self._node_exists(node_id):
             return self._upsert_node(node_id, title, content, labels, author, props, references, embedding)
 
-        # Determina tipo de conteudo e path
-        content_type = self._get_content_type(labels)
-        content_path = self._save_content(node_id, content_type, title, content, author, labels)
-
         # Cria summary
         summary = self._generate_summary(content)
 
-        # Propriedades do no
+        # Propriedades do no — content stored in-graph (no disk I/O)
         node_props = {
             "title": title,
             "author": author,
-            "content_path": str(content_path) if content_path else None,
+            "content": content,
             "summary": summary,
             **(props or {})
         }
@@ -366,6 +362,7 @@ class Brain:
         existing_props = node.get("props", {})
         existing_props.update(props or {})
         existing_props["title"] = title
+        existing_props["content"] = content
         existing_props["summary"] = self._generate_summary(content)
         node["props"] = existing_props
 
@@ -421,21 +418,12 @@ class Brain:
             )
 
     def _get_content_type(self, labels: List[str]) -> str:
-        """Determina tipo de conteudo pelos labels."""
-        if "Episode" in labels:
-            return "episodes"
-        elif "Concept" in labels:
-            return "concepts"
-        elif "Pattern" in labels:
-            return "patterns"
-        elif "Decision" in labels:
-            return "decisions"
-        elif "Person" in labels:
-            return "people"
-        elif "Domain" in labels:
-            return "domains"
-        else:
-            return "episodes"
+        """[DEPRECATED] Determina tipo de conteudo pelos labels.
+
+        No longer used — content is stored in-graph (props.content) since
+        the brain-only self-feeding architecture migration.
+        """
+        return None
 
     def _save_content(
         self,
@@ -446,37 +434,13 @@ class Brain:
         author: str,
         labels: List[str]
     ) -> Optional[Path]:
-        """Salva conteudo em arquivo Markdown."""
-        if not content:
-            return None
+        """[DEPRECATED] Content is now stored in-graph (props.content).
 
-        dir_path = self.memory_path / content_type
-        dir_path.mkdir(parents=True, exist_ok=True)
+        No longer writes to disk. Returns None always.
+        """
+        return None
 
-        # Nome do arquivo
-        date_str = datetime.now().strftime("%Y-%m-%d")
-        slug = re.sub(r'[^a-z0-9]+', '-', title.lower())[:50]
-        filename = f"{date_str}-{slug}-{node_id}.md"
-
-        file_path = dir_path / filename
-
-        # Formata conteudo com metadados
-        md_content = f"""# {title}
-
-**ID**: {node_id}
-**Autor**: [[{author}]]
-**Data**: {date_str}
-**Labels**: {', '.join(labels)}
-
----
-
-{content}
-"""
-
-        file_path.write_text(md_content, encoding='utf-8')
-        return file_path.relative_to(self.base_path.parent)
-
-    def _generate_summary(self, content: str, max_length: int = 200) -> str:
+    def _generate_summary(self, content: str, max_length: int = 500) -> str:
         """Gera summary do conteudo."""
         # Remove markdown formatting
         text = re.sub(r'#+ ', '', content)
@@ -811,11 +775,14 @@ class Brain:
 
                 title = props.get("title", "").lower()
                 summary = props.get("summary", "").lower()
+                content_text = props.get("content", "").lower()
 
                 if query_lower in title:
                     results[node_id] = results.get(node_id, 0) + 1.0
                 if query_lower in summary:
                     results[node_id] = results.get(node_id, 0) + 0.5
+                if query_lower in content_text:
+                    results[node_id] = results.get(node_id, 0) + 0.3
 
         # 3. Aplica filtros
         if labels:

@@ -112,16 +112,21 @@ def build_embeddings(brain_path: Path = Path(".claude/brain")):
     for node_id, node_data in nodes.items():
         props = node_data.get("props", {})
 
-        # Texto para embedding: titulo + summary + labels
+        # Texto para embedding: titulo + content (or summary) + labels
+        # Uses full content (up to 1000 chars) for richer embeddings
         parts = []
 
         title = props.get("title", "")
         if title:
             parts.append(title)
 
-        summary = props.get("summary", "")
-        if summary:
-            parts.append(summary)
+        content = props.get("content", "")
+        if content:
+            parts.append(content[:1000])
+        else:
+            summary = props.get("summary", "")
+            if summary:
+                parts.append(summary)
 
         labels = node_data.get("labels", [])
         if labels:
