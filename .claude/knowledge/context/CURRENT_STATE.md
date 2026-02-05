@@ -1,11 +1,11 @@
 # Estado Atual do Projeto
-> Ultima atualizacao: 2026-02-05 (/learn commit c5b8efa - refactor extras + infra detection)
+> Ultima atualizacao: 2026-02-05 (/learn commit 4ea39bc - brain sleep cycle)
 
 ## Status Geral
-- **Fase**: v3.0.0 — Engram com Cérebro Organizacional (estável, pós-limpeza)
-- **Saúde**: 🟢 Saudável (Health Score 100%)
-- **Cérebro**: 134 nós, 208 arestas, 134 embeddings
-- **Próximo Marco**: Testes unitários nos scripts Python (ICE 12.6)
+- **Fase**: v3.0.0 — Engram com Cérebro Organizacional (estável, pós-sleep)
+- **Saúde**: 🟡 Needs Attention (Health Score 0.75)
+- **Cérebro**: 165 nós, 322 arestas (68 semânticas), 151 embeddings
+- **Próximo Marco**: Gerar embeddings para nós novos + melhorar threshold do relate
 
 ## Identidade
 **Engram v3** — Sistema metacircular de memória persistente para Claude Code.
@@ -118,6 +118,7 @@ genesis → evolui componentes → ciclo recomeça
 /init-engram, /status, /plan, /commit, /review, /priorities, /learn, /create, /spawn, /doctor, /curriculum, /export, /import, /recall, **/domain**
 
 ## O Que Mudou Recentemente
+- [2026-02-05] **Ciclo de Sono do Cérebro (commit 4ea39bc)**: sleep.py com 5 fases (dedup/connect/relate/themes/calibrate). IDs determinísticos, upsert, _resolve_link corrigido, auto-ativação de venv. De 0 para 68 arestas semânticas, 134 duplicatas removidas. [[ADR-014]], [[PAT-036]], [[EXP-022]] | Impacto: CRÍTICO
 - [2026-02-05] **Detecção de infra (commit c5b8efa)**: analyze_project.py detecta CI/CD, K8s, ArgoCD, Terraform + sugere devops-patterns | Impacto: ALTO
 - [2026-02-05] **Remoção de 3 órfãos**: execution-pipeline, microservices-navigator, SERVICE_MAP.md.tmpl — não participavam do ciclo ouroboros | Impacto: MÉDIO
 - [2026-02-05] **ANALISE_IMPLEMENTA.md encerrada**: 9/9 itens implementados, análise revelou 4 gaps, 3 componentes removidos por falta de integração | Impacto: ALTO
@@ -235,6 +236,10 @@ Arquitetura definida em [[ADR-011]]. Sistema de memória com grafo de conhecimen
 - ✅ Curva de esquecimento (Ebbinghaus)
 - ✅ Consolidação de conexões
 - ✅ Embeddings para busca semântica
+- ✅ **Ciclo de Sono** (sleep.py): 5 fases de consolidação semântica
+- ✅ **IDs determinísticos**: md5(title|labels) — repopular é idempotente
+- ✅ **Auto-ativação de venv**: numpy/networkx sempre disponíveis
+- ✅ **8 tipos de aresta semântica**: REFERENCES, INFORMED_BY, APPLIES, RELATED_TO, SAME_SCOPE, MODIFIES_SAME, BELONGS_TO_THEME, CLUSTERED_IN
 
 **Uso:**
 ```bash
@@ -266,3 +271,6 @@ python .claude/brain/embeddings.py search "como resolver bugs"
 6. [x] Gerar embeddings (61 vetores) e testar busca semântica ✅
 7. [x] Integrar no setup.sh e /init-engram ✅
 8. [ ] Documentar fluxo de uso para equipe
+9. [x] Ciclo de Sono — consolidação semântica com 5 fases ✅
+10. [ ] Gerar embeddings para nós novos (14 sem embedding)
+11. [ ] Integrar sleep no workflow do Claude — usar o grafo como fonte primária

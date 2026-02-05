@@ -1,5 +1,5 @@
 # Conhecimento de Domínio
-> Última atualização: 2026-02-04 (/domain analyze)
+> Última atualização: 2026-02-05 (/learn commit 4ea39bc)
 
 ## Glossário
 
@@ -15,7 +15,9 @@
 
 - **Brain (Cérebro Organizacional)**: Sistema de memória com grafo de conhecimento em `.claude/brain/`. Usa NetworkX para nós e arestas, embeddings para busca semântica.
 
-- **Cognitive Job**: Processo periódico de manutenção do cérebro. Três tipos: consolidate (semanal), decay (diário), archive (sob demanda).
+- **Cognitive Job**: Processo periódico de manutenção do cérebro. Quatro tipos: consolidate (semanal), decay (diário), archive (sob demanda), sleep (consolidação semântica).
+
+- **Dedup**: Fase do sono que encontra e merge nós duplicados no grafo. Usa IDs determinísticos (md5) em vez de uuid4 para prevenir duplicatas futuras.
 
 - **Command**: Atalho para invocar skill ou sequência de ações. Arquivo .md em .claude/commands/. Usuário digita /nome.
 
@@ -81,7 +83,11 @@
 
 - **Seed**: Skill universal que vem com toda instalação. Não depende de stack específica.
 
+- **Semantic Edge (Aresta Semântica)**: Aresta no grafo que representa relação de significado (não estrutural). 8 tipos: REFERENCES, INFORMED_BY, APPLIES, RELATED_TO, SAME_SCOPE, MODIFIES_SAME, BELONGS_TO_THEME, CLUSTERED_IN. Criadas pelo sleep.py.
+
 - **Self-Verification**: Conceito do Voyager - só commita skill se verificou sucesso. No Engram: validate.py obrigatório antes de register.py.
+
+- **Sleep Cycle (Ciclo de Sono)**: Processo de consolidação semântica do cérebro com 5 fases: dedup, connect, relate, themes, calibrate. Inspirado no sono biológico. Roda via `sleep.py` ou `cognitive.py sleep`.
 
 - **Skill**: Capacidade especializada do Claude. Diretório com SKILL.md + scripts opcionais. Carregado sob demanda (progressive disclosure).
 
@@ -174,6 +180,15 @@
 - **RN-034**: Health score: >=90%=verde, >=70%=amarelo, <70%=vermelho
   - Fonte: `doctor.py:341-345`
 
+### Brain Sleep (RN-035 a RN-037)
+
+- **RN-035**: Health score do cérebro: 30% weak ratio + 40% conectividade semântica + 30% cobertura de embeddings
+  - Fonte: `cognitive.py:health_check()`
+- **RN-036**: IDs de nó são determinísticos: md5(title|labels)[:8]. Repopular é idempotente.
+  - Fonte: `brain.py:add_memory()`
+- **RN-037**: Threshold de similaridade para RELATED_TO: cosine >= 0.75
+  - Fonte: `sleep.py:phase_relate()`
+
 ## Entidades Principais
 
 ### Manifest e Componentes
@@ -221,14 +236,25 @@ Brain (Cérebro)
 
     └── contém → Edges (Arestas)
                    │
-                   ├── AUTHORED_BY → Node → Person
-                   ├── REFERENCES → Node → Node
-                   └── BELONGS_TO → Node → Domain
+                   ├── Estruturais (populate.py)
+                   │   ├── AUTHORED_BY → Node → Person
+                   │   └── BELONGS_TO → Node → Domain
+                   │
+                   └── Semânticas (sleep.py)
+                       ├── REFERENCES → referência cruzada explícita
+                       ├── INFORMED_BY → Pattern ← ADR
+                       ├── APPLIES → Commit → Pattern
+                       ├── RELATED_TO → similaridade semântica
+                       ├── SAME_SCOPE → commits no mesmo scope
+                       ├── MODIFIES_SAME → commits nos mesmos arquivos
+                       ├── BELONGS_TO_THEME → commit → Theme
+                       └── CLUSTERED_IN → pattern → PatternCluster
 
     └── executa → Cognitive Processes
                    │
                    ├── Consolidate (semanal)
                    ├── Decay (diário)
+                   ├── Sleep (consolidação semântica)
                    └── Archive (sob demanda)
 ```
 

@@ -1,5 +1,5 @@
 # Padrões do Projeto
-> Última atualização: 2026-02-05 (/learn commit c5b8efa)
+> Última atualização: 2026-02-05 (/learn commit 4ea39bc)
 
 ## Padrões Aprovados
 
@@ -454,3 +454,18 @@
   - `*.tf` ou `terraform/` → terraform
 - **Anti-padrão**: skill existente que nunca é sugerido (skill invisível)
 - **Descoberto em**: 2026-02-05 (commit c5b8efa)
+
+### PAT-036: Auto-Ativação de Venv via site.addsitedir
+- **Contexto**: scripts Python precisam de deps (numpy, networkx) que vivem em .venv, mas são chamados via `python3` do sistema
+- **Solução**: no módulo base (brain.py), detectar e ativar o venv automaticamente:
+  ```python
+  import site
+  _venv_dir = Path(__file__).parent / ".venv"
+  if _venv_dir.exists():
+      _site_packages = list(_venv_dir.glob("lib/python*/site-packages"))
+      if _site_packages:
+          site.addsitedir(str(_site_packages[0]))
+  ```
+- **Vantagem**: não precisa ativar venv externamente, funciona com `python3 script.py` direto
+- **Anti-padrão**: criar venv e esperar que chamadores saibam ativá-lo (PAT-012 documentado mas nunca implementado)
+- **Descoberto em**: 2026-02-05 (commit 4ea39bc)

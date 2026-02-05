@@ -20,9 +20,17 @@ Instalacao (openai):
 
 import json
 import os
+import site
 import sys
 from pathlib import Path
 from typing import List, Optional
+
+# Auto-activate brain venv (PAT-036)
+_venv_dir = Path(__file__).parent / ".venv"
+if _venv_dir.exists() and "brain/.venv" not in os.environ.get("VIRTUAL_ENV", ""):
+    _site_packages = list(_venv_dir.glob("lib/python*/site-packages"))
+    if _site_packages:
+        site.addsitedir(str(_site_packages[0]))
 
 try:
     import numpy as np

@@ -1,5 +1,5 @@
 # Architecture Decision Records
-> Última atualização: 2026-02-05 (/learn commit c5b8efa)
+> Última atualização: 2026-02-05 (/learn commit 4ea39bc)
 
 ## ADR-001: Sistema Metacircular
 **Data**: 2026-02-03
@@ -638,6 +638,41 @@ Remover os 3 componentes. O Engram é local e metaprogramável — usuários cri
 - ✅ Princípio claro: componente sem consumidor = remover
 - ✅ Reforça filosofia de geração sob demanda vs pré-fabricação
 - ⚠️ Usuários que esperavam esses extras precisam criar via /create
+
+---
+
+## ADR-014: Ciclo de Sono para Consolidação Semântica
+**Data**: 2026-02-05
+**Status**: ✅ Aceito
+**Relacionado**: [[ADR-011]] (Arquitetura de Cérebro), [[PAT-012]] (Venv Isolado)
+
+### Contexto
+O cérebro tinha 151 nós e 234 arestas, mas 100% eram estruturais (AUTHORED_BY + BELONGS_TO). Zero conexões semânticas. Era uma cópia dos .md sem inteligência — topologia estrela onde tudo apontava para person-engram e domain-X.
+
+Causas raiz: IDs uuid4 causavam duplicatas, `_resolve_link()` nunca encontrava nós por prop/prefixo, populate.py nunca passava `references=`, e o venv com numpy/networkx existia mas nenhum script o ativava.
+
+### Decisão
+Implementar ciclo de sono (`sleep.py`) inspirado no sono biológico com 5 fases:
+1. **dedup** — merge nós duplicados (IDs determinísticos md5)
+2. **connect** — refs cruzadas (ADR/PAT/EXP/wikilinks, same_scope, modifies_same)
+3. **relate** — similaridade vetorial (embeddings ou TF fallback)
+4. **themes** — agrupa commits por scope, patterns por domínio
+5. **calibrate** — ajusta pesos por acesso
+
+Auto-ativação do venv via `site.addsitedir()` no brain.py para que numpy/networkx estejam sempre disponíveis.
+
+### Alternativas Consideradas
+1. ❌ Forçar refs manuais no populate — não escala, depende de parse perfeito
+2. ❌ Embedding-only — requer modelo pesado, não funciona sem GPU
+3. ✅ 5 fases complementares — funciona com ou sem embeddings, incremental
+
+### Consequências
+- ✅ De 0 para 68 arestas semânticas (REFERENCES, SAME_SCOPE, MODIFIES_SAME, RELATED_TO, BELONGS_TO_THEME, CLUSTERED_IN)
+- ✅ 134 duplicatas removidas na primeira execução
+- ✅ health_score de 0.47 para 0.75 (40% do score agora mede conectividade semântica)
+- ✅ /recall mostra conexões — spreading activation navega rede rica
+- ✅ Idempotente — rodar sleep múltiplas vezes não cria duplicatas
+- ⚠️ relate() com TF vectors é impreciso para textos curtos (threshold 0.75 ajuda)
 
 ---
 
