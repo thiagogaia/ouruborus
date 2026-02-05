@@ -883,9 +883,17 @@ class Brain:
     # ══════════════════════════════════════════════════════════
 
     def consolidate(self) -> Dict:
-        """Processo de consolidacao de memorias."""
+        """Processo de consolidacao de memorias.
+
+        Two steps:
+        1. Strengthen existing edges between co-accessed nodes (+10%)
+        2. Create CO_ACCESSED edges between nodes accessed in the same
+           time window (7 days) that share no direct connection yet.
+           This gives spreading activation new paths to follow.
+        """
         stats = {
             "edges_strengthened": 0,
+            "edges_created": 0,
             "patterns_detected": 0,
             "summaries_created": 0
         }
@@ -922,7 +930,47 @@ class Brain:
                 except:
                     pass
 
-        # 2. Identifica hubs
+        # 2. Cria arestas CO_ACCESSED entre nós co-acessados sem conexão direta
+        # Coleta nós acessados recentemente (access_count >= 2 para filtrar ruído)
+        recently_accessed = []
+        all_node_ids = list(self.graph.nodes) if HAS_NETWORKX else list(self.graph._nodes.keys())
+
+        for nid in all_node_ids:
+            ndata = self.graph.nodes.get(nid, {}) if HAS_NETWORKX else self.graph._nodes.get(nid, {})
+            memory = ndata.get("memory", {})
+            accessed = memory.get("last_accessed", "")
+            count = memory.get("access_count", 0)
+            labels = ndata.get("labels", [])
+
+            # Skip structural nodes (Person, Domain) — they connect to everything
+            if "Person" in labels or "Domain" in labels:
+                continue
+
+            if count >= 2 and accessed:
+                try:
+                    t = datetime.fromisoformat(accessed.replace('Z', '+00:00').split('+')[0])
+                    if t > recent_cutoff:
+                        recently_accessed.append(nid)
+                except:
+                    pass
+
+        # Create CO_ACCESSED edges between pairs (max 50 edges per cycle)
+        created = 0
+        max_new_edges = 50
+        for i, nid_a in enumerate(recently_accessed):
+            if created >= max_new_edges:
+                break
+            for nid_b in recently_accessed[i + 1:]:
+                if created >= max_new_edges:
+                    break
+                # Only connect if no direct edge exists in either direction
+                if not self.has_edge(nid_a, nid_b) and not self.has_edge(nid_b, nid_a):
+                    self.add_edge(nid_a, nid_b, "CO_ACCESSED", 0.3)
+                    created += 1
+
+        stats["edges_created"] = created
+
+        # 3. Identifica hubs
         hubs = sorted(
             self.graph.degree(),
             key=lambda x: x[1],

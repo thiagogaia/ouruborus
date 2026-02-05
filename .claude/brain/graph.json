@@ -1,9 +1,9 @@
 {
   "version": "1.0",
   "meta": {
-    "saved_at": "2026-02-05T18:10:10.700201",
-    "node_count": 171,
-    "edge_count": 364
+    "saved_at": "2026-02-05T18:51:23.532595",
+    "node_count": 192,
+    "edge_count": 431
   },
   "nodes": {
     "a52ceda2": {
@@ -3123,38 +3123,40 @@
     },
     "d0b05c77": {
       "labels": [
-        "Pattern",
-        "ApprovedPattern"
+        "ApprovedPattern",
+        "Pattern"
       ],
       "props": {
         "title": "PAT-012: Venv Isolado para Brain",
         "author": "@engram",
         "content_path": "memory/patterns/2026-02-05-pat-012-venv-isolado-para-brain-d0b05c77.md",
-        "summary": "- Contexto: dependências Python pesadas (torch, sentence-transformers) - Solução: criar venv em `.claude/brain/.venv`   - setup.sh cria e instala deps automaticamente   - Scripts do brain ativam ve..."
+        "summary": "- Contexto: dependências Python pesadas (torch, sentence-transformers) - Solução: criar venv em `.claude/brain/.venv`   - setup.sh cria e instala deps automaticamente   - Scripts do brain ativam ve...",
+        "pat_id": "PAT-012"
       },
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T17:05:19.884183",
+        "last_accessed": "2026-02-05T18:51:12.725956",
         "created_at": "2026-02-05T17:05:19.884183",
         "decay_rate": 0.005
       }
     },
     "d48dd7aa": {
       "labels": [
-        "Pattern",
-        "ApprovedPattern"
+        "ApprovedPattern",
+        "Pattern"
       ],
       "props": {
         "title": "PAT-013: Integração de Features em Commands Existentes",
         "author": "@engram",
         "content_path": "memory/patterns/2026-02-05-pat-013-integra-o-de-features-em-commands-existent-d48dd7aa.md",
-        "summary": "- Contexto: nova feature que complementa workflow existente - Solução: adicionar fase ao command existente em vez de criar novo   - /init-engram: Fase 5 para popular cérebro   - /learn: Fase 4 para..."
+        "summary": "- Contexto: nova feature que complementa workflow existente - Solução: adicionar fase ao command existente em vez de criar novo   - /init-engram: Fase 5 para popular cérebro   - /learn: Fase 4 para...",
+        "pat_id": "PAT-013"
       },
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T17:05:19.884293",
+        "last_accessed": "2026-02-05T18:51:12.725978",
         "created_at": "2026-02-05T17:05:19.884293",
         "decay_rate": 0.005
       }
@@ -3636,6 +3638,426 @@
         "created_at": "2026-02-05T18:10:06.860824",
         "decay_rate": 0.003
       }
+    },
+    "801b61db": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-001: Validar Componente Antes de Registrar",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-001-validar-componente-antes-de-registrar-801b61db.md",
+        "summary": "Componente criado manualmente tinha erros no frontmatter - Stack: Python scripts, manifest.json - Padrão: PAT-007 - Abordagem: SEMPRE rodar validate.py antes de register.py. Corrigir todos os erros...",
+        "exp_id": "EXP-001"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.043427",
+        "created_at": "2026-02-05T18:51:08.043427",
+        "decay_rate": 0.01
+      }
+    },
+    "27a9601e": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-002: Debugar Script Python do Engram",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-002-debugar-script-python-do-engram-27a9601e.md",
+        "summary": "Script não estava funcionando como esperado - Stack: Python 3, scripts do Engram - Abordagem: Rodar com output explícito. Verificar se path está correto. Checar se Python 3.8+ está instalado. - Res...",
+        "exp_id": "EXP-002"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.043851",
+        "created_at": "2026-02-05T18:51:08.043851",
+        "decay_rate": 0.01
+      }
+    },
+    "04312e43": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-003: Verificar Saúde do Sistema",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-003-verificar-sa-de-do-sistema-04312e43.md",
+        "summary": "Dúvida se Engram está funcionando corretamente - Stack: /doctor, doctor.py - Abordagem: Rodar `/doctor` ou `python3 doctor.py --project-dir .`. Score 90%+ = saudável. - Resultado: Sucesso — diagnós...",
+        "exp_id": "EXP-003"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044030",
+        "created_at": "2026-02-05T18:51:08.044030",
+        "decay_rate": 0.01
+      }
+    },
+    "e49fd844": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-004: Ver Uso de Componentes",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-004-ver-uso-de-componentes-e49fd844.md",
+        "summary": "Não sei quais skills estão sendo usados - Stack: track_usage.py - Abordagem: Três reports disponíveis: health (completo), stale (obsoletos), summary (rápido). - Resultado: Sucesso — visibilidade de...",
+        "exp_id": "EXP-004"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044161",
+        "created_at": "2026-02-05T18:51:08.044161",
+        "decay_rate": 0.01
+      }
+    },
+    "362caaf6": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-005: Criar Skill Customizado",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-005-criar-skill-customizado-362caaf6.md",
+        "summary": "Preciso de um skill novo para tarefa repetitiva - Stack: genesis scripts - Padrão: PAT-002 - Abordagem: generate_component.py → editar SKILL.md → validate.py → register.py - Resultado: Sucesso - Da...",
+        "exp_id": "EXP-005"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044285",
+        "created_at": "2026-02-05T18:51:08.044285",
+        "decay_rate": 0.01
+      }
+    },
+    "655941d1": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-006: Atualizar Engram Sem Perder Customizações",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-006-atualizar-engram-sem-perder-customiza-es-655941d1.md",
+        "summary": "Nova versão do Engram disponível - Stack: setup.sh - Abordagem: `./setup.sh --update /projeto` preserva knowledge e skills customizados - Resultado: Sucesso - Data: 2026-02-03",
+        "exp_id": "EXP-006"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044406",
+        "created_at": "2026-02-05T18:51:08.044406",
+        "decay_rate": 0.01
+      }
+    },
+    "eefc0e4f": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-007: Listar Todos os Componentes",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-007-listar-todos-os-componentes-eefc0e4f.md",
+        "summary": "Quero ver tudo que está instalado - Stack: register.py - Abordagem: `register.py --list --project-dir .` - Resultado: Sucesso — lista com versão, uso, source - Data: 2026-02-03",
+        "exp_id": "EXP-007"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044525",
+        "created_at": "2026-02-05T18:51:08.044525",
+        "decay_rate": 0.01
+      }
+    },
+    "e9d6b403": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-008: Ciclo Completo /init-engram + /learn + /commit",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-008-ciclo-completo-init-engram-learn-commit-e9d6b403.md",
+        "summary": "Primeira inicialização completa do Engram em um projeto - Stack: /init-engram, /learn, /commit - Abordagem: 1) /init-engram popula knowledge files 2) Gera skills específicos 3) /commit com mensagem...",
+        "exp_id": "EXP-008"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044639",
+        "created_at": "2026-02-05T18:51:08.044639",
+        "decay_rate": 0.01
+      }
+    },
+    "e6441d7a": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-009: Registrar Co-ativações de Skills",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-009-registrar-co-ativa-es-de-skills-e6441d7a.md",
+        "summary": "Quero saber quais skills são usados juntos para detectar oportunidades de composição - Stack: co_activation.py - Abordagem: `co_activation.py --log-session --skills skill1,skill2,skill3 --project-d...",
+        "exp_id": "EXP-009"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.044861",
+        "created_at": "2026-02-05T18:51:08.044861",
+        "decay_rate": 0.01
+      }
+    },
+    "2d0a37a8": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-010: Analisar Arquitetura de Subagentes vs Paralelismo",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-010-analisar-arquitetura-de-subagentes-vs-para-2d0a37a8.md",
+        "summary": "Questão se o Engram deveria ter execução paralela com context windows isoladas - Stack: Arquitetura Engram v2, orquestração - Abordagem: Usar agente Explore para análise profunda. Documentar vantag...",
+        "exp_id": "EXP-010"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045110",
+        "created_at": "2026-02-05T18:51:08.045110",
+        "decay_rate": 0.01
+      }
+    },
+    "f729cc3c": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-011: Implementar Sistema de Migração de Backups",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-011-implementar-sistema-de-migra-o-de-backups-f729cc3c.md",
+        "summary": "/init-engram não tinha lógica para migrar backups criados pelo setup.sh - Stack: Python, engram-genesis scripts - Padrão: PAT-011 - Abordagem: 1) Analisar como setup.sh cria backups 2) Criar migrat...",
+        "exp_id": "EXP-011"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045268",
+        "created_at": "2026-02-05T18:51:08.045268",
+        "decay_rate": 0.01
+      }
+    },
+    "111d92de": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-012: Limpar __pycache__ do Histórico Git",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-012-limpar-pycache-do-hist-rico-git-111d92de.md",
+        "summary": "Arquivos __pycache__ foram commitados acidentalmente antes do .gitignore - Stack: Git, .gitignore - Abordagem: 1) Criar .gitignore robusto 2) `git rm -r --cached /__pycache__/` 3) Commit de cleanup...",
+        "exp_id": "EXP-012"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045408",
+        "created_at": "2026-02-05T18:51:08.045408",
+        "decay_rate": 0.01
+      }
+    },
+    "96024239": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-013: Estruturar Commit Fundacional de Sistema",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-013-estruturar-commit-fundacional-de-sistema-96024239.md",
+        "summary": "Criar base completa de sistema metacircular (Engram v2.0.0) - Stack: Git, bash, Python, Markdown - Padrão: PAT-017 - Abordagem: Incluir em commit atômico:   1. Estrutura de diretórios (.claude/ com...",
+        "exp_id": "EXP-013"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045552",
+        "created_at": "2026-02-05T18:51:08.045552",
+        "decay_rate": 0.01
+      }
+    },
+    "eb1f75cf": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-014: Extrair Conhecimento de Commit Antigo via /learn",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-014-extrair-conhecimento-de-commit-antigo-via--eb1f75cf.md",
+        "summary": "Analisar commit específico para documentar padrões retroativamente - Stack: Git, /learn skill - Abordagem: 1) `git show <sha> --stat` para ver scope 2) `git diff <sha>^..<sha>` para diff completo 3...",
+        "exp_id": "EXP-014"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045688",
+        "created_at": "2026-02-05T18:51:08.045688",
+        "decay_rate": 0.01
+      }
+    },
+    "e2d42ee3": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-015: Documentar Arquitetura v3.0 Git-Native (commit 5da6535c)",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-015-documentar-arquitetura-v3-0-git-native-com-e2d42ee3.md",
+        "summary": "Extrair e consolidar decisões arquiteturais de commit fundacional de arquitetura - Stack: Git, brain.py, populate.py, /learn - Abordagem: 1) `git show 5da6535c --stat` 2) Identificar ADRs novos 3) ...",
+        "exp_id": "EXP-015"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045833",
+        "created_at": "2026-02-05T18:51:08.045833",
+        "decay_rate": 0.01
+      }
+    },
+    "5a05bee2": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-016: Major Version Upgrade (cb64fd73 - v3.0.0)",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-016-major-version-upgrade-cb64fd73-v3-0-0--5a05bee2.md",
+        "summary": "Analisar commit de upgrade de versao major para extrair padroes - Stack: Git, /learn skill, knowledge files - Abordagem: 1) `git show cb64fd73 --stat` (24 files, 1410 insertions) 2) Analisar diff c...",
+        "exp_id": "EXP-016"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.045990",
+        "created_at": "2026-02-05T18:51:08.045990",
+        "decay_rate": 0.01
+      }
+    },
+    "a32016e3": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-017: Implementar /recall para Consulta ao Cerebro (5db29c67)",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-017-implementar-recall-para-consulta-ao-cerebr-a32016e3.md",
+        "summary": "Criar interface human-friendly para consultar cerebro organizacional - Stack: Python, argparse, brain.py, embeddings.py, commands - Abordagem:   1. Criar recall.py com busca semantica + spreading a...",
+        "exp_id": "EXP-017"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.046173",
+        "created_at": "2026-02-05T18:51:08.046173",
+        "decay_rate": 0.01
+      }
+    },
+    "45c0e0b6": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-018: Implementar Cerebro Organizacional Completo (d94adec)",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-018-implementar-cerebro-organizacional-complet-45c0e0b6.md",
+        "summary": "Commit massivo (66 arquivos, 5429 linhas) implementando sistema de memoria com grafo - Stack: Python, NetworkX, sentence-transformers, numpy - Abordagem:   1. brain.py (1060 linhas): grafo DiGraph ...",
+        "exp_id": "EXP-018"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.046385",
+        "created_at": "2026-02-05T18:51:08.046385",
+        "decay_rate": 0.01
+      }
+    },
+    "68480711": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-019: Analisar Commit Fundacional para Documentar Design Decisions (bbcc8777)",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-019-analisar-commit-fundacional-para-documenta-68480711.md",
+        "summary": "Commit inicial de repositório contém decisões implícitas valiosas - Stack: Git, /learn, knowledge files - Abordagem:   1. `git show <sha> --stat` para escopo (77 arquivos, 8137 linhas)   2. Ler doc...",
+        "exp_id": "EXP-019"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.046643",
+        "created_at": "2026-02-05T18:51:08.046643",
+        "decay_rate": 0.01
+      }
+    },
+    "f2aad3c1": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-022: Redesign de Grafo — Diagnóstico Antes de Código",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-022-redesign-de-grafo-diagn-stico-antes-de-c-d-f2aad3c1.md",
+        "summary": "cérebro com 151 nós, 234 arestas, mas 0 semânticas — espelho burro dos .md - Stack: Python, NetworkX, brain.py, sleep.py - Abordagem:   1. Diagnóstico quantitativo primeiro: contar tipos de aresta,...",
+        "exp_id": "EXP-022"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.046945",
+        "created_at": "2026-02-05T18:51:08.046945",
+        "decay_rate": 0.01
+      }
+    },
+    "5e9fb657": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-023: Documentar Sistema com Exemplo Real End-to-End",
+        "author": "@engram",
+        "content_path": "memory/episodes/2026-02-05-exp-023-documentar-sistema-com-exemplo-real-end-to-5e9fb657.md",
+        "summary": "Dev questionou o valor prático do sistema — precisava ver o ciclo completo em ação - Stack: Engram, knowledge files, brain, sleep - Abordagem:   1. Narrar um dia real de trabalho do início ao fim (...",
+        "exp_id": "EXP-023"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-05T18:51:08.047306",
+        "created_at": "2026-02-05T18:51:08.047306",
+        "decay_rate": 0.01
+      }
     }
   },
   "edges": [
@@ -3685,7 +4107,7 @@
       "src": "49d27394",
       "tgt": "166da41d",
       "type": "RELATED_TO",
-      "weight": 0.9620061343199097,
+      "weight": 1.0,
       "props": {
         "method": "tf_vector"
       }
@@ -3708,7 +4130,7 @@
       "src": "442d2f41",
       "tgt": "76918b1d",
       "type": "RELATED_TO",
-      "weight": 0.918313987851143,
+      "weight": 1.0,
       "props": {
         "method": "embedding"
       }
@@ -3770,6 +4192,48 @@
       "props": {}
     },
     {
+      "src": "e57d240c",
+      "tgt": "ee7eb926",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "e57d240c",
+      "tgt": "79abc0a5",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "e57d240c",
+      "tgt": "9310bbae",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "e57d240c",
+      "tgt": "f045840e",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "e57d240c",
+      "tgt": "f2aad3c1",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "e57d240c",
+      "tgt": "68480711",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
       "src": "7b1fcb34",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
@@ -3781,6 +4245,13 @@
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
       "weight": 1.0,
+      "props": {}
+    },
+    {
+      "src": "7b1fcb34",
+      "tgt": "e57d240c",
+      "type": "REFERENCES",
+      "weight": 0.66,
       "props": {}
     },
     {
@@ -3798,6 +4269,13 @@
       "props": {}
     },
     {
+      "src": "2638f530",
+      "tgt": "e57d240c",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
       "src": "9310bbae",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
@@ -3809,6 +4287,41 @@
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
       "weight": 1.0,
+      "props": {}
+    },
+    {
+      "src": "9310bbae",
+      "tgt": "e57d240c",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "9310bbae",
+      "tgt": "7b1fcb34",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "9310bbae",
+      "tgt": "f045840e",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "9310bbae",
+      "tgt": "f2aad3c1",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "9310bbae",
+      "tgt": "68480711",
+      "type": "REFERENCES",
+      "weight": 0.66,
       "props": {}
     },
     {
@@ -4081,11 +4594,10 @@
       "src": "46a30545",
       "tgt": "e1d6fff2",
       "type": "RELATED_TO",
-      "weight": 0.7510076761245728,
+      "weight": 0.8261084437370301,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.698901"
+      }
     },
     {
       "src": "e1d6fff2",
@@ -4119,7 +4631,7 @@
       "src": "7a135a62",
       "tgt": "0c94c63e",
       "type": "RELATED_TO",
-      "weight": 0.9137134218215943,
+      "weight": 1.0,
       "props": {
         "method": "embedding"
       }
@@ -4184,7 +4696,7 @@
       "src": "55501c4b",
       "tgt": "42cd5642",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4205,7 +4717,7 @@
       "src": "848cbb2d",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4226,14 +4738,14 @@
       "src": "43f7e06f",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "43f7e06f",
       "tgt": "3b9b10fd",
       "type": "RELATED_TO",
-      "weight": 0.9149169874191285,
+      "weight": 1.0,
       "props": {
         "method": "embedding"
       }
@@ -4256,7 +4768,7 @@
       "src": "3b9b10fd",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4291,14 +4803,14 @@
       "src": "02a48240",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "02a48240",
       "tgt": "c8be5372",
       "type": "RELATED_TO",
-      "weight": 0.9874800640344621,
+      "weight": 1.0,
       "props": {
         "method": "embedding"
       }
@@ -4321,7 +4833,7 @@
       "src": "c8be5372",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4342,7 +4854,7 @@
       "src": "69c0e925",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4363,7 +4875,7 @@
       "src": "c3ac2a3a",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4384,7 +4896,7 @@
       "src": "96f2c2d1",
       "tgt": "42cd5642",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -4426,7 +4938,7 @@
       "src": "a1516559",
       "tgt": "9a2c7d95",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "engram"
       }
@@ -4458,7 +4970,7 @@
       "src": "78161cc1",
       "tgt": "37d5e104",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "brain"
       }
@@ -4467,7 +4979,7 @@
       "src": "78161cc1",
       "tgt": "0c361ed6",
       "type": "SAME_SCOPE",
-      "weight": 0.44000000000000006,
+      "weight": 0.4840000000000001,
       "props": {
         "scope": "brain"
       }
@@ -4476,18 +4988,17 @@
       "src": "78161cc1",
       "tgt": "ab2d7fea",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.66,
+      "weight": 0.7260000000000001,
       "props": {}
     },
     {
       "src": "78161cc1",
       "tgt": "176fb04a",
       "type": "SAME_SCOPE",
-      "weight": 0.4,
+      "weight": 0.44000000000000006,
       "props": {
         "scope": "brain"
-      },
-      "created_at": "2026-02-05T18:10:10.696912"
+      }
     },
     {
       "src": "7463a6ea",
@@ -4507,14 +5018,14 @@
       "src": "7463a6ea",
       "tgt": "e57d240c",
       "type": "REFERENCES",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "7463a6ea",
       "tgt": "812f0768",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4523,7 +5034,7 @@
       "src": "7463a6ea",
       "tgt": "79c9405c",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4532,7 +5043,7 @@
       "src": "7463a6ea",
       "tgt": "6721d264",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4541,7 +5052,7 @@
       "src": "7463a6ea",
       "tgt": "835a2079",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4550,7 +5061,7 @@
       "src": "7463a6ea",
       "tgt": "7665a274",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4559,7 +5070,7 @@
       "src": "7463a6ea",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
@@ -4622,7 +5133,7 @@
       "src": "37d5e104",
       "tgt": "0c361ed6",
       "type": "SAME_SCOPE",
-      "weight": 0.44000000000000006,
+      "weight": 0.4840000000000001,
       "props": {
         "scope": "brain"
       }
@@ -4631,18 +5142,17 @@
       "src": "37d5e104",
       "tgt": "ab2d7fea",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.66,
+      "weight": 0.7260000000000001,
       "props": {}
     },
     {
       "src": "37d5e104",
       "tgt": "176fb04a",
       "type": "SAME_SCOPE",
-      "weight": 0.4,
+      "weight": 0.44000000000000006,
       "props": {
         "scope": "brain"
-      },
-      "created_at": "2026-02-05T18:10:10.696920"
+      }
     },
     {
       "src": "812f0768",
@@ -4662,7 +5172,7 @@
       "src": "812f0768",
       "tgt": "79c9405c",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4671,7 +5181,7 @@
       "src": "812f0768",
       "tgt": "6721d264",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4680,7 +5190,7 @@
       "src": "812f0768",
       "tgt": "835a2079",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4689,7 +5199,7 @@
       "src": "812f0768",
       "tgt": "7665a274",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4698,7 +5208,7 @@
       "src": "812f0768",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
@@ -4733,66 +5243,65 @@
       "src": "3a7a1d3a",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "9118ae21",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "9118ae21",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "8ed780cf",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "8ed780cf",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "8ed780cf",
       "tgt": "eb333c9a",
       "type": "RELATED_TO",
-      "weight": 0.7680935263633728,
+      "weight": 0.8449028789997102,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699155"
+      }
     },
     {
       "src": "1b7dea8c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "1b7dea8c",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "1b7dea8c",
       "tgt": "76293dca",
       "type": "RELATED_TO",
-      "weight": 0.9146740246823301,
+      "weight": 1.0,
       "props": {
         "method": "tf_vector"
       }
@@ -4801,35 +5310,35 @@
       "src": "fe7d60c8",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "fe7d60c8",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.9743585500000007,
+      "weight": 1.0,
       "props": {}
     },
     {
       "src": "a1396a0f",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.8857805000000005,
+      "weight": 0.9743585500000007,
       "props": {}
     },
     {
       "src": "16c24a89",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.8857805000000005,
+      "weight": 0.9743585500000007,
       "props": {}
     },
     {
       "src": "16c24a89",
       "tgt": "99286bf3",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "readme"
       }
@@ -4838,28 +5347,28 @@
       "src": "81dd2eb4",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.8857805000000005,
+      "weight": 0.9743585500000007,
       "props": {}
     },
     {
       "src": "79c9405c",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.8857805000000005,
+      "weight": 0.9743585500000007,
       "props": {}
     },
     {
       "src": "79c9405c",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.8857805000000005,
+      "weight": 0.9743585500000007,
       "props": {}
     },
     {
       "src": "79c9405c",
       "tgt": "6721d264",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4868,7 +5377,7 @@
       "src": "79c9405c",
       "tgt": "835a2079",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4877,7 +5386,7 @@
       "src": "79c9405c",
       "tgt": "7665a274",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4886,98 +5395,98 @@
       "src": "79c9405c",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
       "src": "75a55c6d",
       "tgt": "person-thigato",
       "type": "AUTHORED_BY",
-      "weight": 0.8052550000000004,
+      "weight": 0.8857805000000005,
       "props": {}
     },
     {
       "src": "75a55c6d",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.8052550000000004,
+      "weight": 0.8857805000000005,
       "props": {}
     },
     {
       "src": "75a55c6d",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.8052550000000004,
+      "weight": 0.8857805000000005,
       "props": {}
     },
     {
       "src": "99286bf3",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "99286bf3",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "cd6cd21f",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "df4a7d40",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "27980a2a",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "27980a2a",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "588628c9",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "6721d264",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "6721d264",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "6721d264",
       "tgt": "835a2079",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4986,7 +5495,7 @@
       "src": "6721d264",
       "tgt": "7665a274",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -4995,49 +5504,58 @@
       "src": "6721d264",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
+    },
+    {
+      "src": "6721d264",
+      "tgt": "32b83c9b",
+      "type": "RELATED_TO",
+      "weight": 0.8750242114067078,
+      "props": {
+        "method": "embedding"
+      }
     },
     {
       "src": "223940a2",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "223940a2",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "223940a2",
       "tgt": "42cd5642",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "35278641",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "35278641",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "35278641",
       "tgt": "f8d0dc8d",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "core"
       }
@@ -5046,21 +5564,21 @@
       "src": "3ee40d0e",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "3ee40d0e",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "3ee40d0e",
       "tgt": "a3095845",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "extras"
       }
@@ -5069,35 +5587,35 @@
       "src": "a3095845",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "a3095845",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "3742d3fd",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "3742d3fd",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "3742d3fd",
       "tgt": "a77de1bc",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "genesis"
       }
@@ -5106,491 +5624,528 @@
       "src": "f3d73e0a",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6655000000000002,
+      "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "79abc0a5",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "79abc0a5",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
+      "props": {}
+    },
+    {
+      "src": "79abc0a5",
+      "tgt": "9310bbae",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "79abc0a5",
+      "tgt": "f045840e",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "79abc0a5",
+      "tgt": "e57d240c",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "79abc0a5",
+      "tgt": "f2aad3c1",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "79abc0a5",
+      "tgt": "68480711",
+      "type": "REFERENCES",
+      "weight": 0.66,
       "props": {}
     },
     {
       "src": "f045840e",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "f045840e",
       "tgt": "domain-api",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "f045840e",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.7320500000000003,
+      "weight": 0.8052550000000004,
       "props": {}
     },
     {
       "src": "53e1ed87",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "53e1ed87",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
+      "props": {}
+    },
+    {
+      "src": "53e1ed87",
+      "tgt": "a52ceda2",
+      "type": "REFERENCES",
+      "weight": 0.66,
       "props": {}
     },
     {
       "src": "99d27b58",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "ac9d3226",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "a23868a8",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "a23868a8",
       "tgt": "domain-api",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "2e6730d3",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "46ffe86c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "6c8589ea",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "6c8589ea",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "475dab4c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "475dab4c",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "76293dca",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "76293dca",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5f110764",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5f110764",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "4d950964",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "4d950964",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "0d4acc23",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "0d4acc23",
       "tgt": "domain-api",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "72d3ebff",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "72d3ebff",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "1d141a87",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "1d141a87",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "362bd1b1",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "362bd1b1",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "802e1c1d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "480b4335",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "480b4335",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "90935be0",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "90935be0",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "eadcc06d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "eadcc06d",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "382d705f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5fc2aceb",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5fc2aceb",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "6e3e1b2f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "6e3e1b2f",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "2acb0005",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "2acb0005",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "83642dad",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "415f4eaa",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "415f4eaa",
       "tgt": "domain-database",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "48f2d20b",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "48f2d20b",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "46c9616c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "46c9616c",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "c71281a9",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "c71281a9",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "872c0f95",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "872c0f95",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "eb333c9a",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "eb333c9a",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "fea18c15",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "fea18c15",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "c047e955",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "c047e955",
       "tgt": "12d4c5b1",
       "type": "RELATED_TO",
-      "weight": 0.8373668193817139,
+      "weight": 0.9211035013198853,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699372"
+      }
     },
     {
       "src": "c047e955",
       "tgt": "5e51d95c",
       "type": "RELATED_TO",
-      "weight": 0.7835317254066467,
+      "weight": 0.8618848979473115,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699375"
+      }
     },
     {
       "src": "c047e955",
       "tgt": "3d5f0db0",
       "type": "RELATED_TO",
-      "weight": 0.7982549071311951,
+      "weight": 0.8780803978443147,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699377"
+      }
     },
     {
       "src": "c047e955",
       "tgt": "e12afc4a",
       "type": "RELATED_TO",
-      "weight": 0.8268675804138184,
+      "weight": 0.9095543384552003,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699379"
+      }
     },
     {
       "src": "c047e955",
       "tgt": "8c20b6a9",
       "type": "RELATED_TO",
-      "weight": 0.7737380862236023,
+      "weight": 0.8511118948459626,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699381"
+      }
     },
     {
       "src": "12d4c5b1",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -5606,85 +6161,80 @@
       "src": "12d4c5b1",
       "tgt": "5e51d95c",
       "type": "RELATED_TO",
-      "weight": 0.757499098777771,
+      "weight": 0.8332490086555482,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699385"
+      }
     },
     {
       "src": "12d4c5b1",
       "tgt": "3d5f0db0",
       "type": "RELATED_TO",
-      "weight": 0.8008426427841187,
+      "weight": 0.8809269070625306,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699387"
+      }
     },
     {
       "src": "12d4c5b1",
       "tgt": "e12afc4a",
       "type": "RELATED_TO",
-      "weight": 0.800584614276886,
+      "weight": 0.8806430757045747,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699388"
+      }
     },
     {
       "src": "12d4c5b1",
       "tgt": "8c20b6a9",
       "type": "RELATED_TO",
-      "weight": 0.786727786064148,
+      "weight": 0.8654005646705628,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699390"
+      }
     },
     {
       "src": "63c9a2d9",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "63c9a2d9",
       "tgt": "e12afc4a",
       "type": "RELATED_TO",
-      "weight": 0.7724043726921082,
+      "weight": 0.8496448099613191,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699394"
+      }
     },
     {
       "src": "2ad2d9da",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "2ad2d9da",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5e51d95c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5e51d95c",
       "tgt": "3d5f0db0",
       "type": "RELATED_TO",
-      "weight": 0.9335352672706563,
+      "weight": 1.0,
       "props": {
         "method": "tf_vector"
       }
@@ -5693,61 +6243,57 @@
       "src": "5e51d95c",
       "tgt": "e12afc4a",
       "type": "RELATED_TO",
-      "weight": 0.776180624961853,
+      "weight": 0.8537986874580384,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699401"
+      }
     },
     {
       "src": "3d5f0db0",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "3d5f0db0",
       "tgt": "86bece09",
       "type": "RELATED_TO",
-      "weight": 0.8017209768295288,
+      "weight": 0.8818930745124818,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699404"
+      }
     },
     {
       "src": "3d5f0db0",
       "tgt": "e12afc4a",
       "type": "RELATED_TO",
-      "weight": 0.8459675312042236,
+      "weight": 0.9305642843246461,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699406"
+      }
     },
     {
       "src": "3d5f0db0",
       "tgt": "8c20b6a9",
       "type": "RELATED_TO",
-      "weight": 0.9282063841819763,
+      "weight": 1.0,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699408"
+      }
     },
     {
       "src": "86bece09",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "86bece09",
       "tgt": "e12afc4a",
       "type": "RELATED_TO",
-      "weight": 0.9335352672706563,
+      "weight": 1.0,
       "props": {
         "method": "tf_vector"
       }
@@ -5756,62 +6302,60 @@
       "src": "86bece09",
       "tgt": "8c20b6a9",
       "type": "RELATED_TO",
-      "weight": 0.8347252011299133,
+      "weight": 0.9181977212429048,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699411"
+      }
     },
     {
       "src": "e12afc4a",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "e12afc4a",
       "tgt": "8c20b6a9",
       "type": "RELATED_TO",
-      "weight": 0.8632455468177795,
+      "weight": 0.9495701014995576,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699415"
+      }
     },
     {
       "src": "8c20b6a9",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5a3fa05d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5a3fa05d",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "e459cfa7",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "e459cfa7",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -5827,28 +6371,28 @@
       "src": "7b8901d0",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "7b8901d0",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "bf4c4521",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "bf4c4521",
       "tgt": "b5bf7925",
       "type": "RELATED_TO",
-      "weight": 0.9335352672706563,
+      "weight": 1.0,
       "props": {
         "method": "tf_vector"
       }
@@ -5857,77 +6401,77 @@
       "src": "b5bf7925",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "b5bf7925",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "b8e5d3f5",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "3d1457be",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "3702133d",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "81f71838",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "81f71838",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "afc822f6",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "afc822f6",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "797ed63f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "c94f797c",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
@@ -5943,77 +6487,77 @@
       "src": "bf4cf47f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "ff5a2f32",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "a6c3edcd",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "d0b05c77",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "d0b05c77",
       "tgt": "domain-infra",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "d0b05c77",
       "tgt": "42cd5642",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "d48dd7aa",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "d48dd7aa",
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "d48dd7aa",
       "tgt": "258e7d75",
       "type": "CLUSTERED_IN",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5a98893e",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "5a98893e",
       "tgt": "51501375",
       "type": "MODIFIES_SAME",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {
         "file": "ANALISE_IMPLEMENTA.md"
       }
@@ -6022,28 +6566,28 @@
       "src": "835a2079",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "835a2079",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "835a2079",
       "tgt": "53e1ed87",
       "type": "REFERENCES",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "835a2079",
       "tgt": "7665a274",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -6052,14 +6596,14 @@
       "src": "835a2079",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
       "src": "835a2079",
       "tgt": "0c361ed6",
       "type": "MODIFIES_SAME",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {
         "file": ".claude/brain/graph.json"
       }
@@ -6068,24 +6612,23 @@
       "src": "835a2079",
       "tgt": "32b83c9b",
       "type": "MODIFIES_SAME",
-      "weight": 0.5,
+      "weight": 0.55,
       "props": {
         "file": ".claude/brain/cognitive-log.jsonl"
-      },
-      "created_at": "2026-02-05T18:10:10.696951"
+      }
     },
     {
       "src": "75b8b777",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "75b8b777",
       "tgt": "fd10e0be",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "templates"
       }
@@ -6094,7 +6637,7 @@
       "src": "75b8b777",
       "tgt": "51501375",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "templates"
       }
@@ -6103,21 +6646,21 @@
       "src": "75b8b777",
       "tgt": "50f6e99f",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
       "src": "fd10e0be",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "fd10e0be",
       "tgt": "51501375",
       "type": "SAME_SCOPE",
-      "weight": 0.4840000000000001,
+      "weight": 0.5324000000000001,
       "props": {
         "scope": "templates"
       }
@@ -6126,7 +6669,7 @@
       "src": "fd10e0be",
       "tgt": "f8d0dc8d",
       "type": "MODIFIES_SAME",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {
         "file": "setup.sh"
       }
@@ -6135,7 +6678,7 @@
       "src": "fd10e0be",
       "tgt": "a77de1bc",
       "type": "MODIFIES_SAME",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {
         "file": "setup.sh"
       }
@@ -6144,21 +6687,21 @@
       "src": "fd10e0be",
       "tgt": "50f6e99f",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
       "src": "51501375",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "51501375",
       "tgt": "f8d0dc8d",
       "type": "MODIFIES_SAME",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {
         "file": "setup.sh"
       }
@@ -6167,7 +6710,7 @@
       "src": "51501375",
       "tgt": "a77de1bc",
       "type": "MODIFIES_SAME",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {
         "file": "setup.sh"
       }
@@ -6176,21 +6719,21 @@
       "src": "51501375",
       "tgt": "50f6e99f",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
       "src": "f8d0dc8d",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "f8d0dc8d",
       "tgt": "a77de1bc",
       "type": "MODIFIES_SAME",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {
         "file": "setup.sh"
       }
@@ -6199,42 +6742,42 @@
       "src": "a77de1bc",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "7665a274",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "7665a274",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "7665a274",
       "tgt": "f045840e",
       "type": "REFERENCES",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "7665a274",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.7260000000000001,
+      "weight": 0.7986000000000002,
       "props": {}
     },
     {
       "src": "7665a274",
       "tgt": "0c361ed6",
       "type": "MODIFIES_SAME",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {
         "file": ".claude/brain/graph.json"
       }
@@ -6243,117 +6786,440 @@
       "src": "7665a274",
       "tgt": "32b83c9b",
       "type": "MODIFIES_SAME",
-      "weight": 0.5,
+      "weight": 0.55,
       "props": {
         "file": ".claude/brain/cognitive-log.jsonl"
-      },
-      "created_at": "2026-02-05T18:10:10.696954"
+      }
     },
     {
       "src": "42cd5642",
       "tgt": "258e7d75",
       "type": "RELATED_TO",
-      "weight": 0.7711129486560822,
+      "weight": 0.8058130313456059,
       "props": {
         "method": "embedding"
-      },
-      "created_at": "2026-02-05T18:10:10.699452"
+      }
     },
     {
       "src": "0c361ed6",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.6050000000000001,
+      "weight": 0.6655000000000002,
       "props": {}
     },
     {
       "src": "0c361ed6",
       "tgt": "ab2d7fea",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.66,
+      "weight": 0.7260000000000001,
       "props": {}
     },
     {
       "src": "0c361ed6",
       "tgt": "176fb04a",
       "type": "SAME_SCOPE",
-      "weight": 0.4,
+      "weight": 0.44000000000000006,
       "props": {
         "scope": "brain"
-      },
-      "created_at": "2026-02-05T18:10:10.696923"
+      }
     },
     {
       "src": "0c361ed6",
       "tgt": "32b83c9b",
       "type": "MODIFIES_SAME",
-      "weight": 0.5,
+      "weight": 0.55,
       "props": {
         "file": ".claude/brain/graph.json"
-      },
-      "created_at": "2026-02-05T18:10:10.696957"
+      }
     },
     {
       "src": "176fb04a",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {}
     },
     {
       "src": "176fb04a",
       "tgt": "ab2d7fea",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.6,
-      "props": {},
-      "created_at": "2026-02-05T18:10:10.699547"
+      "weight": 0.66,
+      "props": {}
     },
     {
       "src": "32b83c9b",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {}
     },
     {
       "src": "32b83c9b",
       "tgt": "domain-auth",
       "type": "BELONGS_TO",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {}
     },
     {
       "src": "32b83c9b",
       "tgt": "695f6814",
       "type": "BELONGS_TO_THEME",
-      "weight": 0.6,
-      "props": {},
-      "created_at": "2026-02-05T18:10:10.699555"
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "32b83c9b",
+      "tgt": "f2aad3c1",
+      "type": "REFERENCES",
+      "weight": 0.55,
+      "props": {}
     },
     {
       "src": "8545986c",
       "tgt": "person-thiagogaia",
       "type": "AUTHORED_BY",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {}
     },
     {
       "src": "8545986c",
       "tgt": "domain-api",
       "type": "BELONGS_TO",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {}
     },
     {
       "src": "f5b8d64f",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
-      "weight": 0.55,
+      "weight": 0.6050000000000001,
       "props": {}
     },
     {
       "src": "f5b8d64f",
       "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.6050000000000001,
+      "props": {}
+    },
+    {
+      "src": "801b61db",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "801b61db",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "801b61db",
+      "tgt": "c8be5372",
+      "type": "REFERENCES",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "27a9601e",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "27a9601e",
+      "tgt": "domain-infra",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "04312e43",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "04312e43",
+      "tgt": "domain-infra",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e49fd844",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "362caaf6",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "362caaf6",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "362caaf6",
+      "tgt": "848cbb2d",
+      "type": "REFERENCES",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "655941d1",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "eefc0e4f",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e9d6b403",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e9d6b403",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e6441d7a",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e6441d7a",
+      "tgt": "domain-auth",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "2d0a37a8",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "2d0a37a8",
+      "tgt": "domain-auth",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "f729cc3c",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "f729cc3c",
+      "tgt": "domain-infra",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "f729cc3c",
+      "tgt": "389d2742",
+      "type": "REFERENCES",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "111d92de",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "111d92de",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "96024239",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "96024239",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "eb1f75cf",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "eb1f75cf",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e2d42ee3",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "e2d42ee3",
+      "tgt": "domain-auth",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "5a05bee2",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "5a05bee2",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "a32016e3",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "a32016e3",
+      "tgt": "domain-database",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "45c0e0b6",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "45c0e0b6",
+      "tgt": "domain-api",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "68480711",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "68480711",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "68480711",
+      "tgt": "79abc0a5",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "68480711",
+      "tgt": "f045840e",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "f2aad3c1",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "f2aad3c1",
+      "tgt": "domain-api",
+      "type": "BELONGS_TO",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "f2aad3c1",
+      "tgt": "68480711",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "f2aad3c1",
+      "tgt": "f045840e",
+      "type": "REFERENCES",
+      "weight": 0.66,
+      "props": {}
+    },
+    {
+      "src": "5e9fb657",
+      "tgt": "person-engram",
+      "type": "AUTHORED_BY",
+      "weight": 0.55,
+      "props": {}
+    },
+    {
+      "src": "5e9fb657",
+      "tgt": "domain-api",
       "type": "BELONGS_TO",
       "weight": 0.55,
       "props": {}

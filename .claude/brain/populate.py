@@ -432,11 +432,18 @@ def populate_patterns(brain: Brain) -> int:
             labels.append("ApprovedPattern")
 
         refs = _extract_references(pattern["description"])
+        # Extract pat_id from title (e.g. "PAT-001: Feedback Loop" -> "PAT-001")
+        pat_props = {}
+        pat_match = re.match(r'(PAT-\d+)', pattern["name"])
+        if pat_match:
+            pat_props["pat_id"] = pat_match.group(1)
+
         node_id = brain.add_memory(
             title=pattern["name"],
             content=pattern["description"],
             labels=labels,
             author="@engram",
+            props=pat_props,
             references=refs
         )
         print(f"  Added pattern: {pattern['name']} -> {node_id}")
@@ -518,6 +525,55 @@ def populate_commits(brain: Brain, max_commits: int = 7000) -> int:
     return count
 
 
+def populate_experiences(brain: Brain) -> int:
+    """Adiciona experiências ao cérebro como memória episódica."""
+    exp_file = Path(".claude/knowledge/experiences/EXPERIENCE_LIBRARY.md")
+
+    if not exp_file.exists():
+        print(f"Experience file not found: {exp_file}")
+        return 0
+
+    content = exp_file.read_text(encoding='utf-8')
+
+    count = 0
+    sections = re.split(r'\n---\n', content)
+
+    for section in sections:
+        match = re.search(r'## (EXP-\d+): (.+)', section)
+        if not match:
+            continue
+
+        exp_id = match.group(1)
+        title = match.group(2).strip()
+
+        # Extract fields
+        context = ""
+        ctx_match = re.search(r'\*\*Contexto\*\*: (.+?)(?=\n\*\*|\n---|\n## |$)', section, re.DOTALL)
+        if ctx_match:
+            context = ctx_match.group(1).strip()
+
+        approach = ""
+        app_match = re.search(r'\*\*Abordagem\*\*:\s*\n(.+?)(?=\n\*\*|\n---|\n## |$)', section, re.DOTALL)
+        if app_match:
+            approach = app_match.group(1).strip()
+
+        exp_content = f"{context}\n{approach}".strip()
+        refs = _extract_references(section)
+
+        node_id = brain.add_memory(
+            title=f"{exp_id}: {title}",
+            content=exp_content,
+            labels=["Episode", "Experience"],
+            author="@engram",
+            props={"exp_id": exp_id},
+            references=refs
+        )
+        print(f"  Added experience: {exp_id} -> {node_id}")
+        count += 1
+
+    return count
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: populate.py <command> [args]")
@@ -526,6 +582,7 @@ def main():
         print("  adrs             Process ADRs only")
         print("  domain           Process domain concepts only")
         print("  patterns         Process patterns only")
+        print("  experiences      Process experiences only")
         print("  commits [N]      Process last N commits (default: 7000)")
         print("  stats            Show current brain stats")
         sys.exit(1)
@@ -558,6 +615,12 @@ def main():
         print("\n=== Processing Patterns ===")
         count = populate_patterns(brain)
         print(f"Added {count} patterns")
+        total += count
+
+    if cmd in ["all", "experiences"]:
+        print("\n=== Processing Experiences ===")
+        count = populate_experiences(brain)
+        print(f"Added {count} experiences")
         total += count
 
     if cmd in ["all", "commits"]:
