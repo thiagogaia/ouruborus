@@ -17,6 +17,40 @@ import sys
 from datetime import date
 
 
+def find_matching_template(name: str, project_dir: str):
+    """Find a pre-built template in staging area matching the skill name."""
+    staging_dir = os.path.join(project_dir, ".claude", "templates", "skills")
+    if not os.path.isdir(staging_dir):
+        return None
+
+    target = f"{name}.skill.tmpl"
+    for root, _dirs, files in os.walk(staging_dir):
+        if target in files:
+            return os.path.join(root, target)
+
+    return None
+
+
+def use_template(template_path: str, skill_dir: str) -> None:
+    """Install a pre-built template as SKILL.md, then delete the template."""
+    with open(template_path) as f:
+        content = f.read()
+
+    os.makedirs(skill_dir, exist_ok=True)
+    with open(os.path.join(skill_dir, "SKILL.md"), "w") as f:
+        f.write(content)
+
+    # Delete used template immediately
+    os.remove(template_path)
+
+    # Clean up empty parent directories in staging
+    parent = os.path.dirname(template_path)
+    try:
+        os.removedirs(parent)
+    except OSError:
+        pass
+
+
 def load_project_context(project_dir: str) -> dict:
     """Load project context from manifest and stack detection."""
     ctx = {
@@ -80,13 +114,23 @@ def load_project_context(project_dir: str) -> dict:
 
 def generate_skill(name: str, project_dir: str, description: str = "") -> str:
     """Generate a skill directory with SKILL.md scaffold."""
-    ctx = load_project_context(project_dir)
     skill_dir = os.path.join(project_dir, ".claude", "skills", name)
 
     if os.path.exists(skill_dir):
         print(f"⚠️  Skill '{name}' already exists at {skill_dir}")
         return skill_dir
 
+    # Check for pre-built template in staging area
+    template = find_matching_template(name, project_dir)
+    if template:
+        use_template(template, skill_dir)
+        print(f"✅ Skill created from template: {skill_dir}/")
+        print(f"   → Source: {os.path.basename(template)}")
+        print(f"   → Customize SKILL.md for your specific project needs")
+        return skill_dir
+
+    # No template found — generate generic scaffold
+    ctx = load_project_context(project_dir)
     os.makedirs(skill_dir, exist_ok=True)
 
     desc_placeholder = description or f"[TODO: Descreva o que este skill faz e quando ativá-lo. Mínimo 50 caracteres. Inclua triggers explícitos.]"

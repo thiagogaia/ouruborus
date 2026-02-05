@@ -57,28 +57,9 @@ python3 .claude/skills/engram-genesis/scripts/analyze_project.py --project-dir .
 
 2. Leia o resultado e entenda a stack detectada e sugestões de componentes.
 
-## Fase 2: Planejar Componentes
+## Fase 2: Apresentar Plano
 
-Cruzar três fontes de informação para montar o plano:
-
-1. **Stack detectada** (resultado da Fase 1): framework, ORM, database, linguagem
-2. **Template skills disponíveis** (em `.claude/templates/skills/`): listar as pastas — cada pasta é um template de skill nomeado pelo framework que atende
-3. **Sugestões do analyze_project.py**: skills, agents e commands sugeridos
-
-Para cada template em `.claude/templates/skills/`:
-- Se o **nome da pasta** corresponde ao framework ou tecnologia detectada → marcar como INSTALAR
-- Se não corresponde → marcar como DESCARTAR
-- Se corresponde parcialmente (ex: `react/` num projeto Next.js) → avaliar e decidir
-
-Para as sugestões do genesis:
-- Se já existe um template que cobre a sugestão → usar o template (não gerar do zero)
-- Se não existe template → marcar para gerar via genesis
-
-Montar a lista unificada de componentes a criar.
-
-## Fase 3: Apresentar Plano
-
-Apresente ao dev o plano completo ANTES de executar:
+Apresente ao dev o plano de geração ANTES de executar:
 
 ```
 🐍 Engram Init — Plano de Geração
@@ -86,18 +67,19 @@ Apresente ao dev o plano completo ANTES de executar:
 
 Stack detectada: [listar]
 
-Skills a instalar:
-  📦 [nome] — de template (match com stack detectada)
-  🔧 [nome] — gerar via genesis (sem template disponível)
-
-Skills descartados (sem match):
-  ❌ [nome-patterns] — [framework] não detectado
+Skills a gerar:
+  🔴 [nome] — [razão]
+  🟡 [nome] — [razão]
 
 Agents a gerar:
-  🔧 [nome] — [razão]
+  🔴 [nome] — [razão]
 
 Seeds universais (já instalados):
-  ✅ [listar os seeds presentes em .claude/skills/]
+  ✅ project-analyzer
+  ✅ knowledge-manager
+  ✅ domain-expert
+  ✅ priority-engine
+  ✅ code-reviewer
 
 [Se houve migração na Fase 0:]
 Migrados do backup:
@@ -106,33 +88,19 @@ Migrados do backup:
 Continuar? (perguntar ao dev)
 ```
 
-## Fase 4: Gerar e Instalar Componentes
+## Fase 3: Auto-Geração via Genesis
 
-Executar o plano aprovado. Para cada componente:
+Ativar o skill `engram-genesis`. Para cada componente aprovado:
 
-### Se veio de template:
-1. Copiar `.skill.tmpl` para `.claude/skills/[nome]/SKILL.md`
-2. **Customizar** o conteúdo para o projeto:
-   - Trocar exemplos genéricos por exemplos reais encontrados no codebase
-   - Ajustar nomes de entidades, rotas, serviços para os do projeto
-   - Adicionar padrões específicos detectados na análise
-3. Registrar via `register.py` com `--source template`
-
-### Se gerado via genesis:
 1. Gerar scaffold via `generate_component.py`
-2. Customizar para o projeto (skills, agents, commands)
+2. **Customizar o conteúdo** para este projeto específico:
+   - Skills: preencher workflow com padrões reais da stack
+   - Agents: configurar tools e skills relevantes
+   - Commands: adaptar para o package manager e scripts do projeto
 3. Validar via `validate.py`
 4. Registrar via `register.py`
 
-### Ao final:
-Deletar staging area inteira:
-```bash
-rm -rf .claude/templates/
-```
-
-**Regra**: Template é ponto de partida, NÃO produto final. SEMPRE customizar para o projeto.
-
-## Fase 5: Popular Knowledge
+## Fase 4: Popular Knowledge
 
 Preencher knowledge files com dados reais:
 
@@ -163,11 +131,11 @@ Preencher knowledge files com dados reais:
 - **Se houve migração**: manter experiências do backup
 - Caso contrário: criar vazia (será populada pelo /learn)
 
-## Fase 6: Popular Cérebro Organizacional
+## Fase 5: Popular Cérebro Organizacional
 
 O cérebro em `.claude/brain/` deve ser populado com conhecimento existente.
 
-### 6.1 Verificar venv do Brain
+### 5.1 Verificar venv do Brain
 ```bash
 # Verifica se venv existe e ativa
 if [[ -d ".claude/brain/.venv" ]]; then
@@ -175,7 +143,7 @@ if [[ -d ".claude/brain/.venv" ]]; then
 fi
 ```
 
-### 6.2 Popular com conhecimento existente
+### 5.2 Popular com conhecimento existente
 
 Processar ADRs, conceitos de domínio, patterns e commits:
 ```bash
@@ -188,19 +156,19 @@ Isso irá:
 - Extrair patterns do PATTERNS.md
 - Processar últimos 7000 commits do git (memória episódica)
 
-### 6.3 Gerar Embeddings para Busca Semântica
+### 5.3 Gerar Embeddings para Busca Semântica
 ```bash
 python3 .claude/brain/embeddings.py build
 ```
 
-### 6.4 Verificar Saúde do Cérebro
+### 5.4 Verificar Saúde do Cérebro
 ```bash
 python3 .claude/brain/cognitive.py health
 ```
 
 Se `status: healthy`, continuar. Se não, seguir recomendações.
 
-### 6.5 Reportar ao Dev
+### 5.5 Reportar ao Dev
 ```
 🧠 Cérebro Organizacional Populado
 ══════════════════════════════════
@@ -220,39 +188,40 @@ Status: 🟢 Saudável
 
 ---
 
-## Fase 7: Health Check
+## Fase 6: Health Check
 
 Executar `/doctor` para validar a instalação completa.
 
-## Fase 8: Cleanup e Relatório Final
+## Fase 7: Cleanup e Relatório Final
 
 1. **Se houve backup na Fase 0**, execute cleanup:
 ```bash
 python3 .claude/skills/engram-genesis/scripts/migrate_backup.py --project-dir . --cleanup
 ```
 
+2. Remover staging de templates (se existir):
+```bash
+rm -rf .claude/templates/
+```
+
 3. Apresentar resumo do que foi:
-   - Template skills instalados (da staging area)
-   - Template skills removidos (sem match com stack)
-   - Gerado via genesis (componentes adicionais)
-   - Migrado (do backup, se houve)
+   - Gerado (novos componentes)
+   - Migrado (do backup)
    - Populado (knowledge files)
    - Validado (health check)
 
-4. Sugerir próximos passos concretos baseado nas prioridades detectadas.
+3. Sugerir próximos passos concretos baseado nas prioridades detectadas.
 
 ```
 🐍 Engram Init — Concluído!
 ═══════════════════════════════════
 
-✅ Template skills: X instalados, Y removidos
 ✅ Componentes gerados: X skills, Y agents
 ✅ Migrados do backup: Z items
-✅ Knowledge populado: 7 arquivos
+✅ Knowledge populado: 6 arquivos
 ✅ Cérebro populado: N nós, M arestas, E embeddings
 ✅ Health check: PASSED
 
-🗑️  Staging de templates removido
 🗑️  Backups removidos (migração concluída)
 
 Próximos passos sugeridos:
@@ -262,5 +231,5 @@ Próximos passos sugeridos:
 
 Use /status para ver o estado atual.
 Use /learn após cada sessão para retroalimentar.
-Use /recall para consultar o cérebro organizacional.
+Use .claude/brain/maintain.sh health para ver saúde do cérebro.
 ```
