@@ -11,13 +11,11 @@ O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposen
 ## Workflow Obrigatório
 
 ### Antes de Codificar
-1. Leia `.claude/knowledge/context/CURRENT_STATE.md`
-2. Consulte `.claude/knowledge/priorities/PRIORITY_MATRIX.md`
-3. Verifique `.claude/knowledge/patterns/PATTERNS.md`
-4. Se decisão arquitetural: consulte `ADR_LOG.md`
-5. Se lógica de negócio: consulte `DOMAIN.md`
-6. Se tarefa similar já resolvida: consulte `EXPERIENCE_LIBRARY.md`
-7. **Se pergunta sobre arquitetura/domínio: use `/recall`**
+1. Leia `.claude/knowledge/context/CURRENT_STATE.md` (sempre — é curto e dá contexto)
+2. **Consulte o cérebro PRIMEIRO**: rode `python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json` para encontrar ADRs, patterns, experiências e conexões relevantes
+3. Só leia os `.md` completos se o recall não cobrir — os arquivos vão crescer e não caberão no contexto
+
+O cérebro é a fonte primária. Os `.md` são o fallback para quando precisa do texto completo de um ADR ou pattern específico.
 
 ### Ao Codificar
 - Validação de input em todas as APIs
@@ -66,20 +64,33 @@ Regras: anunciar antes de criar, máximo 2 por sessão, nunca duplicar, source=r
 
 ## Cérebro Organizacional
 
-O projeto possui um cérebro em `.claude/brain/` que armazena memórias do projeto:
-- **ADRs** — Decisões arquiteturais
-- **Conceitos** — Glossário e definições do domínio
-- **Padrões** — Padrões aprovados de código
-- **Episódios** — Commits, bug fixes, eventos
-- **Regras** — Regras de negócio
+O cérebro em `.claude/brain/` é um **grafo de conhecimento com conexões semânticas**.
+Não é uma cópia dos .md — contém informação que os .md não têm:
+- **Conexões entre nós**: quais commits mexeram nos mesmos arquivos, quais patterns se complementam, quais ADRs motivaram quais patterns
+- **Busca semântica**: encontra conhecimento por significado, não só por texto
+- **Spreading activation**: a partir de um resultado, navega conexões para encontrar conhecimento relacionado indiretamente
+
+### IMPORTANTE: O Cérebro é a Fonte Primária
+
+**Use o cérebro ANTES de ler os .md completos.** Os arquivos de knowledge vão crescer e não caberão no contexto. O cérebro retorna os 10 pedaços mais relevantes de todo o conhecimento.
+
+```bash
+# Forma rápida — output JSON parseável
+python3 .claude/brain/recall.py "<pergunta>" --top 10 --format json
+
+# Ver conexões semânticas de forma legível
+python3 .claude/brain/recall.py "<pergunta>"
+```
 
 ### Quando Consultar o Cérebro
 
-Use `/recall <pergunta>` automaticamente quando:
+Use `python3 .claude/brain/recall.py` automaticamente quando:
+- **Qualquer tarefa nova**: buscar padrões, ADRs e experiências relacionadas
 - Pergunta sobre arquitetura: "como funciona X?", "por que Y foi feito assim?"
 - Pergunta sobre domínio: "o que é X?", "qual a regra de Y?"
 - Antes de decisões: verificar se já existe ADR relacionado
 - Debug de problemas: encontrar soluções anteriores similares
+- Refactoring: encontrar commits que mexeram nos mesmos arquivos
 
 ### Quando Usar Domain-Expert Automaticamente
 
@@ -105,16 +116,29 @@ O Claude DEVE invocar `domain-analyst` ou seguir `domain-expert` quando:
 ### Exemplo de Uso
 
 ```bash
-# Via command
-/recall como funciona a autenticação
+# Busca geral — retorna nós + conexões semânticas
+python3 .claude/brain/recall.py "autenticação" --format json
 
-# Via script direto (se precisar de mais controle)
-python3 .claude/brain/recall.py "autenticação" --type ADR --top 5
+# Filtrar por tipo
+python3 .claude/brain/recall.py "setup" --type ADR --top 5
+
+# Ver saúde do cérebro
+python3 .claude/brain/cognitive.py health
 ```
+
+### O que as Conexões Semânticas Revelam
+
+O campo `connections` nos resultados do recall mostra relações que os .md não contêm:
+- `SAME_SCOPE`: commits que trabalharam na mesma área — se um quebrou algo, os outros são suspeitos
+- `MODIFIES_SAME`: commits que tocaram os mesmos arquivos — mudanças acopladas
+- `RELATED_TO`: nós semanticamente similares — patterns complementares, conceitos relacionados
+- `BELONGS_TO_THEME`: commits agrupados por tema — mostra áreas de atividade
+- `REFERENCES`: referências cruzadas explícitas entre ADRs, patterns e experiências
 
 ### Quando Alimentar o Cérebro
 
 O cérebro é alimentado automaticamente via `/learn`. Execute ao final de cada sessão.
+O `/learn` roda: populate (commits) → consolidate → sleep (5 fases) → health check → embeddings.
 
 ## Regras de Ouro
 - NUNCA pule o workflow de retroalimentação
@@ -122,4 +146,4 @@ O cérebro é alimentado automaticamente via `/learn`. Execute ao final de cada 
 - Pergunte antes de mudar arquitetura
 - Registre TUDO que pode ser útil no futuro
 - Se não existe skill para algo repetitivo: crie com `/create`
-- **Consulte o cérebro antes de responder perguntas sobre o projeto**
+- **Cérebro primeiro, .md depois** — sempre rode recall antes de ler arquivos de knowledge inteiros
