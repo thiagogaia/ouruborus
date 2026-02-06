@@ -289,6 +289,25 @@ class BrainSQLite:
             self._npz_embeddings[node_id] = np.array(embedding)
             self._embeddings_dirty = True
 
+    def _generate_embedding(self, title: str, content: str, labels: List[str]):
+        """Generate embedding inline. Returns None silently if deps unavailable."""
+        if not HAS_NUMPY:
+            return None
+        if not hasattr(self, '_embedding_model'):
+            self._embedding_model = None
+            try:
+                from sentence_transformers import SentenceTransformer
+                self._embedding_model = SentenceTransformer('all-MiniLM-L6-v2')
+            except Exception:
+                pass
+        if self._embedding_model is None:
+            return None
+        try:
+            text = f"{title} {(content or '')[:1000]} {' '.join(labels)}"
+            return self._embedding_model.encode(text)
+        except Exception:
+            return None
+
     def _remove_embedding(self, node_id: str):
         """Remove an embedding from the active vector store."""
         if self._use_chromadb and self._chroma_collection is not None:
@@ -464,7 +483,9 @@ class BrainSQLite:
         self._set_labels(node_id, labels)
         conn.commit()
 
-        # Embedding
+        # Embedding (inline generation if not provided)
+        if embedding is None:
+            embedding = self._generate_embedding(title, content, labels)
         if embedding is not None:
             self._store_embedding(node_id, embedding)
 
@@ -533,7 +554,9 @@ class BrainSQLite:
         self._set_labels(node_id, list(existing_labels))
         conn.commit()
 
-        # Embedding
+        # Embedding (inline generation if not provided)
+        if embedding is None:
+            embedding = self._generate_embedding(title, content, labels)
         if embedding is not None:
             self._store_embedding(node_id, embedding)
 

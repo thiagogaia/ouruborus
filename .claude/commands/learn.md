@@ -99,7 +99,13 @@ brain.save()
 python3 .claude/brain/sleep.py
 ```
 
-Roda 5 fases in-memory (zero disk I/O): dedup, connect, relate, themes, calibrate.
+Roda 8 fases de inteligência: connect, relate, themes, calibrate, promote, insights, gaps, decay.
+- **promote**: promove Episodes muito acessados para Concept
+- **insights**: detecta clusters de nós relacionados sem Theme
+- **gaps**: encontra nós isolados e domínios sem Patterns
+- **decay**: aplica curva de esquecimento de Ebbinghaus
+
+Fase `dedup` disponível sob demanda (`python3 .claude/brain/sleep.py dedup`) mas fora do ciclo padrão (IDs determinísticos já previnem duplicatas).
 
 ### 4.2 Verificar Saúde do Cérebro
 
@@ -109,13 +115,13 @@ python3 .claude/brain/cognitive.py health
 
 Se `health_score < 0.8`, seguir recomendações exibidas.
 
-### 4.3 Atualizar Embeddings
+### 4.3 Atualizar Embeddings (opcional)
 
 ```bash
 python3 .claude/brain/embeddings.py build 2>/dev/null || echo "⚠️ Embeddings: instale sentence-transformers chromadb pydantic-settings"
 ```
 
-Embeddings usam ChromaDB HNSW (primário) com auto-migrate de npz. Modelo local: all-MiniLM-L6-v2 (384 dims).
+**Nota**: embeddings agora são gerados inline no `brain.add_memory()` quando `sentence-transformers` está instalado. O `embeddings.py build` é opcional — útil para rebuild em massa ou migração de npz para ChromaDB.
 
 ---
 
@@ -165,6 +171,7 @@ python3 .claude/skills/engram-evolution/scripts/co_activation.py --project-dir .
 
 Apresentar:
 - O que foi registrado no cérebro (quantos nós criados, tipos)
+- Resultados do sono: promoções, insights (clusters sem tema), gaps (nós isolados, domínios sem patterns), memórias fracas/decay
 - Sugestões evolutivas (novos skills, archives, composições)
 - Próxima ação recomendada
 

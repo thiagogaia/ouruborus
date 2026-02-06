@@ -206,16 +206,161 @@ class TestPhaseCalibrate:
         assert new_weight <= old_weight
 
 
+class TestPhasePromote:
+    """sleep.phase_promote()"""
+
+    def test_no_promotions_by_default(self, seeded_brain):
+        from sleep import phase_promote
+        stats = phase_promote(seeded_brain)
+        assert stats["promoted"] == 0
+
+    def test_promotes_highly_accessed_episode(self, seeded_brain):
+        from sleep import phase_promote
+
+        now = datetime.now().isoformat()
+        # Create episode with high access, high strength, and 3+ semantic edges
+        seeded_brain.graph.add_node(
+            "ep_hot",
+            labels=["Episode"],
+            props={"title": "Hot Episode", "content": "Very useful episode", "author": "test"},
+            memory={"strength": 0.95, "access_count": 15, "last_accessed": now,
+                    "created_at": now, "decay_rate": 0.01},
+        )
+        # Add 3 semantic edges
+        seeded_brain.graph.add_edge("ep_hot", "adr1", type="REFERENCES", weight=0.6, props={})
+        seeded_brain.graph.add_edge("ep_hot", "pat1", type="APPLIES", weight=0.6, props={})
+        seeded_brain.graph.add_edge("ep_hot", "adr2", type="REFERENCES", weight=0.6, props={})
+
+        stats = phase_promote(seeded_brain)
+        assert stats["promoted"] == 1
+
+        node = seeded_brain.get_node("ep_hot")
+        assert "Concept" in node["labels"]
+        assert "PromotedEpisode" in node["labels"]
+        assert "Episode" in node["labels"]  # keeps original
+
+    def test_skips_already_concept(self, seeded_brain):
+        from sleep import phase_promote
+        # concept1 is already a Concept — should not be promoted again
+        stats = phase_promote(seeded_brain)
+        assert stats["promoted"] == 0
+
+    def test_returns_stats(self, seeded_brain):
+        from sleep import phase_promote
+        stats = phase_promote(seeded_brain)
+        assert "promoted" in stats
+        assert "candidates" in stats
+
+
+class TestPhaseInsights:
+    """sleep.phase_insights()"""
+
+    def test_no_insights_without_related_edges(self, seeded_brain):
+        from sleep import phase_insights
+        stats = phase_insights(seeded_brain)
+        assert stats["clusters_found"] == 0
+
+    def test_detects_unthemed_cluster(self, seeded_brain):
+        from sleep import phase_insights
+
+        now = datetime.now().isoformat()
+        # Create 3 connected nodes without a Theme
+        for i in range(3):
+            seeded_brain.graph.add_node(
+                f"cluster_{i}",
+                labels=["Episode"],
+                props={"title": f"Cluster Node {i}", "content": f"Content {i}", "author": "test"},
+                memory={"strength": 1.0, "access_count": 1, "last_accessed": now,
+                        "created_at": now, "decay_rate": 0.01},
+            )
+        seeded_brain.graph.add_edge("cluster_0", "cluster_1", type="RELATED_TO", weight=0.8, props={})
+        seeded_brain.graph.add_edge("cluster_1", "cluster_2", type="RELATED_TO", weight=0.8, props={})
+
+        stats = phase_insights(seeded_brain)
+        assert stats["clusters_found"] >= 1
+        assert len(stats["suggestions"]) >= 1
+
+    def test_returns_stats(self, seeded_brain):
+        from sleep import phase_insights
+        stats = phase_insights(seeded_brain)
+        assert "clusters_found" in stats
+        assert "suggestions" in stats
+
+
+class TestPhaseGaps:
+    """sleep.phase_gaps()"""
+
+    def test_finds_isolated_nodes(self, seeded_brain):
+        from sleep import phase_gaps
+
+        now = datetime.now().isoformat()
+        # Add a node with only AUTHORED_BY (structural) — it's "isolated" semantically
+        seeded_brain.graph.add_node(
+            "isolated1",
+            labels=["Episode"],
+            props={"title": "Lonely Node", "content": "No semantic edges", "author": "test"},
+            memory={"strength": 1.0, "access_count": 1, "last_accessed": now,
+                    "created_at": now, "decay_rate": 0.01},
+        )
+        seeded_brain.graph.add_edge("isolated1", "person1", type="AUTHORED_BY", weight=0.5, props={})
+
+        stats = phase_gaps(seeded_brain)
+        assert stats["isolated_count"] >= 1
+        isolated_ids = [n["id"] for n in stats["isolated_nodes"]]
+        assert "isolated1" in isolated_ids
+
+    def test_finds_domains_without_patterns(self, seeded_brain):
+        from sleep import phase_gaps
+
+        now = datetime.now().isoformat()
+        seeded_brain.graph.add_node(
+            "domain_orphan",
+            labels=["Domain"],
+            props={"title": "Orphan Domain", "name": "orphan", "content": "", "author": ""},
+            memory={"strength": 1.0, "access_count": 0, "last_accessed": now,
+                    "created_at": now, "decay_rate": 0.001},
+        )
+
+        stats = phase_gaps(seeded_brain)
+        assert stats["gap_domains_count"] >= 1
+        domain_ids = [d["id"] for d in stats["domains_without_patterns"]]
+        assert "domain_orphan" in domain_ids
+
+    def test_returns_stats(self, seeded_brain):
+        from sleep import phase_gaps
+        stats = phase_gaps(seeded_brain)
+        assert "isolated_count" in stats
+        assert "gap_domains_count" in stats
+
+
+class TestPhaseDecay:
+    """sleep.phase_decay()"""
+
+    def test_returns_decay_stats(self, seeded_brain):
+        from sleep import phase_decay
+        stats = phase_decay(seeded_brain)
+        assert "weak_count" in stats
+        assert "archive_count" in stats
+
+    def test_delegates_to_brain_apply_decay(self, seeded_brain):
+        from sleep import phase_decay
+        # Just verify it runs without error and returns expected keys
+        stats = phase_decay(seeded_brain)
+        assert isinstance(stats, dict)
+        assert "weak_nodes" in stats
+
+
 class TestRunSleep:
     """sleep.run_sleep() orchestrator."""
 
-    def test_runs_all_phases(self, seeded_brain):
-        from sleep import run_sleep
+    def test_runs_all_default_phases(self, seeded_brain):
+        from sleep import run_sleep, PHASE_ORDER
         results = run_sleep(seeded_brain)
         assert "phases" in results
-        assert "dedup" in results["phases"]
-        assert "connect" in results["phases"]
-        assert "calibrate" in results["phases"]
+        for phase in PHASE_ORDER:
+            assert phase in results["phases"]
+        # dedup is NOT in default cycle
+        assert "dedup" not in results["phases"]
 
     def test_runs_specific_phases(self, seeded_brain):
         from sleep import run_sleep
@@ -230,3 +375,9 @@ class TestRunSleep:
         assert "before" in results
         assert "after" in results
         assert "delta" in results
+
+    def test_reports_actionable(self, seeded_brain):
+        from sleep import run_sleep
+        results = run_sleep(seeded_brain)
+        assert "actionable" in results
+        assert isinstance(results["actionable"], list)

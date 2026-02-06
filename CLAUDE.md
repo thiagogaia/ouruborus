@@ -151,13 +151,13 @@ O campo `connections` nos resultados do recall mostra relações que os .md não
 ### Quando Alimentar o Cérebro
 
 O cérebro é alimentado automaticamente via `/learn`. Execute ao final de cada sessão.
-O `/learn` roda: brain.add_memory() (direto) → refresh (commits) → sleep (5 fases in-memory) → health check → embeddings.
+O `/learn` roda: brain.add_memory() (direto, com embeddings inline) → refresh (commits) → sleep (8 fases de inteligência) → health check.
 
 O loop de auto-alimentação funciona assim:
 1. `/recall` busca → reforça memórias acessadas → **persiste** (brain.save())
-2. Trabalho acontece → novas memórias via `brain.add_memory()` (zero disk I/O)
-3. `/learn` consolida → sleep in-memory → embeddings mais ricos
-4. Próximo recall acha resultados melhores (memórias reforçadas + novas conexões)
+2. Trabalho acontece → novas memórias via `brain.add_memory()` (embeddings gerados inline)
+3. `/learn` consolida → sleep (connect, relate, themes, calibrate, promote, insights, gaps, decay)
+4. Próximo recall acha resultados melhores (memórias reforçadas + novas conexões + promoções + insights)
 
 ## Regras de Ouro
 - NUNCA pule o workflow de retroalimentação

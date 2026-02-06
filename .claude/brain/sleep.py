@@ -2,21 +2,27 @@
 """
 sleep.py - Brain consolidation cycle ("sleep phases")
 
-Inspired by biological sleep, this script runs 5 phases of consolidation
+Inspired by biological sleep, this script runs 8 phases of intelligence
 to transform the brain from a star topology (all structural edges) into
-a rich semantic network.
+a rich semantic network with actionable insights.
 
-Phases:
-  1. dedup    - Find and merge duplicate nodes
-  2. connect  - Parse content, discover cross-references (ADR/PAT/EXP/wikilinks)
-  3. relate   - Cosine similarity between embeddings -> RELATED_TO edges
-  4. themes   - Group commits by scope, create Theme nodes
-  5. calibrate - Adjust edge weights by access patterns
+Default phases (PHASE_ORDER):
+  1. connect   - Parse content, discover cross-references (ADR/PAT/EXP/wikilinks)
+  2. relate    - Cosine similarity between embeddings -> RELATED_TO edges
+  3. themes    - Group commits by scope, create Theme nodes
+  4. calibrate - Adjust edge weights by access patterns
+  5. promote   - Promote highly-accessed Episodes to Concepts
+  6. insights  - Detect clusters of related nodes without a Theme
+  7. gaps      - Find isolated nodes and domains without patterns
+  8. decay     - Apply Ebbinghaus forgetting curve
+
+Available but not in default cycle:
+  - dedup     - Find and merge duplicate nodes (IDs are now deterministic)
 
 Usage:
-    python3 sleep.py              # Run full cycle
+    python3 sleep.py              # Run full cycle (8 phases)
     python3 sleep.py connect      # Run single phase
-    python3 sleep.py dedup connect # Run specific phases
+    python3 sleep.py dedup        # Run dedup on demand
 """
 
 import json
@@ -696,6 +702,217 @@ def phase_calibrate(brain: Brain) -> Dict:
 
 
 # ══════════════════════════════════════════════════════════
+# PHASE 6: PROMOTE (Episodic -> Semantic)
+# ══════════════════════════════════════════════════════════
+
+def phase_promote(brain: Brain) -> Dict:
+    """Promote highly-accessed Episodes to Concepts.
+
+    Criteria: access_count > 10, strength > 0.9, 3+ semantic connections.
+    Adds label 'Concept' + 'PromotedEpisode' (keeps original labels).
+    """
+    stats = {"promoted": 0, "candidates": 0}
+    all_nodes = brain.get_all_nodes()
+    structural_types = {"AUTHORED_BY", "BELONGS_TO"}
+
+    for nid, ndata in all_nodes.items():
+        labels = ndata.get("labels", [])
+        if "Episode" not in labels or "Concept" in labels:
+            continue
+
+        memory = ndata.get("memory", {})
+        access_count = memory.get("access_count", 0)
+        strength = memory.get("strength", 0.0)
+
+        if access_count <= 10 or strength <= 0.9:
+            continue
+
+        stats["candidates"] += 1
+
+        # Count semantic connections (non-structural)
+        semantic_edges = 0
+        for neighbor in brain.get_neighbors(nid):
+            edge = brain.get_edge(nid, neighbor)
+            if edge and edge.get("type") not in structural_types:
+                semantic_edges += 1
+        for pred in brain.get_predecessors(nid):
+            edge = brain.get_edge(pred, nid)
+            if edge and edge.get("type") not in structural_types:
+                semantic_edges += 1
+
+        if semantic_edges >= 3:
+            new_labels = list(set(labels + ["Concept", "PromotedEpisode"]))
+            _update_node_labels(brain, nid, new_labels)
+            stats["promoted"] += 1
+
+    return stats
+
+
+# ══════════════════════════════════════════════════════════
+# PHASE 7: INSIGHTS (Detect clusters without Pattern)
+# ══════════════════════════════════════════════════════════
+
+def phase_insights(brain: Brain) -> Dict:
+    """Detect clusters of related nodes that lack a Theme or PatternCluster.
+
+    BFS through RELATED_TO/SAME_SCOPE/MODIFIES_SAME edges.
+    Clusters of 3+ nodes without an associated Theme/PatternCluster
+    are reported as insight suggestions.
+    """
+    stats = {"clusters_found": 0, "suggestions": []}
+    all_nodes = brain.get_all_nodes()
+    insight_edge_types = {"RELATED_TO", "SAME_SCOPE", "MODIFIES_SAME"}
+    skip_labels = {"Person", "Domain", "Theme", "PatternCluster"}
+
+    # Build adjacency list for insight-relevant edges
+    adj: Dict[str, Set[str]] = defaultdict(set)
+    if hasattr(brain, '_get_conn'):
+        conn = brain._get_conn()
+        placeholders = ",".join("?" for _ in insight_edge_types)
+        rows = conn.execute(
+            f"SELECT from_id, to_id FROM edges WHERE type IN ({placeholders})",
+            tuple(insight_edge_types)
+        ).fetchall()
+        for row in rows:
+            adj[row["from_id"]].add(row["to_id"])
+            adj[row["to_id"]].add(row["from_id"])
+    else:
+        # FallbackGraph: _edges is a dict of {(u,v): data}
+        edges_dict = getattr(brain.graph, '_edges', {})
+        for (u, v), data in edges_dict.items():
+            if data.get("type") in insight_edge_types:
+                adj[u].add(v)
+                adj[v].add(u)
+
+    # Filter to content nodes only
+    content_nodes = set()
+    for nid, ndata in all_nodes.items():
+        labels = set(ndata.get("labels", []))
+        if not (labels & skip_labels):
+            content_nodes.add(nid)
+
+    # BFS to find connected components
+    visited: Set[str] = set()
+    for start in content_nodes:
+        if start not in adj or start in visited:
+            continue
+        # BFS
+        cluster: Set[str] = set()
+        queue = [start]
+        while queue:
+            node = queue.pop(0)
+            if node in visited or node not in content_nodes:
+                continue
+            visited.add(node)
+            cluster.add(node)
+            for neighbor in adj.get(node, set()):
+                if neighbor not in visited and neighbor in content_nodes:
+                    queue.append(neighbor)
+
+        if len(cluster) < 3:
+            continue
+
+        # Check if cluster already has a Theme or PatternCluster
+        has_grouping = False
+        for nid in cluster:
+            for neighbor in brain.get_neighbors(nid):
+                neighbor_node = brain.get_node(neighbor)
+                if neighbor_node:
+                    n_labels = set(neighbor_node.get("labels", []))
+                    if n_labels & {"Theme", "PatternCluster"}:
+                        has_grouping = True
+                        break
+            if has_grouping:
+                break
+
+        if not has_grouping:
+            titles = []
+            for nid in list(cluster)[:5]:
+                node = brain.get_node(nid)
+                if node:
+                    titles.append(node.get("props", {}).get("title", nid))
+            stats["clusters_found"] += 1
+            stats["suggestions"].append({
+                "size": len(cluster),
+                "sample_titles": titles,
+                "node_ids": list(cluster)[:10]
+            })
+
+    return stats
+
+
+# ══════════════════════════════════════════════════════════
+# PHASE 8: GAPS (Find knowledge gaps)
+# ══════════════════════════════════════════════════════════
+
+def phase_gaps(brain: Brain) -> Dict:
+    """Find knowledge gaps: isolated nodes and domains without patterns.
+
+    Detects:
+    - Nodes with 0 semantic connections (ignoring AUTHORED_BY/BELONGS_TO)
+    - Domain nodes without any associated Pattern nodes
+    """
+    stats = {"isolated_nodes": [], "domains_without_patterns": []}
+    all_nodes = brain.get_all_nodes()
+    structural_types = {"AUTHORED_BY", "BELONGS_TO"}
+    skip_labels = {"Person", "Domain"}
+
+    # Find isolated nodes (0 semantic connections)
+    for nid, ndata in all_nodes.items():
+        labels = set(ndata.get("labels", []))
+        if labels & skip_labels:
+            continue
+
+        has_semantic = False
+        for neighbor in brain.get_neighbors(nid):
+            edge = brain.get_edge(nid, neighbor)
+            if edge and edge.get("type") not in structural_types:
+                has_semantic = True
+                break
+        if not has_semantic:
+            for pred in brain.get_predecessors(nid):
+                edge = brain.get_edge(pred, nid)
+                if edge and edge.get("type") not in structural_types:
+                    has_semantic = True
+                    break
+
+        if not has_semantic:
+            title = ndata.get("props", {}).get("title", nid)
+            stats["isolated_nodes"].append({"id": nid, "title": title})
+
+    # Find domains without patterns
+    for nid, ndata in all_nodes.items():
+        if "Domain" not in ndata.get("labels", []):
+            continue
+        domain_name = ndata.get("props", {}).get("name", ndata.get("props", {}).get("title", nid))
+
+        has_pattern = False
+        for pred in brain.get_predecessors(nid):
+            pred_node = brain.get_node(pred)
+            if pred_node and "Pattern" in pred_node.get("labels", []):
+                has_pattern = True
+                break
+
+        if not has_pattern:
+            stats["domains_without_patterns"].append({
+                "id": nid, "name": domain_name
+            })
+
+    stats["isolated_count"] = len(stats["isolated_nodes"])
+    stats["gap_domains_count"] = len(stats["domains_without_patterns"])
+    return stats
+
+
+# ══════════════════════════════════════════════════════════
+# PHASE 9: DECAY (Apply forgetting curve)
+# ══════════════════════════════════════════════════════════
+
+def phase_decay(brain: Brain) -> Dict:
+    """Apply Ebbinghaus forgetting curve via brain.apply_decay()."""
+    return brain.apply_decay()
+
+
+# ══════════════════════════════════════════════════════════
 # ORCHESTRATOR
 # ══════════════════════════════════════════════════════════
 
@@ -704,10 +921,14 @@ PHASES = {
     "connect": phase_connect,
     "relate": phase_relate,
     "themes": phase_themes,
-    "calibrate": phase_calibrate
+    "calibrate": phase_calibrate,
+    "promote": phase_promote,
+    "insights": phase_insights,
+    "gaps": phase_gaps,
+    "decay": phase_decay,
 }
 
-PHASE_ORDER = ["dedup", "connect", "relate", "themes", "calibrate"]
+PHASE_ORDER = ["connect", "relate", "themes", "calibrate", "promote", "insights", "gaps", "decay"]
 
 
 def run_sleep(brain: Brain, phases: List[str] = None) -> Dict:
@@ -756,6 +977,26 @@ def run_sleep(brain: Brain, phases: List[str] = None) -> Dict:
         "edges": stats_after["edges"] - stats_before["edges"],
         "semantic_edges": stats_after.get("semantic_edges", 0) - stats_before.get("semantic_edges", 0)
     }
+
+    # Actionable summary
+    actionable = []
+    promote_stats = results["phases"].get("promote", {})
+    if promote_stats.get("promoted", 0) > 0:
+        actionable.append(f"{promote_stats['promoted']} episodes promoted to Concept")
+    insights_stats = results["phases"].get("insights", {})
+    if insights_stats.get("clusters_found", 0) > 0:
+        actionable.append(f"{insights_stats['clusters_found']} unthemed clusters detected")
+    gaps_stats = results["phases"].get("gaps", {})
+    if gaps_stats.get("isolated_count", 0) > 0:
+        actionable.append(f"{gaps_stats['isolated_count']} isolated nodes found")
+    if gaps_stats.get("gap_domains_count", 0) > 0:
+        actionable.append(f"{gaps_stats['gap_domains_count']} domains without patterns")
+    decay_stats = results["phases"].get("decay", {})
+    if decay_stats.get("weak_count", 0) > 0:
+        actionable.append(f"{decay_stats['weak_count']} weak memories marked")
+    if decay_stats.get("archive_count", 0) > 0:
+        actionable.append(f"{decay_stats['archive_count']} memories ready for archive")
+    results["actionable"] = actionable
 
     return results
 
