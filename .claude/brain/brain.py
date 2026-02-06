@@ -878,7 +878,9 @@ class Brain:
         top_k: int = 20,
         spread_depth: int = 2,
         since: str = None,
-        sort_by: str = "score"
+        sort_by: str = "score",
+        compact: bool = False,
+        reinforce: bool = True
     ) -> List[Dict]:
         """
         Busca completa: embedding + spreading activation + filtros.
@@ -886,6 +888,8 @@ class Brain:
         Args:
             since: Ignored in JSON fallback (no temporal indexing).
             sort_by: "score" (default) or "date".
+            compact: Ignored in JSON fallback (no compact mode).
+            reinforce: Ignored in JSON fallback (always reinforces).
         """
         results = {}
 

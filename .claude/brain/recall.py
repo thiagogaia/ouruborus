@@ -10,6 +10,8 @@ Uso:
     python3 recall.py --recent 7d --top 10
     python3 recall.py --recent 7d --type Episode --sort date
     python3 recall.py "bug" --since 2026-02-01 --sort date
+    python3 recall.py "autenticação" --compact --top 20
+    python3 recall.py --expand ADR-001,PAT-012
 """
 
 import argparse
@@ -17,6 +19,7 @@ import json
 import os
 import sys
 from pathlib import Path
+from typing import List
 
 # Add brain to path
 BRAIN_PATH = Path(__file__).parent
@@ -43,7 +46,8 @@ def search_brain(
     depth: int = 2,
     top_k: int = 10,
     since: str = None,
-    sort_by: str = "score"
+    sort_by: str = "score",
+    compact: bool = False
 ) -> dict:
     """
     Busca no cérebro organizacional.
@@ -107,7 +111,8 @@ def search_brain(
         top_k=top_k,
         spread_depth=depth,
         since=since,
-        sort_by=sort_by
+        sort_by=sort_by,
+        compact=compact
     )
 
     # Persist reinforcement — closes the self-feeding loop
@@ -116,6 +121,19 @@ def search_brain(
         brain.save()
     except Exception:
         pass
+
+    # Compact mode: return index directly (progressive disclosure layer 1)
+    if compact:
+        return {
+            "query": query or "(temporal)",
+            "filters": {
+                "type": filter_type, "author": filter_author,
+                "since": since, "sort_by": sort_by, "depth": depth
+            },
+            "results": results,
+            "total": len(results),
+            "hint": "Use --expand id1,id2 to get full details for selected nodes"
+        }
 
     # Formatar resultados
     formatted = []
@@ -207,10 +225,37 @@ def search_brain(
     }
 
 
+def expand_brain(node_ids: List[str]) -> dict:
+    """Progressive disclosure layer 2: expand specific nodes with full details.
+
+    Args:
+        node_ids: List of node IDs to expand (from compact search results).
+
+    Returns:
+        Dict with expanded node details including content and connections.
+    """
+    if not HAS_DEPS:
+        return {"error": f"Dependências não disponíveis: {IMPORT_ERROR}"}
+
+    brain = Brain()
+    if not brain.load():
+        return {"error": "Não foi possível carregar o cérebro"}
+
+    expanded = brain.expand_nodes(node_ids)
+    return {
+        "expanded": expanded,
+        "total": len(expanded)
+    }
+
+
 def format_human_readable(data: dict) -> str:
     """Formata resultado para leitura humana."""
     if "error" in data:
         return f"⚠️ Erro: {data['error']}\n💡 {data.get('fallback', '')}"
+
+    # Expanded nodes output (layer 2)
+    if "expanded" in data:
+        return format_expanded(data)
 
     lines = []
     lines.append(f'🧠 Recall: "{data["query"]}"')
@@ -230,27 +275,72 @@ def format_human_readable(data: dict) -> str:
         lines.append("   - Execute /learn para registrar conhecimento")
         lines.append("   - Verifique se o cérebro foi populado (/init-engram)")
     else:
-        lines.append(f"Encontrei {data['total']} memórias relevantes:")
-        lines.append("")
-
-        for item in data["results"]:
-            score_bar = "█" * int(item["score"] * 5) + "░" * (5 - int(item["score"] * 5))
-            date_str = f" ({item['date']})" if item.get("date") else ""
-            lines.append(f"📋 [{score_bar}] {item['type']}: {item['title']}{date_str}")
-            if item["summary"]:
-                lines.append(f"   {item['summary'][:100]}...")
-            if item.get("content"):
-                lines.append(f"   📝 {item['content'][:200]}...")
-            if item["author"]:
-                lines.append(f"   👤 {item['author']}")
-            # Show semantic connections
-            connections = item.get("connections", [])
-            if connections:
-                lines.append(f"   🔗 {len(connections)} conexões:")
-                for conn in connections[:5]:
-                    direction = "→" if "target" in conn else "←"
-                    lines.append(f"      {direction} [{conn['type']}] {conn['title']}")
+        # Compact mode: minimal index
+        if data.get("hint"):
+            lines.append(f"Encontrei {data['total']} memórias (modo compacto):")
             lines.append("")
+            for item in data["results"]:
+                score_bar = "█" * int(item["score"] * 5) + "░" * (5 - int(item["score"] * 5))
+                date_str = f" ({item['date']})" if item.get("date") else ""
+                lines.append(f"  [{score_bar}] {item['type']:8s} {item['id']:20s} {item['title']}{date_str}")
+            lines.append("")
+            lines.append(f"💡 {data['hint']}")
+        else:
+            # Full mode
+            lines.append(f"Encontrei {data['total']} memórias relevantes:")
+            lines.append("")
+
+            for item in data["results"]:
+                score_bar = "█" * int(item["score"] * 5) + "░" * (5 - int(item["score"] * 5))
+                date_str = f" ({item['date']})" if item.get("date") else ""
+                lines.append(f"📋 [{score_bar}] {item['type']}: {item['title']}{date_str}")
+                if item["summary"]:
+                    lines.append(f"   {item['summary'][:100]}...")
+                if item.get("content"):
+                    lines.append(f"   📝 {item['content'][:200]}...")
+                if item["author"]:
+                    lines.append(f"   👤 {item['author']}")
+                # Show semantic connections
+                connections = item.get("connections", [])
+                if connections:
+                    lines.append(f"   🔗 {len(connections)} conexões:")
+                    for conn in connections[:5]:
+                        direction = "→" if "target" in conn else "←"
+                        lines.append(f"      {direction} [{conn['type']}] {conn['title']}")
+                lines.append("")
+
+    return "\n".join(lines)
+
+
+def format_expanded(data: dict) -> str:
+    """Formata nós expandidos (layer 2) para leitura humana."""
+    lines = []
+    lines.append(f"🔍 Expanded {data['total']} nodes:")
+    lines.append("═" * 50)
+    lines.append("")
+
+    for item in data["expanded"]:
+        lines.append(f"📋 {item['type']}: {item['title']}")
+        if item.get("date"):
+            lines.append(f"   📅 {item['date']}")
+        if item.get("author"):
+            lines.append(f"   👤 {item['author']}")
+        if item.get("labels"):
+            lines.append(f"   🏷️  {', '.join(item['labels'])}")
+        if item.get("summary"):
+            lines.append(f"   {item['summary'][:200]}")
+        if item.get("content"):
+            lines.append(f"   📝 {item['content'][:500]}")
+        memory = item.get("memory", {})
+        if memory:
+            lines.append(f"   🧠 strength={memory.get('strength', '?')} access={memory.get('access_count', '?')}")
+        connections = item.get("connections", [])
+        if connections:
+            lines.append(f"   🔗 {len(connections)} conexões:")
+            for conn in connections[:5]:
+                direction = "→" if "target" in conn else "←"
+                lines.append(f"      {direction} [{conn['type']}] {conn['title']}")
+        lines.append("")
 
     return "\n".join(lines)
 
@@ -268,11 +358,15 @@ Exemplos:
   python3 recall.py --recent 7d --top 10
   python3 recall.py --recent 7d --type Commit --sort date
   python3 recall.py "bug" --since 2026-02-01 --sort date
+
+Progressive Disclosure:
+  python3 recall.py "autenticação" --compact --top 20     # Layer 1: minimal index
+  python3 recall.py --expand ADR-001,PAT-012              # Layer 2: full details
         """
     )
 
     parser.add_argument("query", nargs="?", default=None,
-                        help="Pergunta ou tema para buscar (opcional com --recent/--since)")
+                        help="Pergunta ou tema para buscar (opcional com --recent/--since/--expand)")
     parser.add_argument("--type", "-t", dest="filter_type",
                         help="Filtrar por tipo (ADR, Concept, Pattern, Episode, Commit, Rule, Experience)")
     parser.add_argument("--author", "-a", dest="filter_author",
@@ -290,8 +384,22 @@ Exemplos:
     parser.add_argument("--sort", dest="sort_by", choices=["score", "date"],
                         default="score",
                         help="Ordenar por relevância (score) ou data (date)")
+    parser.add_argument("--compact", "-c", action="store_true",
+                        help="Modo compacto: retorna índice mínimo (~50 tokens/resultado)")
+    parser.add_argument("--expand", "-e", dest="expand",
+                        help="Expandir nós específicos com detalhes completos (IDs separados por vírgula)")
 
     args = parser.parse_args()
+
+    # --expand mode: layer 2 (no query needed)
+    if args.expand:
+        node_ids = [nid.strip() for nid in args.expand.split(",") if nid.strip()]
+        result = expand_brain(node_ids)
+        if args.format == "json":
+            print(json.dumps(result, indent=2, ensure_ascii=False))
+        else:
+            print(format_human_readable(result))
+        return
 
     # Resolve since: --recent takes precedence over --since
     since = args.recent or args.since
@@ -311,7 +419,8 @@ Exemplos:
         depth=args.depth,
         top_k=args.top,
         since=since,
-        sort_by=args.sort_by
+        sort_by=args.sort_by,
+        compact=args.compact
     )
 
     if args.format == "json":

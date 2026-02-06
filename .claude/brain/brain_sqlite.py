@@ -1035,7 +1035,8 @@ class BrainSQLite:
         spread_depth: int = 2,
         since: str = None,
         sort_by: str = "score",
-        reinforce: bool = True
+        reinforce: bool = True,
+        compact: bool = False
     ) -> List[Dict]:
         """Full hybrid search: embedding + spreading activation + FTS5 fusion + filters.
 
@@ -1049,6 +1050,8 @@ class BrainSQLite:
             since: ISO date or relative (e.g. "7d", "30d", "2026-02-01").
             sort_by: "score" (default) or "date" (newest first).
             reinforce: If True, reinforce accessed memories (set False for read-only).
+            compact: If True, return minimal dicts (id, score, title, type, date only).
+                     Use expand_nodes() to get full details for selected IDs.
         """
         results = {}
 
@@ -1155,10 +1158,40 @@ class BrainSQLite:
         # 7. Format output
         output = []
         conn = self._get_conn()
-        for node_id, score in sorted_results[:top_k]:
-            row = conn.execute("SELECT * FROM nodes WHERE id = ?", (node_id,)).fetchone()
-            if row:
-                output.append(self._row_to_legacy_dict(row, score))
+        if compact:
+            # Progressive disclosure layer 1: minimal index (~50 tokens/result)
+            result_ids = [nid for nid, _ in sorted_results[:top_k]]
+            if result_ids:
+                ph = ",".join("?" for _ in result_ids)
+                rows = conn.execute(
+                    f"""SELECT n.id, n.title, n.created_at,
+                               (SELECT GROUP_CONCAT(nl.label) FROM node_labels nl
+                                WHERE nl.node_id = n.id) AS labels_str
+                        FROM nodes n WHERE n.id IN ({ph})""",
+                    result_ids
+                ).fetchall()
+                row_map = {r["id"]: r for r in rows}
+                score_map = dict(sorted_results[:top_k])
+                for nid in result_ids:
+                    r = row_map.get(nid)
+                    if r:
+                        labels_list = r["labels_str"].split(",") if r["labels_str"] else []
+                        date = r["created_at"] or ""
+                        if "T" in date:
+                            date = date.split("T")[0]
+                        output.append({
+                            "id": nid,
+                            "score": score_map.get(nid, 0),
+                            "title": r["title"] or nid,
+                            "type": self._primary_type(labels_list),
+                            "date": date,
+                        })
+        else:
+            # Full output (layer 2: ~500 tokens/result)
+            for node_id, score in sorted_results[:top_k]:
+                row = conn.execute("SELECT * FROM nodes WHERE id = ?", (node_id,)).fetchone()
+                if row:
+                    output.append(self._row_to_legacy_dict(row, score))
 
         return output
 
@@ -1292,6 +1325,77 @@ class BrainSQLite:
             "props": props,
             "memory": memory
         }
+
+    @staticmethod
+    def _primary_type(labels: List[str]) -> str:
+        """Determine the primary type from a list of labels."""
+        priority = ["ADR", "Decision", "Pattern", "Concept", "Rule",
+                     "Episode", "Commit", "BugFix", "Experience", "Person"]
+        for t in priority:
+            if t in labels:
+                return t
+        return "Memory"
+
+    def expand_nodes(self, node_ids: List[str]) -> List[Dict]:
+        """Progressive disclosure layer 2: full details for selected node IDs.
+
+        Returns full props, content, memory, labels, and semantic connections
+        for the given IDs. Use after compact retrieve() to expand only the
+        nodes the consumer actually needs (~500 tokens/result).
+        """
+        conn = self._get_conn()
+        output = []
+        semantic_types = {"REFERENCES", "INFORMED_BY", "APPLIES", "RELATED_TO",
+                          "SAME_SCOPE", "MODIFIES_SAME", "BELONGS_TO_THEME", "CLUSTERED_IN"}
+
+        for node_id in node_ids:
+            row = conn.execute("SELECT * FROM nodes WHERE id = ?", (node_id,)).fetchone()
+            if not row:
+                continue
+
+            node_data = self._row_to_legacy_dict(row)
+            props = node_data.get("props", {})
+            labels_list = node_data.get("labels", [])
+
+            # Collect semantic connections
+            connections = []
+            for neighbor in self.get_neighbors(node_id):
+                edge = self.get_edge(node_id, neighbor)
+                if edge and edge.get("type") in semantic_types:
+                    nb = self.get_node(neighbor)
+                    nb_title = nb.get("props", {}).get("title", neighbor) if nb else neighbor
+                    connections.append({
+                        "target": neighbor, "title": nb_title,
+                        "type": edge["type"], "weight": round(edge.get("weight", 0.5), 2)
+                    })
+            for neighbor in self.get_predecessors(node_id):
+                edge = self.get_edge(neighbor, node_id)
+                if edge and edge.get("type") in semantic_types:
+                    nb = self.get_node(neighbor)
+                    nb_title = nb.get("props", {}).get("title", neighbor) if nb else neighbor
+                    connections.append({
+                        "source": neighbor, "title": nb_title,
+                        "type": edge["type"], "weight": round(edge.get("weight", 0.5), 2)
+                    })
+
+            date = props.get("date", props.get("created_at", ""))
+            if date and "T" in str(date):
+                date = str(date).split("T")[0]
+
+            output.append({
+                "id": node_id,
+                "title": props.get("title", node_id),
+                "type": self._primary_type(labels_list),
+                "labels": labels_list,
+                "date": date,
+                "content": props.get("content", ""),
+                "summary": props.get("summary", ""),
+                "author": props.get("author"),
+                "memory": node_data.get("memory", {}),
+                "connections": connections[:10],
+            })
+
+        return output
 
     def _has_labels(self, node_id: str, labels: List[str]) -> bool:
         """Check if node has any of the given labels."""
