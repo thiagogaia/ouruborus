@@ -43,7 +43,7 @@ brain.add_memory(
     title="ADR-NNN: [Título da Decisão]",
     content="## Contexto\n[...]\n\n## Decisão\n[...]\n\n## Consequências\n[...]",
     labels=["Decision", "ADR"],
-    author=dev["username"],
+    author=dev["author"],
     props={"adr_id": "ADR-NNN", "status": "Aceito", "date": "YYYY-MM-DD"}
 )
 
@@ -52,7 +52,7 @@ brain.add_memory(
     title="PAT-NNN: [Nome do Padrão]",
     content="[Descrição, quando usar, exemplo]",
     labels=["Pattern", "ApprovedPattern"],
-    author=dev["username"],
+    author=dev["author"],
     props={"pat_id": "PAT-NNN"}
 )
 
@@ -61,7 +61,7 @@ brain.add_memory(
     title="EXP-NNN: [Título]",
     content="[Contexto, abordagem, resultado, aprendizado]",
     labels=["Episode", "Experience"],
-    author=dev["username"],
+    author=dev["author"],
     props={"exp_id": "EXP-NNN"}
 )
 
@@ -78,7 +78,7 @@ brain.add_memory(
     title="Bug: [descrição curta]",
     content="[O que aconteceu, como foi resolvido, arquivos afetados]",
     labels=["Episode", "BugFix"],
-    author=dev["username"],
+    author=dev["author"],
     references=["[[ADR-001]]", "[[PAT-005]]"]  # opcional
 )
 

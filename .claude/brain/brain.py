@@ -469,42 +469,149 @@ class Brain:
             return 0.02
 
     def _ensure_person_node(self, author: str) -> str:
-        """Garante que existe no para a pessoa."""
-        # Normaliza nome
-        if not author.startswith("@"):
-            author = f"@{author}"
+        """Garante que existe no para a pessoa.
 
-        person_id = f"person-{author[1:]}"
+        Aceita email (canonical) ou @username (legacy).
+        ID do nó: person-{email} para devs reais, person-{name} para sistema.
+        """
+        # Resolve author para person_id
+        if "@" in author and not author.startswith("@"):
+            # É um email — formato canônico (ADR-010)
+            person_id = f"person-{author}"
+            display_name = author.split("@")[0]
+        elif author.startswith("@"):
+            # Legacy @username — tenta encontrar nó existente por alias
+            existing = self._find_person_by_alias(author)
+            if existing:
+                return existing
+            person_id = f"person-{author[1:]}"
+            display_name = author[1:]
+        else:
+            person_id = f"person-{author}"
+            display_name = author
 
         if not self._node_exists(person_id):
-            if HAS_NETWORKX:
-                self.graph.add_node(
-                    person_id,
-                    labels=["Person"],
-                    props={"name": author, "username": author},
-                    memory={
-                        "strength": 1.0,
-                        "access_count": 0,
-                        "last_accessed": datetime.now().isoformat(),
-                        "created_at": datetime.now().isoformat(),
-                        "decay_rate": 0.0001
-                    }
-                )
-            else:
-                self.graph.add_node(
-                    person_id,
-                    labels=["Person"],
-                    props={"name": author, "username": author},
-                    memory={
-                        "strength": 1.0,
-                        "access_count": 0,
-                        "last_accessed": datetime.now().isoformat(),
-                        "created_at": datetime.now().isoformat(),
-                        "decay_rate": 0.0001
-                    }
-                )
+            now = datetime.now().isoformat()
+            self.graph.add_node(
+                person_id,
+                labels=["Person"],
+                props={
+                    "email": author if "@" in author and not author.startswith("@") else "",
+                    "name": display_name,
+                    "aliases": [author] if author.startswith("@") else [],
+                },
+                memory={
+                    "strength": 1.0,
+                    "access_count": 0,
+                    "last_accessed": now,
+                    "created_at": now,
+                    "decay_rate": 0.0001
+                }
+            )
 
         return person_id
+
+    def _find_person_by_alias(self, alias: str) -> Optional[str]:
+        """Busca nó Person por alias (@username)."""
+        for node_id in self.graph.nodes:
+            node = self.get_node(node_id)
+            if node and "Person" in node.get("labels", []):
+                aliases = node.get("props", {}).get("aliases", [])
+                if alias in aliases:
+                    return node_id
+        return None
+
+    def update_dev_state(self, email: str, focus: str = None,
+                         last_session: str = None, name: str = None) -> str:
+        """Atualiza estado do desenvolvedor no nó Person.
+
+        Grava foco atual, resumo da última sessão e deriva expertise
+        das edges AUTHORED_BY. Chamado pelo /learn ao final de sessão.
+
+        Args:
+            email: Email canônico do dev (git config user.email)
+            focus: O que o dev está trabalhando agora
+            last_session: Resumo do que foi feito na sessão
+            name: Nome display (atualiza se fornecido)
+        """
+        person_id = self._ensure_person_node(email)
+        node = self.get_node(person_id)
+        if node is None:
+            return person_id
+
+        props = node.get("props", {})
+        now = datetime.now().isoformat()
+
+        if focus is not None:
+            props["focus"] = focus
+            props["focus_updated_at"] = now
+        if last_session is not None:
+            props["last_session"] = last_session
+            props["last_session_at"] = now
+        if name is not None:
+            props["name"] = name
+
+        # Derive expertise from AUTHORED_BY edges
+        expertise = {}
+        for edge_data in self.graph.edges(person_id, data=True) if HAS_NETWORKX else []:
+            src, tgt, data = edge_data
+            # Edges pointing TO this person are AUTHORED_BY
+            pass
+        # Walk all edges where tgt == person_id
+        authored_nodes = []
+        if HAS_NETWORKX:
+            for src, tgt, data in self.graph.edges(data=True):
+                if tgt == person_id and data.get("type") == "AUTHORED_BY":
+                    authored_nodes.append(src)
+        else:
+            for e in self.graph._edges:
+                if e.get("tgt") == person_id and e.get("type") == "AUTHORED_BY":
+                    authored_nodes.append(e["src"])
+
+        # Count labels from authored nodes to derive expertise areas
+        from collections import Counter
+        label_counts = Counter()
+        for nid in authored_nodes:
+            n = self.get_node(nid)
+            if n:
+                for label in n.get("labels", []):
+                    if label.endswith("Domain"):
+                        label_counts[label.replace("Domain", "")] += 1
+        if label_counts:
+            props["expertise"] = [area for area, _ in label_counts.most_common(10) if area]
+
+        props["sessions_count"] = props.get("sessions_count", 0) + (1 if last_session else 0)
+
+        # Update node
+        if HAS_NETWORKX:
+            self.graph.nodes[person_id]["props"] = props
+            self.graph.nodes[person_id]["memory"]["last_accessed"] = now
+        else:
+            self.graph._nodes[person_id]["props"] = props
+            self.graph._nodes[person_id]["memory"]["last_accessed"] = now
+
+        return person_id
+
+    def get_dev_state(self, email: str) -> Optional[Dict]:
+        """Retorna estado atual do desenvolvedor.
+
+        Útil no início de sessão para contextualizar o recall.
+        """
+        person_id = f"person-{email}"
+        node = self.get_node(person_id)
+        if node is None:
+            return None
+        props = node.get("props", {})
+        return {
+            "email": props.get("email", email),
+            "name": props.get("name", ""),
+            "focus": props.get("focus", ""),
+            "last_session": props.get("last_session", ""),
+            "last_session_at": props.get("last_session_at", ""),
+            "expertise": props.get("expertise", []),
+            "sessions_count": props.get("sessions_count", 0),
+            "aliases": props.get("aliases", []),
+        }
 
     def _ensure_domain_node(self, domain: str) -> str:
         """Garante que existe no para o dominio."""
@@ -1169,7 +1276,11 @@ class Brain:
 # ══════════════════════════════════════════════════════════
 
 def get_current_developer() -> Dict[str, str]:
-    """Obtem identidade do desenvolvedor atual via git config."""
+    """Obtem identidade do desenvolvedor atual via git config.
+
+    Retorna email como identificador canônico (ADR-010).
+    O campo 'author' é o que deve ser passado para add_memory().
+    """
     try:
         email = subprocess.check_output(
             ["git", "config", "user.email"],
@@ -1187,12 +1298,10 @@ def get_current_developer() -> Dict[str, str]:
         email = f"{getpass.getuser()}@local"
         name = getpass.getuser()
 
-    username = re.sub(r'[^a-z0-9]', '-', email.split("@")[0].lower())
-
     return {
         "email": email,
         "name": name,
-        "username": f"@{username}"
+        "author": email,  # canonical — usar em add_memory()
     }
 
 
@@ -1263,11 +1372,42 @@ if __name__ == "__main__":
             title=title,
             content=content,
             labels=["Episode"],
-            author=dev["username"]
+            author=dev["author"]
         )
 
         brain.save()
         print(f"Created: {node_id}")
+
+    elif cmd == "dev-state":
+        brain.load()
+        dev = get_current_developer()
+        state = brain.get_dev_state(dev["email"])
+        if state:
+            print(json.dumps(state, indent=2, ensure_ascii=False))
+        else:
+            print(f"No state found for {dev['email']}")
+
+    elif cmd == "update-dev-state":
+        if len(sys.argv) < 3:
+            print("Usage: brain.py update-dev-state --focus 'text' --session 'text'")
+            sys.exit(1)
+        brain.load()
+        dev = get_current_developer()
+        focus = None
+        session = None
+        i = 2
+        while i < len(sys.argv):
+            if sys.argv[i] == "--focus" and i + 1 < len(sys.argv):
+                focus = sys.argv[i + 1]
+                i += 2
+            elif sys.argv[i] == "--session" and i + 1 < len(sys.argv):
+                session = sys.argv[i + 1]
+                i += 2
+            else:
+                i += 1
+        brain.update_dev_state(dev["email"], focus=focus, last_session=session, name=dev["name"])
+        brain.save()
+        print(json.dumps(brain.get_dev_state(dev["email"]), indent=2, ensure_ascii=False))
 
     else:
         print(f"Unknown command: {cmd}")

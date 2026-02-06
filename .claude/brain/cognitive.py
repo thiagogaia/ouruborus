@@ -63,20 +63,13 @@ def decay(brain: Brain) -> dict:
 
 def archive(brain: Brain, threshold: float = 0.1) -> dict:
     """
-    Move memorias muito fracas para arquivo.
+    Marca memorias muito fracas como arquivadas no grafo.
 
-    Memorias com strength < threshold sao movidas para:
-    .claude/archive/{year}/{node_id}.json
+    Memorias com strength < threshold recebem label 'Archived'.
+    Tudo in-graph — sem gravacao em disco separada (ADR-009).
     """
-    archive_path = brain.base_path.parent / "archive"
-    year = str(datetime.now().year)
-    year_path = archive_path / year
-    year_path.mkdir(parents=True, exist_ok=True)
-
     archived = []
-    nodes_to_remove = []
 
-    # Identifica nos para arquivar
     for node_id in list(brain.graph.nodes):
         node = brain.get_node(node_id)
         if node is None:
@@ -91,25 +84,12 @@ def archive(brain: Brain, threshold: float = 0.1) -> dict:
         if any(l in labels for l in protected_labels):
             continue
 
+        if "Archived" in labels:
+            continue
+
         if strength < threshold:
-            # Salva no arquivo
-            archive_file = year_path / f"{node_id}.json"
-            archive_file.write_text(
-                json.dumps(node, indent=2, default=str),
-                encoding='utf-8'
-            )
-
+            brain.graph.nodes[node_id]["labels"] = labels + ["Archived"]
             archived.append(node_id)
-            nodes_to_remove.append(node_id)
-
-    # Remove do grafo (em lote para evitar modificar durante iteracao)
-    # Nota: NetworkX requer cuidado ao remover nos
-    # Por ora, apenas marcamos como archived
-    for node_id in nodes_to_remove:
-        if node_id in brain.graph.nodes:
-            brain.graph.nodes[node_id]["labels"] = (
-                brain.graph.nodes[node_id].get("labels", []) + ["Archived"]
-            )
 
     return {
         "archived_count": len(archived),

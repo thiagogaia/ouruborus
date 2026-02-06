@@ -480,3 +480,16 @@
   5. Varrer todos os arquivos por terminologia inconsistente após aplicar
 - **Evita**: decisões unilaterais, inconsistências entre arquivos, retrabalho
 - **Descoberto em**: 2026-02-05 (sessão de alinhamento LIFECYCLE_GUIDE)
+
+### PAT-039: Safe Update — Separar Código de Dados em Cópias
+- **Quando usar**: atualizar componentes que misturam código (.py/.sh/.md) e dados (.json/.npz/.jsonl)
+- **Solução**: copiar APENAS arquivos de código, NUNCA dados persistentes
+- **Exemplo**: brain/ — copia *.py, *.sh, *.md; nunca graph.json, embeddings.npz, *.jsonl
+- **Anti-padrão**: usar `cp -r` cegamente (sobrescreve dados do projeto)
+- **Descoberto em**: 2026-02-06 (rewrite do_update)
+
+### PAT-040: --force Flag em vez de Pipe Hacks
+- **Quando usar**: scripts CLI com prompts interativos consumidos por batch/CI
+- **Solução**: aceitar --force para pular confirmações; consumidores passam a flag
+- **Anti-padrão**: `echo "y" | script.sh` — quebra com múltiplos prompts
+- **Descoberto em**: 2026-02-06 (batch-setup.sh simplificado)

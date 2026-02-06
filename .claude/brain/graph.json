@@ -1,9 +1,9 @@
 {
   "version": "1.0",
   "meta": {
-    "saved_at": "2026-02-06T00:06:54.266137",
-    "node_count": 202,
-    "edge_count": 488
+    "saved_at": "2026-02-06T01:20:08.193134",
+    "node_count": 212,
+    "edge_count": 522
   },
   "nodes": {
     "a52ceda2": {
@@ -33,13 +33,17 @@
         "Person"
       ],
       "props": {
-        "name": "@engram",
-        "username": "@engram"
+        "name": "Engram System",
+        "username": "@engram",
+        "email": "engram@system",
+        "aliases": [
+          "@engram"
+        ]
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 6,
-        "last_accessed": "2026-02-06T00:06:54.265925",
+        "access_count": 10,
+        "last_accessed": "2026-02-06T01:18:42.530957",
         "created_at": "2026-02-03T21:34:27.978965",
         "decay_rate": 0.0001
       }
@@ -53,8 +57,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 6,
-        "last_accessed": "2026-02-06T00:06:54.265928",
+        "access_count": 7,
+        "last_accessed": "2026-02-06T00:19:42.226152",
         "created_at": "2026-02-03T21:34:27.979045",
         "decay_rate": 0.0001
       }
@@ -90,8 +94,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T19:46:56.257238",
+        "access_count": 4,
+        "last_accessed": "2026-02-06T01:18:42.530984",
         "created_at": "2026-02-03T21:34:27.979203",
         "decay_rate": 0.0001
       }
@@ -149,8 +153,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-06T00:06:54.265927",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:28:20.564029",
         "created_at": "2026-02-03T21:34:27.979448",
         "decay_rate": 0.0001
       }
@@ -237,8 +241,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 2,
-        "last_accessed": "2026-02-06T00:06:54.265929",
+        "access_count": 4,
+        "last_accessed": "2026-02-06T01:18:42.530989",
         "created_at": "2026-02-03T21:34:27.979796",
         "decay_rate": 0.001
       }
@@ -851,8 +855,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-03T21:34:27.983135",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:19:42.226133",
         "created_at": "2026-02-03T21:34:27.983135",
         "decay_rate": 0.003
       }
@@ -1022,8 +1026,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 2,
-        "last_accessed": "2026-02-05T19:46:56.257223",
+        "access_count": 3,
+        "last_accessed": "2026-02-06T00:19:42.226145",
         "created_at": "2026-02-03T21:34:27.984379",
         "decay_rate": 0.005
       }
@@ -1060,8 +1064,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 2,
-        "last_accessed": "2026-02-05T19:46:56.257232",
+        "access_count": 3,
+        "last_accessed": "2026-02-06T00:19:42.226155",
         "created_at": "2026-02-03T21:34:27.984578",
         "decay_rate": 0.005
       }
@@ -1090,22 +1094,6 @@
         "last_accessed": "2026-02-03T21:34:28.050709",
         "created_at": "2026-02-03T21:34:28.050709",
         "decay_rate": 0.01
-      }
-    },
-    "person-thiagogaia": {
-      "labels": [
-        "Person"
-      ],
-      "props": {
-        "name": "@thiagogaia",
-        "username": "@thiagogaia"
-      },
-      "memory": {
-        "strength": 1.0,
-        "access_count": 4,
-        "last_accessed": "2026-02-06T00:06:54.265927",
-        "created_at": "2026-02-03T21:34:28.050980",
-        "decay_rate": 0.0001
       }
     },
     "domain-database": {
@@ -1243,8 +1231,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-03T21:50:42.139813",
+        "access_count": 3,
+        "last_accessed": "2026-02-06T01:18:42.530979",
         "created_at": "2026-02-03T21:50:42.139813",
         "decay_rate": 0.01
       }
@@ -1266,22 +1254,6 @@
         "last_accessed": "2026-02-05T19:46:56.257230",
         "created_at": "2026-02-03T22:13:15.742242",
         "decay_rate": 0.01
-      }
-    },
-    "person-Thiago Gaia": {
-      "labels": [
-        "Person"
-      ],
-      "props": {
-        "name": "@Thiago Gaia",
-        "username": "@Thiago Gaia"
-      },
-      "memory": {
-        "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T19:46:56.257237",
-        "created_at": "2026-02-03T22:13:15.742749",
-        "decay_rate": 0.0001
       }
     },
     "b9a5cadd": {
@@ -1392,8 +1364,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-04T01:39:00.826490",
+        "access_count": 3,
+        "last_accessed": "2026-02-06T01:18:42.530990",
         "created_at": "2026-02-04T01:39:00.826490",
         "decay_rate": 0.01
       }
@@ -1646,22 +1618,6 @@
         "decay_rate": 0.01
       }
     },
-    "person-thigato": {
-      "labels": [
-        "Person"
-      ],
-      "props": {
-        "name": "@thigato",
-        "username": "@thigato"
-      },
-      "memory": {
-        "strength": 1.0,
-        "access_count": 0,
-        "last_accessed": "2026-02-04T04:48:01.122645",
-        "created_at": "2026-02-04T04:48:01.122647",
-        "decay_rate": 0.0001
-      }
-    },
     "99286bf3": {
       "labels": [
         "ReadmeDomain",
@@ -1734,8 +1690,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-04T19:16:46.724372",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:19:42.226147",
         "created_at": "2026-02-04T19:16:46.724372",
         "decay_rate": 0.01
       }
@@ -1838,9 +1794,9 @@
     "35278641": {
       "labels": [
         "Commit",
+        "Refactor",
         "Episode",
-        "CoreDomain",
-        "Refactor"
+        "CoreDomain"
       ],
       "props": {
         "title": "refactor(core): add infra detection and remove orphan extras",
@@ -1864,9 +1820,9 @@
     "3ee40d0e": {
       "labels": [
         "Commit",
-        "ExtrasDomain",
+        "Feature",
         "Episode",
-        "Feature"
+        "ExtrasDomain"
       ],
       "props": {
         "title": "feat(extras): add infra-expert agent for DevOps troubleshooting",
@@ -1890,9 +1846,9 @@
     "a3095845": {
       "labels": [
         "Commit",
-        "ExtrasDomain",
+        "Feature",
         "Episode",
-        "Feature"
+        "ExtrasDomain"
       ],
       "props": {
         "title": "feat(extras): add 4 niche skills with real-world content",
@@ -1916,9 +1872,9 @@
     "3742d3fd": {
       "labels": [
         "Commit",
-        "Episode",
+        "Feature",
         "GenesisDomain",
-        "Feature"
+        "Episode"
       ],
       "props": {
         "title": "feat(genesis): use pre-built templates before generating generic scaffolds",
@@ -1941,10 +1897,10 @@
     },
     "f3d73e0a": {
       "labels": [
-        "InitengramDomain",
         "Commit",
-        "Episode",
-        "Feature"
+        "Feature",
+        "InitengramDomain",
+        "Episode"
       ],
       "props": {
         "title": "feat(init-engram): add template skills staging and evaluation flow",
@@ -2079,8 +2035,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T17:05:19.875082",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:19:42.226148",
         "created_at": "2026-02-05T17:05:19.875082",
         "decay_rate": 0.003
       }
@@ -3163,10 +3119,10 @@
     },
     "5a98893e": {
       "labels": [
-        "Commit",
-        "Documentation",
         "AnalysisDomain",
-        "Episode"
+        "Documentation",
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "docs(analysis): add deep implementation analysis and update roadmap",
@@ -3186,16 +3142,16 @@
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.305607",
+        "last_accessed": "2026-02-06T01:11:53.646861",
         "created_at": "2026-02-05T17:05:20.309320",
         "decay_rate": 0.01
       }
     },
     "835a2079": {
       "labels": [
-        "Commit",
         "KnowledgeDomain",
-        "Episode"
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "chore(knowledge): record /learn session with ADR-013, PAT-034/035, EXP-021",
@@ -3218,17 +3174,17 @@
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.305629",
+        "last_accessed": "2026-02-06T01:11:53.646883",
         "created_at": "2026-02-05T17:05:20.309951",
         "decay_rate": 0.01
       }
     },
     "75b8b777": {
       "labels": [
-        "Commit",
         "TemplatesDomain",
         "Refactor",
-        "Episode"
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "refactor(templates): rename stacks/ to skills/ for semantic clarity",
@@ -3251,7 +3207,7 @@
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.306005",
+        "last_accessed": "2026-02-06T01:11:53.647261",
         "created_at": "2026-02-05T17:05:20.310634",
         "decay_rate": 0.01
       }
@@ -3429,9 +3385,9 @@
         "content": "Theme 'knowledge' with 6 commits: chore(3), docs(2), feat(1)"
       },
       "memory": {
-        "strength": 0.8,
-        "access_count": 0,
-        "last_accessed": "2026-02-05T17:05:25.721927",
+        "strength": 0.8820000000000001,
+        "access_count": 2,
+        "last_accessed": "2026-02-06T01:18:42.530987",
         "created_at": "2026-02-05T17:05:25.721927",
         "decay_rate": 0.002
       }
@@ -3495,10 +3451,10 @@
     },
     "0c361ed6": {
       "labels": [
-        "Commit",
-        "Feature",
         "BrainDomain",
-        "Episode"
+        "Feature",
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "feat(brain): add sleep cycle for semantic consolidation",
@@ -3520,8 +3476,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.305591",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T01:11:53.646840",
         "created_at": "2026-02-05T17:20:53.768670",
         "decay_rate": 0.01
       }
@@ -3538,19 +3494,19 @@
         "content": "Theme 'brain' with 3 commits: feat(3)"
       },
       "memory": {
-        "strength": 0.8400000000000001,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T23:27:07.927646",
+        "strength": 0.8820000000000001,
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:28:20.564027",
         "created_at": "2026-02-05T17:21:00.596867",
         "decay_rate": 0.002
       }
     },
     "176fb04a": {
       "labels": [
-        "Commit",
-        "Feature",
         "BrainDomain",
-        "Episode"
+        "Feature",
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "feat(brain): make brain the primary knowledge source in CLAUDE.md",
@@ -3569,16 +3525,16 @@
       "memory": {
         "strength": 1.0,
         "access_count": 2,
-        "last_accessed": "2026-02-05T23:29:21.305331",
+        "last_accessed": "2026-02-06T01:11:53.646535",
         "created_at": "2026-02-05T18:09:48.953339",
         "decay_rate": 0.01
       }
     },
     "32b83c9b": {
       "labels": [
-        "Commit",
         "KnowledgeDomain",
-        "Episode"
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "chore(knowledge): record /learn session with ADR-014, PAT-036, EXP-022",
@@ -3600,8 +3556,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.305350",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T01:11:53.646555",
         "created_at": "2026-02-05T18:09:48.953866",
         "decay_rate": 0.01
       }
@@ -3858,8 +3814,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T18:51:08.045268",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:19:42.226142",
         "created_at": "2026-02-05T18:51:08.045268",
         "decay_rate": 0.01
       }
@@ -3998,8 +3954,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T18:51:08.046385",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:28:20.564022",
         "created_at": "2026-02-05T18:51:08.046385",
         "decay_rate": 0.01
       }
@@ -4038,8 +3994,8 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T18:51:08.046945",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T00:28:20.564031",
         "created_at": "2026-02-05T18:51:08.046945",
         "decay_rate": 0.01
       }
@@ -4066,10 +4022,10 @@
     },
     "20d4c1cc": {
       "labels": [
-        "Commit",
-        "Feature",
         "BrainDomain",
-        "Episode"
+        "Feature",
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "feat(brain): read canonical .md files in sleep and create CO_ACCESSED edges",
@@ -4091,17 +4047,17 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 2,
-        "last_accessed": "2026-02-05T23:29:21.305248",
+        "access_count": 3,
+        "last_accessed": "2026-02-06T01:11:53.646446",
         "created_at": "2026-02-05T18:59:31.988749",
         "decay_rate": 0.01
       }
     },
     "3bc29518": {
       "labels": [
-        "Commit",
         "KnowledgeDomain",
-        "Episode"
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "chore(knowledge): record /learn session with LIFECYCLE_GUIDE, RN-038/039/040, EXP-023",
@@ -4123,18 +4079,18 @@
       },
       "memory": {
         "strength": 1.0,
-        "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.305273",
+        "access_count": 2,
+        "last_accessed": "2026-02-06T01:11:53.646474",
         "created_at": "2026-02-05T18:59:31.989438",
         "decay_rate": 0.01
       }
     },
     "99153eac": {
       "labels": [
-        "Commit",
-        "Feature",
         "BrainDomain",
-        "Episode"
+        "Feature",
+        "Episode",
+        "Commit"
       ],
       "props": {
         "title": "feat(brain): make brain the single source of truth with self-feeding loop",
@@ -4157,7 +4113,7 @@
       "memory": {
         "strength": 1.0,
         "access_count": 2,
-        "last_accessed": "2026-02-05T23:29:21.305222",
+        "last_accessed": "2026-02-06T01:11:53.646422",
         "created_at": "2026-02-05T19:30:42.740536",
         "decay_rate": 0.01
       }
@@ -4226,9 +4182,9 @@
     },
     "a5a071fa": {
       "labels": [
+        "Documentation",
         "Episode",
-        "Commit",
-        "Documentation"
+        "Commit"
       ],
       "props": {
         "title": "docs: shift from brain-only to brain-primary with synced .md files",
@@ -4250,16 +4206,16 @@
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.304933",
+        "last_accessed": "2026-02-06T01:11:53.646374",
         "created_at": "2026-02-05T23:29:21.304933",
         "decay_rate": 0.01
       }
     },
     "63ff63e5": {
       "labels": [
+        "Documentation",
         "Episode",
-        "Commit",
-        "Documentation"
+        "Commit"
       ],
       "props": {
         "title": "docs: update LIFECYCLE_GUIDE.md to reflect brain-only architecture",
@@ -4278,7 +4234,7 @@
       "memory": {
         "strength": 1.0,
         "access_count": 1,
-        "last_accessed": "2026-02-05T23:29:21.305164",
+        "last_accessed": "2026-02-06T01:11:53.646396",
         "created_at": "2026-02-05T23:29:21.305164",
         "decay_rate": 0.01
       }
@@ -4320,6 +4276,324 @@
         "last_accessed": "2026-02-05T23:29:48.793184",
         "created_at": "2026-02-05T23:29:48.793184",
         "decay_rate": 0.003
+      }
+    },
+    "d0a1dc73": {
+      "labels": [
+        "ADR",
+        "Decision"
+      ],
+      "props": {
+        "title": "ADR-009: Remover pastas de memória baseada em arquivos",
+        "author": "@thiagogaia",
+        "content": "**Contexto**: ADR-005 desenhou memória em 3 camadas com arquivos (archive/, consolidated/, brain/state/). ADR-008 implementou o cérebro em grafo NetworkX que absorveu essas responsabilidades — decay, consolidação e arquivamento são feitos in-graph via strength, labels e sleep().\n\n**Decisão**: Remover as 3 pastas vazias (archive/, consolidated/, brain/state/) e simplificar cognitive.py:archive() para apenas marcar label Archived no grafo, sem gravar JSON em disco.\n\n**Consequências**:\n- Menos ruído na estrutura de diretórios\n- Elimina código morto (gravação em disco redundante)\n- archive() continua funcionando — marca no grafo em vez de duplicar em arquivo\n- Pastas consolidadas pelo grafo: strength decai via Ebbinghaus, sleep() consolida semanticamente, archive() marca label Archived\n\n**Supersede**: Partes do ADR-005 (estrutura archive/ e consolidated/) e ADR-008 (brain/state/)",
+        "summary": "Contexto: ADR-005 desenhou memória em 3 camadas com arquivos (archive/, consolidated/, brain/state/). ADR-008 implementou o cérebro em grafo NetworkX que absorveu essas responsabilidades — decay, consolidação e arquivamento são feitos in-graph via strength, labels e sleep(). Decisão: Remover as 3 pastas vazias (archive/, consolidated/, brain/state/) e simplificar cognitive.py:archive() para apenas marcar label Archived no grafo, sem gravar JSON em disco. Consequências: - Menos ruído na estrut..."
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T00:51:14.389599",
+        "created_at": "2026-02-06T00:51:14.389599",
+        "decay_rate": 0.001
+      }
+    },
+    "person-thiagogaia@gmail.com": {
+      "labels": [
+        "Person"
+      ],
+      "props": {
+        "email": "thiagogaia@gmail.com",
+        "name": "Thiago Gaia",
+        "aliases": [
+          "@thiagogaia",
+          "@thigato",
+          "@Thiago Gaia"
+        ],
+        "focus": "limpeza arquitetural + dev state no cérebro",
+        "focus_updated_at": "2026-02-06T01:20:08.192692",
+        "last_session": "ADR-009: removeu pastas redundantes. ADR-010: email como ID canônico, dev state persistente.",
+        "last_session_at": "2026-02-06T01:20:08.192692",
+        "expertise": [
+          "Knowledge",
+          "Brain",
+          "Core",
+          "Templates",
+          "Engram",
+          "Readme",
+          "Extras",
+          "Genesis",
+          "Engramgenesis"
+        ],
+        "sessions_count": 2
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 9,
+        "last_accessed": "2026-02-06T01:20:08.192692",
+        "created_at": "2026-02-03T21:34:28.050980",
+        "decay_rate": 0.0001
+      }
+    },
+    "28e09161": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "BugFix",
+        "UpdateDomain"
+      ],
+      "props": {
+        "title": "fix(update): rewrite do_update() to fix 8 gaps in --update mode",
+        "author": "thiagogaia@gmail.com",
+        "content": "fix(update): rewrite do_update() to fix 8 gaps in --update mode\n\nThe previous do_update() was a shallow copy of install_core() that\n\n**Files changed:** batch-setup.sh, setup.sh",
+        "summary": "fix(update): rewrite do_update() to fix 8 gaps in --update mode The previous do_update() was a shallow copy of install_core() that Files changed: batch-setup.sh, setup.sh",
+        "commit_hash": "313c4dd1",
+        "date": "2026-02-06",
+        "commit_type": "fix",
+        "scope": "update",
+        "files_count": 2,
+        "files": [
+          "batch-setup.sh",
+          "setup.sh"
+        ]
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:11:53.645827",
+        "created_at": "2026-02-06T01:11:53.645827",
+        "decay_rate": 0.01
+      }
+    },
+    "dbcf1516": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "Feature",
+        "CoreDomain"
+      ],
+      "props": {
+        "title": "feat(core): add CHANGELOG.md and auto-update on /commit",
+        "author": "thiagogaia@gmail.com",
+        "content": "feat(core): add CHANGELOG.md and auto-update on /commit\n\nTrack core/ (DNA) changes in standard Keep a Changelog format.\n\n**Files changed:** .claude/commands/commit.md, CHANGELOG.md, core/commands/commit.md",
+        "summary": "feat(core): add CHANGELOG.md and auto-update on /commit Track core/ (DNA) changes in standard Keep a Changelog format. Files changed: .claude/commands/commit.md, CHANGELOG.md, core/commands/commit.md",
+        "commit_hash": "9d7b5e32",
+        "date": "2026-02-06",
+        "commit_type": "feat",
+        "scope": "core",
+        "files_count": 3,
+        "files": [
+          ".claude/commands/commit.md",
+          "CHANGELOG.md",
+          "core/commands/commit.md"
+        ]
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:11:53.646036",
+        "created_at": "2026-02-06T01:11:53.646036",
+        "decay_rate": 0.01
+      }
+    },
+    "ccf19976": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "BugFix",
+        "VersioningDomain"
+      ],
+      "props": {
+        "title": "fix(versioning): make VERSION file the single source of truth for Engram version",
+        "author": "thiagogaia@gmail.com",
+        "content": "fix(versioning): make VERSION file the single source of truth for Engram version\n\nVERSION was 2.0.0 while .engram-version and manifest.json had 3.0.0.\n\n**Files changed:** .claude/brain/graph.json, .claude/skills/engram-genesis/scripts/register.py, VERSION, batch-setup.sh, core/genesis/scripts/register.py",
+        "summary": "fix(versioning): make VERSION file the single source of truth for Engram version VERSION was 2.0.0 while .engram-version and manifest.json had 3.0.0. Files changed: .claude/brain/graph.json, .claude/skills/engram-genesis/scripts/register.py, VERSION, batch-setup.sh, core/genesis/scripts/register.py",
+        "commit_hash": "3d7905a5",
+        "date": "2026-02-06",
+        "commit_type": "fix",
+        "scope": "versioning",
+        "files_count": 6,
+        "files": [
+          ".claude/brain/graph.json",
+          ".claude/skills/engram-genesis/scripts/register.py",
+          "VERSION",
+          "batch-setup.sh",
+          "core/genesis/scripts/register.py"
+        ]
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:11:53.646075",
+        "created_at": "2026-02-06T01:11:53.646075",
+        "decay_rate": 0.01
+      }
+    },
+    "be905097": {
+      "labels": [
+        "Episode",
+        "Commit",
+        "KnowledgeDomain"
+      ],
+      "props": {
+        "title": "chore(knowledge): sync knowledge files after brain-primary sessions",
+        "author": "thiagogaia@gmail.com",
+        "content": "chore(knowledge): sync knowledge files after brain-primary sessions\n\nUpdate all knowledge files to reflect brain-primary architecture\n\n**Files changed:** .claude/brain/embeddings.npz, .claude/brain/graph.json, .claude/brain/sleep-log.jsonl, .claude/evolution-activations.json, .claude/knowledge/context/CURRENT_STATE.md",
+        "summary": "chore(knowledge): sync knowledge files after brain-primary sessions Update all knowledge files to reflect brain-primary architecture Files changed: .claude/brain/embeddings.npz, .claude/brain/graph.json, .claude/brain/sleep-log.jsonl, .claude/evolution-activations.json, .claude/knowledge/context/CURRENT_STATE.md",
+        "commit_hash": "2ab85334",
+        "date": "2026-02-05",
+        "commit_type": "chore",
+        "scope": "knowledge",
+        "files_count": 10,
+        "files": [
+          ".claude/brain/embeddings.npz",
+          ".claude/brain/graph.json",
+          ".claude/brain/sleep-log.jsonl",
+          ".claude/evolution-activations.json",
+          ".claude/knowledge/context/CURRENT_STATE.md"
+        ]
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:11:53.646112",
+        "created_at": "2026-02-06T01:11:53.646112",
+        "decay_rate": 0.01
+      }
+    },
+    "1c04c2fa": {
+      "labels": [
+        "Decision",
+        "ADR"
+      ],
+      "props": {
+        "title": "ADR-016: Rewrite do_update() with 8 gap fixes and safety invariants",
+        "author": "Thiago Gaia",
+        "content": "## Contexto\nO do_update() original (linhas 692-738 do setup.sh) era uma cópia rasa do install_core() que não atualizava brain scripts, não fazia backup, não comparava versão, não atualizava manifest, e sobrescrevia seeds sem aviso.\n\n## Decisão\nReescrever do_update() com 13 passos ordenados, 2 helpers (backup_for_update, update_manifest_json), e 2 novas flags (--force, --regenerate).\n\n## Invariantes de Segurança\n- graph.json, embeddings.npz, *.jsonl NUNCA sobrescritos\n- Knowledge files NUNCA tocados\n- Manifest entries existentes NUNCA removidas ou resetadas\n- Cada update gera backup timestampado único\n- --force pula prompts mas ainda faz backup\n\n## 8 Gaps Corrigidos\n1. Brain scripts: copia .py/.sh/.md, nunca .json/.npz/.jsonl\n2. Brain deps: instala venv se ausente, --force reinstala\n3. CLAUDE.md: preservado por padrão, --regenerate regenera com backup\n4. settings.json: idem\n5. manifest.json: update_manifest_json() atualiza versão e adiciona seeds novos\n6. Seeds overwrite: detecta arquivos locais extras e avisa\n7. Sem backup: backup_for_update() cria backup timestampado\n8. Sem versão: compara SCRIPT_DIR/VERSION (source) vs TARGET_DIR/.claude/.engram-version (local)\n\n## Consequências\n- Updates são seguros e reversíveis (backup sempre criado)\n- batch-setup.sh usa --force em vez de pipe hack (echo \"y\" |)\n- VERSION é a fonte da verdade na comparação de versões",
+        "summary": "Contexto O do_update() original (linhas 692-738 do setup.sh) era uma cópia rasa do install_core() que não atualizava brain scripts, não fazia backup, não comparava versão, não atualizava manifest, e sobrescrevia seeds sem aviso. Decisão Reescrever do_update() com 13 passos ordenados, 2 helpers (backup_for_update, update_manifest_json), e 2 novas flags (--force, --regenerate). Invariantes de Segurança - graph.json, embeddings.npz, *.jsonl NUNCA sobrescritos - Knowledge files NUNCA tocados - Ma...",
+        "adr_id": "ADR-016",
+        "status": "Aceito",
+        "date": "2026-02-06"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:13:26.537341",
+        "created_at": "2026-02-06T01:13:26.537341",
+        "decay_rate": 0.001
+      }
+    },
+    "person-Thiago Gaia": {
+      "labels": [
+        "Person"
+      ],
+      "props": {
+        "email": "",
+        "name": "Thiago Gaia",
+        "aliases": []
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 2,
+        "last_accessed": "2026-02-06T01:18:42.530975",
+        "created_at": "2026-02-06T01:13:26.537619",
+        "decay_rate": 0.0001
+      }
+    },
+    "bbcd2ca0": {
+      "labels": [
+        "Pattern",
+        "ApprovedPattern"
+      ],
+      "props": {
+        "title": "PAT-039: Safe Update Pattern — separate code from data in copy operations",
+        "author": "Thiago Gaia",
+        "content": "## Padrão\nAo atualizar componentes que misturam código e dados, copiar APENAS arquivos de código (.py, .sh, .md) e NUNCA arquivos de dados (.json, .npz, .jsonl).\n\n## Quando Usar\n- Atualizando brain/ (código vs graph.json/embeddings.npz)\n- Atualizando seeds (templates vs customizações locais)\n- Qualquer update de componente com estado persistente\n\n## Exemplo\n```bash\n# Brain: copia código, preserva dados\ncp source/brain/*.py target/brain/\ncp source/brain/*.sh target/brain/\ncp source/brain/*.md target/brain/\n# NUNCA: cp source/brain/*.json target/brain/\n```\n\n## Anti-padrão\nUsar cp -r cegamente, que sobrescreve dados do projeto.",
+        "summary": "Padrão Ao atualizar componentes que misturam código e dados, copiar APENAS arquivos de código (.py, .sh, .md) e NUNCA arquivos de dados (.json, .npz, .jsonl). Quando Usar - Atualizando brain/ (código vs graph.json/embeddings.npz) - Atualizando seeds (templates vs customizações locais) - Qualquer update de componente com estado persistente Exemplo ```bash Brain: copia código, preserva dados cp source/brain/*.py target/brain/ cp source/brain/*.sh target/brain/ cp source/brain/*.md target/brain/...",
+        "pat_id": "PAT-039"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:13:26.537742",
+        "created_at": "2026-02-06T01:13:26.537742",
+        "decay_rate": 0.005
+      }
+    },
+    "72f04c4f": {
+      "labels": [
+        "Pattern",
+        "ApprovedPattern"
+      ],
+      "props": {
+        "title": "PAT-040: --force flag instead of pipe hacks for non-interactive mode",
+        "author": "Thiago Gaia",
+        "content": "## Padrão\nScripts CLI que têm prompts interativos devem aceitar --force para pular confirmações. Consumidores (batch scripts, CI) passam --force como flag em vez de usar pipe hacks (echo \"y\" |).\n\n## Quando Usar\n- Scripts com read -p para confirmação\n- Wrappers que chamam outros scripts em modo batch\n- CI/CD pipelines que não podem interagir\n\n## Exemplo\n```bash\n# Bom: flag explícita\n$BATCH_MODE && CMD+=(\"--force\")\n\"${CMD[@]}\"\n\n# Ruim: pipe hack\necho \"y\" | \"${CMD[@]}\"\n```\n\n## Por quê\n- Pipe hack quebra se o script tem múltiplos prompts\n- --force é declarativo e auto-documentado\n- --force ainda pode fazer backup (seguro por padrão)",
+        "summary": "Padrão Scripts CLI que têm prompts interativos devem aceitar --force para pular confirmações. Consumidores (batch scripts, CI) passam --force como flag em vez de usar pipe hacks (echo \"y\" |). Quando Usar - Scripts com read -p para confirmação - Wrappers que chamam outros scripts em modo batch - CI/CD pipelines que não podem interagir Exemplo ```bash Bom: flag explícita $BATCH_MODE && CMD+=(\"--force\") \"${CMD[@]}\" Ruim: pipe hack echo \"y\" | \"${CMD[@]}\" ``` Por quê - Pipe hack quebra se o script...",
+        "pat_id": "PAT-040"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:13:26.537796",
+        "created_at": "2026-02-06T01:13:26.537796",
+        "decay_rate": 0.005
+      }
+    },
+    "c1e3e79a": {
+      "labels": [
+        "Episode",
+        "Experience"
+      ],
+      "props": {
+        "title": "EXP-025: Rewriting do_update() — plan-driven implementation of 8 gaps",
+        "author": "Thiago Gaia",
+        "content": "## Contexto\ndo_update() no setup.sh tinha 8 gaps identificados em sessão de planejamento. A implementação seguiu um plano detalhado com tabela de gaps e ordem de execução.\n\n## Abordagem\n1. Plano detalhado com 8 gaps mapeados + ordem de passos\n2. Implementação em 4 tasks paralelas (flags, helpers, rewrite, batch)\n3. Syntax check (bash -n) após cada mudança\n4. Revisão iterativa da mensagem de versão (VERSION como fonte da verdade)\n\n## Resultado\n- 242 linhas adicionadas, 26 removidas\n- 2 novas funções helper (backup_for_update, update_manifest_json)\n- 2 novas flags (--force, --regenerate)\n- batch-setup.sh simplificado\n- Commit limpo com apenas setup.sh e batch-setup.sh\n\n## Aprendizado\n- Plan mode é essencial para rewrites complexos — evita retrabalho\n- Comparação de versão precisa ter labels claros (source vs local)\n- Invariantes de segurança devem ser listados explicitamente no plano",
+        "summary": "Contexto do_update() no setup.sh tinha 8 gaps identificados em sessão de planejamento. A implementação seguiu um plano detalhado com tabela de gaps e ordem de execução. Abordagem 1. Plano detalhado com 8 gaps mapeados + ordem de passos 2. Implementação em 4 tasks paralelas (flags, helpers, rewrite, batch) 3. Syntax check (bash -n) após cada mudança 4. Revisão iterativa da mensagem de versão (VERSION como fonte da verdade) Resultado - 242 linhas adicionadas, 26 removidas - 2 novas funções help...",
+        "exp_id": "EXP-025"
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:13:26.537936",
+        "created_at": "2026-02-06T01:13:26.537936",
+        "decay_rate": 0.01
+      }
+    },
+    "2a37eab3": {
+      "labels": [
+        "ADR",
+        "Decision"
+      ],
+      "props": {
+        "title": "ADR-010: Email como ID Canônico de Person + Dev State no Cérebro",
+        "author": "thiagogaia@gmail.com",
+        "content": "**Contexto**: Person nodes usavam @username como ID, criando duplicatas para o mesmo dev (3 nós para Thiago Gaia). Estado de sessão era volátil (perdia-se entre conversas). CURRENT_STATE.md é global, não per-dev.\n\n**Decisão**:\n1. Usar git config user.email como ID canônico de Person nodes (person-{email})\n2. _ensure_person_node() aceita email (canonical) ou @username (legacy, resolve via aliases)\n3. Nó Person enriquecido: email, name, aliases, focus, last_session, expertise (derivada), sessions_count\n4. update_dev_state() grava foco e sessão no nó Person ao final de cada sessão\n5. get_dev_state() recupera contexto individual no início de sessão\n6. Expertise derivada automaticamente das edges AUTHORED_BY → labels Domain dos nós autorados\n\n**Consequências**:\n- Cada dev tem contexto individual persistente no cérebro\n- Recall pode priorizar por quem está perguntando\n- /learn grava estado da sessão automaticamente\n- Múltiplos devs = mais assertividade individual\n- Retrocompat: @username resolve via aliases no nó canônico",
+        "summary": "Contexto: Person nodes usavam @username como ID, criando duplicatas para o mesmo dev (3 nós para Thiago Gaia). Estado de sessão era volátil (perdia-se entre conversas). CURRENT_STATE.md é global, não per-dev. Decisão: 1. Usar git config user.email como ID canônico de Person nodes (person-{email}) 2. _ensure_person_node() aceita email (canonical) ou @username (legacy, resolve via aliases) 3. Nó Person enriquecido: email, name, aliases, focus, last_session, expertise (derivada), sessions_count ..."
+      },
+      "memory": {
+        "strength": 1.0,
+        "access_count": 1,
+        "last_accessed": "2026-02-06T01:19:02.646518",
+        "created_at": "2026-02-06T01:19:02.646518",
+        "decay_rate": 0.001
+      }
+    },
+    "bbffee89": {
+      "labels": [
+        "Theme"
+      ],
+      "props": {
+        "title": "Theme: core",
+        "scope": "core",
+        "commit_count": 3,
+        "summary": "Theme 'core' with 3 commits: feat(2), refactor(1)"
+      },
+      "memory": {
+        "strength": 0.8,
+        "access_count": 0,
+        "last_accessed": "2026-02-06T01:19:30.579544",
+        "created_at": "2026-02-06T01:19:30.579544",
+        "decay_rate": 0.002
       }
     }
   },
@@ -4486,7 +4760,7 @@
       "src": "e57d240c",
       "tgt": "f2aad3c1",
       "type": "REFERENCES",
-      "weight": 0.7260000000000001,
+      "weight": 0.8349000000000001,
       "props": {}
     },
     {
@@ -4535,7 +4809,7 @@
       "src": "2638f530",
       "tgt": "e57d240c",
       "type": "REFERENCES",
-      "weight": 0.7260000000000001,
+      "weight": 0.8349000000000001,
       "props": {}
     },
     {
@@ -5171,7 +5445,7 @@
     },
     {
       "src": "50ec5f8c",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5185,14 +5459,14 @@
     },
     {
       "src": "28e6f731",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
     },
     {
       "src": "a1516559",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5208,7 +5482,7 @@
     },
     {
       "src": "13ef8a7c",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5224,7 +5498,7 @@
     },
     {
       "src": "78161cc1",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5283,7 +5557,7 @@
     },
     {
       "src": "7463a6ea",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5299,14 +5573,14 @@
       "src": "7463a6ea",
       "tgt": "e57d240c",
       "type": "REFERENCES",
-      "weight": 0.7320500000000003,
+      "weight": 0.8418575000000003,
       "props": {}
     },
     {
       "src": "7463a6ea",
       "tgt": "812f0768",
       "type": "SAME_SCOPE",
-      "weight": 0.5856400000000002,
+      "weight": 0.6734860000000001,
       "props": {
         "scope": "knowledge"
       }
@@ -5356,7 +5630,7 @@
     },
     {
       "src": "90cb0bdf",
-      "tgt": "person-Thiago Gaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5370,7 +5644,7 @@
     },
     {
       "src": "b9a5cadd",
-      "tgt": "person-Thiago Gaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5391,14 +5665,14 @@
     },
     {
       "src": "d1a007bc",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
     },
     {
       "src": "37d5e104",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5455,7 +5729,7 @@
     },
     {
       "src": "812f0768",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5512,7 +5786,7 @@
     },
     {
       "src": "9a2c7d95",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5621,14 +5895,14 @@
     },
     {
       "src": "a1396a0f",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
     },
     {
       "src": "16c24a89",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5644,14 +5918,14 @@
     },
     {
       "src": "81dd2eb4",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
     },
     {
       "src": "79c9405c",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 1.0,
       "props": {}
@@ -5699,7 +5973,7 @@
     },
     {
       "src": "75a55c6d",
-      "tgt": "person-thigato",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.9743585500000007,
       "props": {}
@@ -5712,15 +5986,8 @@
       "props": {}
     },
     {
-      "src": "75a55c6d",
-      "tgt": "person-thiagogaia",
-      "type": "AUTHORED_BY",
-      "weight": 0.9743585500000007,
-      "props": {}
-    },
-    {
       "src": "99286bf3",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8857805000000005,
       "props": {}
@@ -5734,21 +6001,21 @@
     },
     {
       "src": "cd6cd21f",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8857805000000005,
       "props": {}
     },
     {
       "src": "df4a7d40",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8857805000000005,
       "props": {}
     },
     {
       "src": "27980a2a",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8857805000000005,
       "props": {}
@@ -5762,14 +6029,14 @@
     },
     {
       "src": "588628c9",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8857805000000005,
       "props": {}
     },
     {
       "src": "6721d264",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8857805000000005,
       "props": {}
@@ -5825,6 +6092,15 @@
       }
     },
     {
+      "src": "6721d264",
+      "tgt": "be905097",
+      "type": "RELATED_TO",
+      "weight": 0.7832234273492444,
+      "props": {
+        "method": "tf_vector"
+      }
+    },
+    {
       "src": "223940a2",
       "tgt": "person-engram",
       "type": "AUTHORED_BY",
@@ -5847,7 +6123,7 @@
     },
     {
       "src": "35278641",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8052550000000004,
       "props": {}
@@ -5869,8 +6145,24 @@
       }
     },
     {
+      "src": "35278641",
+      "tgt": "dbcf1516",
+      "type": "SAME_SCOPE",
+      "weight": 0.4,
+      "props": {
+        "scope": "core"
+      }
+    },
+    {
+      "src": "35278641",
+      "tgt": "bbffee89",
+      "type": "BELONGS_TO_THEME",
+      "weight": 0.6,
+      "props": {}
+    },
+    {
       "src": "3ee40d0e",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8052550000000004,
       "props": {}
@@ -5893,7 +6185,7 @@
     },
     {
       "src": "a3095845",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8052550000000004,
       "props": {}
@@ -5907,7 +6199,7 @@
     },
     {
       "src": "3742d3fd",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8052550000000004,
       "props": {}
@@ -5930,7 +6222,7 @@
     },
     {
       "src": "f3d73e0a",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.8052550000000004,
       "props": {}
@@ -6044,7 +6336,7 @@
       "src": "53e1ed87",
       "tgt": "a52ceda2",
       "type": "REFERENCES",
-      "weight": 0.9601350000000001,
+      "weight": 1.0,
       "props": {}
     },
     {
@@ -6877,7 +7169,7 @@
     },
     {
       "src": "5a98893e",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -6893,7 +7185,7 @@
     },
     {
       "src": "835a2079",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -6965,8 +7257,17 @@
       }
     },
     {
+      "src": "835a2079",
+      "tgt": "be905097",
+      "type": "MODIFIES_SAME",
+      "weight": 0.5,
+      "props": {
+        "file": ".claude/evolution-activations.json"
+      }
+    },
+    {
       "src": "75b8b777",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -6998,7 +7299,7 @@
     },
     {
       "src": "fd10e0be",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -7039,7 +7340,7 @@
     },
     {
       "src": "51501375",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -7071,7 +7372,7 @@
     },
     {
       "src": "f8d0dc8d",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -7086,15 +7387,31 @@
       }
     },
     {
+      "src": "f8d0dc8d",
+      "tgt": "dbcf1516",
+      "type": "SAME_SCOPE",
+      "weight": 0.4,
+      "props": {
+        "scope": "core"
+      }
+    },
+    {
+      "src": "f8d0dc8d",
+      "tgt": "bbffee89",
+      "type": "BELONGS_TO_THEME",
+      "weight": 0.6,
+      "props": {}
+    },
+    {
       "src": "a77de1bc",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
     },
     {
       "src": "7665a274",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -7157,6 +7474,15 @@
       }
     },
     {
+      "src": "7665a274",
+      "tgt": "be905097",
+      "type": "MODIFIES_SAME",
+      "weight": 0.5,
+      "props": {
+        "file": ".claude/evolution-activations.json"
+      }
+    },
+    {
       "src": "42cd5642",
       "tgt": "258e7d75",
       "type": "RELATED_TO",
@@ -7167,7 +7493,7 @@
     },
     {
       "src": "0c361ed6",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.7320500000000003,
       "props": {}
@@ -7217,7 +7543,7 @@
     },
     {
       "src": "176fb04a",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.6655000000000002,
       "props": {}
@@ -7258,7 +7584,7 @@
     },
     {
       "src": "32b83c9b",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.6655000000000002,
       "props": {}
@@ -7312,8 +7638,17 @@
       }
     },
     {
+      "src": "32b83c9b",
+      "tgt": "be905097",
+      "type": "MODIFIES_SAME",
+      "weight": 0.5,
+      "props": {
+        "file": ".claude/brain/sleep-log.jsonl"
+      }
+    },
+    {
       "src": "8545986c",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.6655000000000002,
       "props": {}
@@ -7709,7 +8044,7 @@
     },
     {
       "src": "20d4c1cc",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.55,
       "props": {}
@@ -7732,7 +8067,7 @@
     },
     {
       "src": "3bc29518",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.55,
       "props": {}
@@ -7759,8 +8094,17 @@
       "props": {}
     },
     {
+      "src": "3bc29518",
+      "tgt": "be905097",
+      "type": "MODIFIES_SAME",
+      "weight": 0.5,
+      "props": {
+        "file": ".claude/evolution-activations.json"
+      }
+    },
+    {
       "src": "99153eac",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7774,7 +8118,7 @@
     },
     {
       "src": "1d2174d3",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7795,7 +8139,7 @@
     },
     {
       "src": "78f292dc",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7830,7 +8174,7 @@
     },
     {
       "src": "fe5f6d37",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7858,7 +8202,7 @@
     },
     {
       "src": "a5a071fa",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7881,7 +8225,7 @@
     },
     {
       "src": "63ff63e5",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7895,7 +8239,7 @@
     },
     {
       "src": "3bd7b0da",
-      "tgt": "person-thiagogaia",
+      "tgt": "person-thiagogaia@gmail.com",
       "type": "AUTHORED_BY",
       "weight": 0.5,
       "props": {}
@@ -7926,6 +8270,190 @@
       "tgt": "domain-frontend",
       "type": "BELONGS_TO",
       "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "d0a1dc73",
+      "tgt": "person-thiagogaia@gmail.com",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "d0a1dc73",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "d0a1dc73",
+      "tgt": "7b1fcb34",
+      "type": "REFERENCES",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "d0a1dc73",
+      "tgt": "a4d710c9",
+      "type": "REFERENCES",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "d0a1dc73",
+      "tgt": "e57d240c",
+      "type": "REFERENCES",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "28e09161",
+      "tgt": "person-thiagogaia@gmail.com",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "28e09161",
+      "tgt": "ccf19976",
+      "type": "MODIFIES_SAME",
+      "weight": 0.5,
+      "props": {
+        "file": "batch-setup.sh"
+      }
+    },
+    {
+      "src": "dbcf1516",
+      "tgt": "person-thiagogaia@gmail.com",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "dbcf1516",
+      "tgt": "bbffee89",
+      "type": "BELONGS_TO_THEME",
+      "weight": 0.6,
+      "props": {}
+    },
+    {
+      "src": "ccf19976",
+      "tgt": "person-thiagogaia@gmail.com",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "be905097",
+      "tgt": "person-thiagogaia@gmail.com",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "be905097",
+      "tgt": "domain-auth",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "be905097",
+      "tgt": "695f6814",
+      "type": "BELONGS_TO_THEME",
+      "weight": 0.6,
+      "props": {}
+    },
+    {
+      "src": "1c04c2fa",
+      "tgt": "person-Thiago Gaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "1c04c2fa",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "bbcd2ca0",
+      "tgt": "person-Thiago Gaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "bbcd2ca0",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "bbcd2ca0",
+      "tgt": "258e7d75",
+      "type": "CLUSTERED_IN",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "72f04c4f",
+      "tgt": "person-Thiago Gaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "72f04c4f",
+      "tgt": "domain-infra",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "72f04c4f",
+      "tgt": "42cd5642",
+      "type": "CLUSTERED_IN",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "c1e3e79a",
+      "tgt": "person-Thiago Gaia",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "c1e3e79a",
+      "tgt": "domain-frontend",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "2a37eab3",
+      "tgt": "person-thiagogaia@gmail.com",
+      "type": "AUTHORED_BY",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "2a37eab3",
+      "tgt": "domain-auth",
+      "type": "BELONGS_TO",
+      "weight": 0.5,
+      "props": {}
+    },
+    {
+      "src": "2a37eab3",
+      "tgt": "2638f530",
+      "type": "REFERENCES",
+      "weight": 0.6,
       "props": {}
     }
   ]

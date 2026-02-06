@@ -286,3 +286,12 @@
 - **Resultado**: 5 arquivos alinhados (CLAUDE.md, learn.md x2, LIFECYCLE_GUIDE.md, MEMORY.md)
 - **Aprendizado**: sempre grep por terminologia antiga após mudança filosófica — inconsistências se escondem
 - **Data**: 2026-02-05
+
+---
+
+## EXP-025: Rewriting do_update() — Plan-Driven Implementation
+- **Contexto**: do_update() no setup.sh tinha 8 gaps identificados em sessão de planejamento
+- **Abordagem**: plano detalhado com tabela de gaps → 4 tasks (flags, helpers, rewrite, batch) → syntax check após cada mudança → revisão iterativa da mensagem de versão
+- **Resultado**: 242 linhas adicionadas, 26 removidas, 2 helpers, 2 flags, batch simplificado
+- **Aprendizado**: plan mode essencial para rewrites complexos; comparação de versão precisa labels claros (source vs local); invariantes de segurança devem ser explícitos no plano
+- **Data**: 2026-02-06

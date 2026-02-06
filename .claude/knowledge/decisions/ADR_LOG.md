@@ -708,3 +708,14 @@ Auto-ativação do venv via `site.addsitedir()` no brain.py para que numpy/netwo
 - ✅ Fallback real (não stale), git diffs mostram evolução
 - ✅ Conhecimento acessível sem Python
 - ⚠️ Dual-write — dois lugares para manter em sincronia
+
+## ADR-016: Rewrite do_update() with 8 Gap Fixes and Safety Invariants
+**Data**: 2026-02-06
+**Status**: ✅ Aceito
+**Contexto**: do_update() original era cópia rasa de install_core() com 8 gaps: sem brain scripts, sem backup, sem comparação de versão, sem manifest update, seeds sobrescritos sem aviso, CLAUDE.md/settings.json não preservados.
+**Decisão**: Reescrever com 13 passos, 2 helpers (backup_for_update, update_manifest_json), 2 flags (--force, --regenerate). Invariantes: graph.json/embeddings.npz/\*.jsonl NUNCA sobrescritos, knowledge NUNCA tocado, manifest entries NUNCA removidas, backup timestampado sempre criado.
+**Consequências**:
+- ✅ Updates seguros e reversíveis
+- ✅ VERSION como fonte da verdade (source vs local)
+- ✅ batch-setup.sh usa --force em vez de pipe hack
+- ✅ --regenerate para recriar configs com backup

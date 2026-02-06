@@ -554,10 +554,8 @@ def populate_commits(brain: Brain, max_commits: int = 7000) -> int:
 **Files changed:** {', '.join(commit['files'][:5]) if commit['files'] else 'N/A'}
 """.strip()
 
-        # Extrai autor como @username
-        author_email = commit["author_email"]
-        author_username = re.sub(r'[^a-z0-9]', '-', author_email.split("@")[0].lower())
-        author = f"@{author_username}"
+        # Usa email como ID canônico do autor (ADR-010)
+        author = commit["author_email"]
 
         refs = _extract_references(content)
         node_id = brain.add_memory(

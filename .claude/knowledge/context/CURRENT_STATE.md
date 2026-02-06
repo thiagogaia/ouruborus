@@ -1,10 +1,10 @@
 # Estado Atual do Projeto
-> Ultima atualizacao: 2026-02-05 (/learn sessao 7 - Brain-Primary com .md Sincronizados)
+> Ultima atualizacao: 2026-02-06 (/learn sessao 8 - do_update rewrite)
 
 ## Status Geral
 - **Fase**: v3.0.0 — Engram com Cérebro Organizacional (brain-primary, .md sincronizados)
 - **Saúde**: 🟢 Healthy (Health Score 0.95, Doctor 96%)
-- **Cérebro**: 209 nós, 489+ arestas, 198 embeddings — **fonte primária**
+- **Cérebro**: 214 nós, 506+ arestas, 202 embeddings — **fonte primária**
 - **Próximo Marco**: Testes unitários + observar loop de auto-alimentação em ação
 
 ## Identidade
@@ -120,6 +120,9 @@ genesis → evolui componentes → ciclo recomeça
 /init-engram, /status, /plan, /commit, /review, /priorities, /learn, /create, /spawn, /doctor, /curriculum, /export, /import, /recall, **/domain**
 
 ## O Que Mudou Recentemente
+- [2026-02-06] **do_update() reescrito (commit 313c4dd)**: 8 gaps corrigidos — brain scripts, backup timestampado, comparação de versão (VERSION source vs local), manifest update, seed warnings, --force, --regenerate. batch-setup.sh usa --force em vez de pipe hack. [[ADR-016]], [[PAT-039]], [[PAT-040]], [[EXP-025]] | Impacto: ALTO
+- [2026-02-06] **CHANGELOG.md + /commit auto-update (commit 9d7b5e3)**: Changelog gerado e atualizado automaticamente em cada /commit | Impacto: MÉDIO
+- [2026-02-06] **VERSION como fonte da verdade (commit 3d7905a)**: .engram-version lê de VERSION, não hardcoded | Impacto: MÉDIO
 - [2026-02-05] **Brain-Primary com .md Sincronizados (commits 2500005, 05ac19c)**: Filosofia mudou de brain-only para brain-primary. Cérebro é fonte primária, .md mantidos em sincronia como espelho legível. LIFECYCLE_GUIDE, CLAUDE.md, learn.md alinhados. [[ADR-015]], [[PAT-038]], [[EXP-024]] | Impacto: CRÍTICO
 - [2026-02-05] **Brain-Only Self-Feeding Architecture (commit b33fd9c)**: Conteúdo in-graph (props.content), recall persiste reforço, sleep zero disk I/O, embeddings com content[:1000]. 184 nós migrados. | Impacto: CRÍTICO
 - [2026-02-05] **REFERENCES fix + CO_ACCESSED + EXP nodes (commit e39c7f5)**: sleep.py lê .md canônicos para cross-refs (REFERENCES: 3→30). consolidate() cria CO_ACCESSED edges. populate_experiences() cria nós EXP. pat_id nos patterns. Health: 0.79→0.89. | Impacto: CRÍTICO
