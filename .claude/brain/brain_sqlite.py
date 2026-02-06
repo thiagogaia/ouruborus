@@ -47,11 +47,26 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
+# ── ChromaDB import with Python 3.14 workaround ──
+# ChromaDB ≤1.4.1 uses pydantic.v1 compat layer which crashes on Python 3.14+.
+# The fix (PR #6356) uses pydantic-settings instead, but isn't released yet.
+# Workaround: pre-inject pydantic_settings.BaseSettings into pydantic namespace
+# so chromadb.config finds it at `from pydantic import BaseSettings`.
+# See: https://github.com/chroma-core/chroma/issues/5996
+# Remove this block when ChromaDB releases with PR #6356 merged.
+HAS_CHROMADB = False
+if sys.version_info >= (3, 14):
+    try:
+        import pydantic
+        import pydantic_settings
+        pydantic.BaseSettings = pydantic_settings.BaseSettings
+    except Exception:
+        pass
 try:
     import chromadb
     HAS_CHROMADB = True
 except Exception:
-    HAS_CHROMADB = False
+    pass
 
 
 # ══════════════════════════════════════════════════════════

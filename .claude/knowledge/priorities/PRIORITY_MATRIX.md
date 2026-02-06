@@ -1,12 +1,12 @@
 # Priority Matrix
-> Ultima atualizacao: 2026-02-06 (/learn sessao 7 — brain-primary)
+> Ultima atualizacao: 2026-02-06 (/learn sessao 9 — ChromaDB vector store migration)
 > ICE = (Impacto x Confianca) / Esforco - todos 1-10
 
 ## Ativas
 
 | # | Tarefa | I | C | E | ICE | Status |
 |---|--------|---|---|---|-----|--------|
-| 1 | Adicionar testes unitários aos scripts | 7 | 9 | 5 | 12.6 | 🟢 concluído |
+| — | Nenhuma tarefa ativa | — | — | — | — | — |
 
 ## Backlog
 
@@ -58,6 +58,10 @@
 | Remover JSON fallback, SQLite v2 único backend | ✅ Concluído — brain_sqlite.py sole backend | 2026-02-06 |
 | 195 unit tests para brain scripts | ✅ Concluído — 206/206 passando | 2026-02-06 |
 | CURRENT_STATE genesis-only + temporal recall | ✅ Concluído — 30+ arquivos, 0 tokens/sessão | 2026-02-06 |
+| Knowledge files genesis-only (ADR, PAT, DOMAIN, EXP) | ✅ Concluído — 30+ arquivos, brain é fonte primária | 2026-02-06 |
+| Fix ghost brain.db path bug | ✅ Concluído — Path(__file__).parent em 4 scripts | 2026-02-06 |
+| Fix 5+1 parser bugs populate.py | ✅ Concluído — 227→331 nós, 0 dados perdidos | 2026-02-06 |
+| Migrar vector store para ChromaDB | ✅ Concluído — HNSW O(log n), fallback npz, 227 tests | 2026-02-06 |
 
 ## Como Priorizar
 
