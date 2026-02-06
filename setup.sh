@@ -474,7 +474,7 @@ install_brain_deps() {
                 print_warn "Não foi possível criar venv."
                 print_warn "Instale o pacote venv do seu sistema e execute novamente."
                 print_warn "Ou instale as dependências globalmente:"
-                print_warn "  pip install networkx numpy sentence-transformers"
+                print_warn "  pip install networkx numpy sentence-transformers chromadb pydantic-settings"
                 return
             fi
         fi
@@ -488,9 +488,17 @@ install_brain_deps() {
         pip install --quiet --upgrade pip 2>/dev/null || true
         pip install --quiet networkx numpy 2>/dev/null && print_done "networkx + numpy instalados"
         pip install --quiet sentence-transformers 2>/dev/null && print_done "sentence-transformers instalado"
+        pip install --quiet chromadb pydantic-settings 2>/dev/null && print_done "chromadb + pydantic-settings instalados"
+
+        # Patch ChromaDB for Python 3.14+ compatibility (pydantic.v1 crash)
+        # See: https://github.com/chroma-core/chroma/issues/5996
+        local PATCH_SCRIPT="$CLAUDE_DIR/brain/patch_chromadb.py"
+        if [[ -f "$PATCH_SCRIPT" ]]; then
+            python3 "$PATCH_SCRIPT" 2>/dev/null && print_done "ChromaDB patched para Python $(python3 --version 2>&1 | awk '{print $2}')" || true
+        fi
     ) || {
         print_warn "Algumas dependências podem não ter sido instaladas."
-        print_warn "Execute: source .claude/brain/.venv/bin/activate && pip install networkx numpy sentence-transformers"
+        print_warn "Execute: source .claude/brain/.venv/bin/activate && pip install networkx numpy sentence-transformers chromadb pydantic-settings"
     }
 }
 

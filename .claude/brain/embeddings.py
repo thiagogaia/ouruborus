@@ -154,6 +154,16 @@ def build_embeddings(brain_path: Path = Path(__file__).parent):
     brain._ensure_vector_store()
     use_chroma = brain._use_chromadb and brain._chroma_collection is not None
 
+    # Auto-migrate: if ChromaDB is empty but npz exists, migrate first
+    if use_chroma and brain._chroma_collection.count() == 0:
+        emb_file = brain_path / "embeddings.npz"
+        if emb_file.exists():
+            print("Auto-migrating existing npz embeddings to ChromaDB...")
+            try:
+                migrate_embeddings(brain_path)
+            except Exception as e:
+                print(f"  Migration failed (will rebuild): {e}")
+
     embeddings = {}
     count = 0
     batch_ids = []

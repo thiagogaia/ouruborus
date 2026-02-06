@@ -194,6 +194,13 @@ def get_recommendations(stats: dict, health_score: float) -> list:
             "message": f"Apenas {embeddings_count}/{total_nodes} nos tem embeddings. Rode 'embeddings.py build'."
         })
 
+    vector_backend = stats.get("vector_backend", "none")
+    if vector_backend == "npz":
+        recommendations.append({
+            "type": "vector_store",
+            "message": "Usando npz fallback (brute-force O(n)). Instale chromadb para HNSW O(log n): pip install chromadb pydantic-settings"
+        })
+
     if total_nodes > 0 and semantic_edges < total_nodes * 0.5:
         recommendations.append({
             "type": "sleep",

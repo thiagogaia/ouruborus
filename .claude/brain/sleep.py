@@ -396,8 +396,8 @@ def phase_relate(brain: Brain, threshold: float = 0.75) -> Dict:
                                            props={"method": "embedding"})
                             stats["related_to"] += 1
 
-    # Fallback: TF-based similarity
-    if stats["related_to"] == 0:
+    # Fallback: TF-based similarity (only if embeddings weren't available)
+    if stats["related_to"] == 0 and stats["method"] != "embeddings":
         stats["method"] = "tf_vectors"
 
         # Build vocabulary from all texts

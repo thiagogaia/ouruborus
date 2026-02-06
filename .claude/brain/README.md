@@ -1,16 +1,22 @@
 # Brain - Cerebro Organizacional
 
-Sistema de memoria com grafo de conhecimento, embeddings e processos cognitivos.
+Sistema de memoria com grafo de conhecimento, busca semantica via ChromaDB (HNSW) e processos cognitivos.
 
 ## Estrutura
 
 ```
 brain/
-├── brain.py          # Nucleo do cerebro (grafo + operacoes)
-├── embeddings.py     # Geracao de embeddings para busca semantica
-├── cognitive.py      # Processos: consolidate, decay, archive
-├── graph.json        # Grafo serializado (nos + arestas)
-├── embeddings.npz    # Vetores de embedding
+├── brain_sqlite.py   # Nucleo do cerebro (SQLite v2 + ChromaDB)
+├── brain.py          # Backend legado (JSON, deprecated)
+├── embeddings.py     # Geracao/busca de embeddings
+├── recall.py         # Interface de busca (CLI + lib)
+├── sleep.py          # Consolidacao semantica (5 fases)
+├── cognitive.py      # Processos: consolidate, decay, archive, health
+├── populate.py       # Popular grafo de commits/knowledge files
+├── patch_chromadb.py # Patch Python 3.14 para ChromaDB
+├── brain.db          # SQLite database (grafo + FTS5)
+├── chroma/           # ChromaDB persistent storage (HNSW index)
+├── embeddings.npz    # Fallback numpy (se ChromaDB indisponivel)
 └── state/            # Estado por desenvolvedor
     └── @username.json
 ```
@@ -18,26 +24,35 @@ brain/
 ## Dependencias
 
 ```bash
-# Minimo (grafo funciona)
-pip install networkx
+# Instalacao completa (recomendado — setup.sh faz isso automaticamente)
+pip install networkx numpy sentence-transformers chromadb pydantic-settings
 
-# Para busca semantica local (gratis)
-pip install sentence-transformers numpy
+# Python 3.14+: rodar patch apos instalar chromadb
+python3 .claude/brain/patch_chromadb.py
 
-# OU para OpenAI embeddings (melhor, pago)
-pip install openai numpy
+# OU para OpenAI embeddings (pago, maior qualidade)
+pip install openai numpy chromadb pydantic-settings
 export OPENAI_API_KEY=sk-...
 ```
+
+### Vector Store
+
+| Backend | Busca | Performance | Quando |
+|---------|-------|-------------|--------|
+| ChromaDB (primario) | HNSW ANN | O(log n) | Quando `chromadb` esta instalado |
+| NumPy/npz (fallback) | Brute-force cosine | O(n) | Quando ChromaDB falha ou nao esta instalado |
+
+ChromaDB usa `PersistentClient` com auto-persistencia em `chroma/`. Nao precisa de `save()` explicito.
 
 ## Uso Basico
 
 ### Python
 
 ```python
-from brain import Brain
+from brain_sqlite import BrainSQLite
 
 # Carrega cerebro
-brain = Brain()
+brain = BrainSQLite()
 brain.load()
 
 # Adiciona memoria
@@ -48,41 +63,41 @@ node_id = brain.add_memory(
     author="@joao"
 )
 
-# Busca
+# Busca semantica
 results = brain.retrieve(query="problemas de autenticacao")
 for r in results:
     print(f"{r['score']:.2f} - {r['props']['title']}")
 
-# Salva
+# Salva (no-op se ChromaDB ativo)
 brain.save()
 ```
 
 ### CLI
 
 ```bash
-# Estatisticas
-python brain.py stats
+# Estatisticas (mostra vector_backend: chromadb/npz)
+python brain_sqlite.py stats
 
-# Busca por texto
-python brain.py search "autenticacao"
+# Busca semantica via recall
+python recall.py "autenticacao" --top 10 --format json
 
-# Adicionar memoria rapida
-python brain.py add "Titulo" "Conteudo da memoria"
-
-# Consolidacao (rodar semanalmente)
-python cognitive.py consolidate
-
-# Decay (rodar diariamente)
-python cognitive.py decay
-
-# Saude do cerebro
-python cognitive.py health
+# Busca temporal
+python recall.py --recent 7d --type Commit --top 10
 
 # Gerar embeddings
 python embeddings.py build
 
-# Busca semantica
+# Migrar npz -> ChromaDB (auto-executado pelo build se necessario)
+python embeddings.py migrate
+
+# Busca semantica direta
 python embeddings.py search "como resolver bugs de auth"
+
+# Saude do cerebro (inclui vector_backend)
+python cognitive.py health
+
+# Consolidacao semantica (5 fases)
+python sleep.py
 ```
 
 ## Conceitos
@@ -107,29 +122,28 @@ python embeddings.py search "como resolver bugs de auth"
 | BELONGS_TO | Pertence a dominio |
 | SOLVED_BY | Problema resolvido por pattern/decisao |
 | SUPERSEDES | Nova versao substitui antiga |
-| SIMILAR_TO | Similaridade semantica (auto-detectado) |
+| RELATED_TO | Similaridade semantica (auto-detectado pelo sleep) |
+| SAME_SCOPE | Commits no mesmo scope |
+| MODIFIES_SAME | Commits que mexeram nos mesmos arquivos |
+| CO_ACCESSED | Nos acessados juntos em sessoes |
 
 ### Processos Cognitivos
 
 1. **Encode**: Criar memoria com arestas automaticas
-2. **Retrieve**: Busca com spreading activation
-3. **Consolidate**: Fortalecer conexoes (semanal)
-4. **Decay**: Esquecimento por Ebbinghaus (diario)
-5. **Archive**: Mover memorias fracas (quando necessario)
+2. **Retrieve**: Busca com spreading activation + HNSW
+3. **Sleep**: Consolidacao semantica (5 fases in-memory)
+4. **Consolidate**: Fortalecer conexoes (semanal)
+5. **Decay**: Esquecimento por Ebbinghaus (diario)
+6. **Archive**: Mover memorias fracas (quando necessario)
 
 ## Integracao com Git
 
 ```bash
-# Adiciona arquivos do cerebro
-git add .claude/brain/graph.json
-git add .claude/memory/
+# O cerebro usa SQLite + ChromaDB, nao precisa de git add manual
+# brain.db e chroma/ sao gitignored (reconstruiveis via populate + build)
 
-# Para embeddings grandes, use LFS
-git lfs track "*.npz"
-git add .claude/brain/embeddings.npz
-
-# Commit
-git commit -m "knowledge(@joao): session about auth bugs"
+# Apenas scripts e knowledge files vao pro git
+git add .claude/brain/*.py .claude/brain/*.md
 ```
 
 ## Processos Cognitivos Periodicos
@@ -155,48 +169,19 @@ crontab -e
 
 # Adicionar:
 # Decay diario (2am)
-0 2 * * * cd /path/to/projeto && python3 .claude/brain/cognitive.py decay && git add .claude/brain/graph.json && git commit -m "chore(brain): daily decay" --no-verify 2>/dev/null || true
+0 2 * * * cd /path/to/projeto && python3 .claude/brain/cognitive.py decay 2>/dev/null || true
 
 # Consolidacao semanal (domingo 3am)
-0 3 * * 0 cd /path/to/projeto && python3 .claude/brain/cognitive.py consolidate && git add .claude/brain/graph.json && git commit -m "chore(brain): weekly consolidation" --no-verify 2>/dev/null || true
+0 3 * * 0 cd /path/to/projeto && python3 .claude/brain/cognitive.py consolidate 2>/dev/null || true
 
 # Archive mensal (dia 1, 4am)
-0 4 1 * * cd /path/to/projeto && python3 .claude/brain/cognitive.py archive && git add .claude/brain/ .claude/archive/ && git commit -m "chore(brain): monthly archive" --no-verify 2>/dev/null || true
-```
-
-### Opcao 3: CI/CD
-
-Adicione ao seu pipeline (GitHub Actions exemplo):
-
-```yaml
-# .github/workflows/brain-maintenance.yml
-name: Brain Maintenance
-on:
-  schedule:
-    - cron: '0 2 * * *'  # Diario 2am UTC
-  workflow_dispatch:
-
-jobs:
-  decay:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
-        with:
-          python-version: '3.11'
-      - run: pip install networkx
-      - run: python .claude/brain/cognitive.py decay
-      - run: python .claude/brain/cognitive.py health
-      - uses: stefanzweifel/git-auto-commit-action@v5
-        with:
-          commit_message: "chore(brain): automated decay"
-          file_pattern: ".claude/brain/graph.json"
+0 4 1 * * cd /path/to/projeto && python3 .claude/brain/cognitive.py archive 2>/dev/null || true
 ```
 
 ### Verificacao Manual
 
 ```bash
-# Ver saude do cerebro
+# Ver saude do cerebro (inclui vector_backend e recomendacoes)
 python3 .claude/brain/cognitive.py health
 
 # Ver log de processos
@@ -212,6 +197,7 @@ python3 .claude/brain/cognitive.py consolidate
 |---------|-------------------|
 | Nos | ~1M |
 | Arestas | ~5M |
-| Embeddings | ~100k |
+| Embeddings (ChromaDB) | ~1M (HNSW) |
+| Embeddings (npz) | ~100k (brute-force) |
 | RAM | ~500MB |
 | Tempo de carga | <2s |

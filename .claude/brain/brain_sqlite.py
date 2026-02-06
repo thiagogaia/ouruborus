@@ -322,9 +322,11 @@ class BrainSQLite:
                     ids=node_ids,
                     include=["embeddings"]
                 )
-                if fetched and fetched.get("ids") and fetched.get("embeddings"):
-                    for nid, emb in zip(fetched["ids"], fetched["embeddings"]):
-                        if emb is not None and HAS_NUMPY:
+                ids = fetched.get("ids") if fetched else []
+                embs = fetched.get("embeddings") if fetched else None
+                if ids and embs is not None and HAS_NUMPY:
+                    for nid, emb in zip(ids, embs):
+                        if emb is not None:
                             result[nid] = np.array(emb)
             except Exception:
                 pass  # some IDs might not exist
