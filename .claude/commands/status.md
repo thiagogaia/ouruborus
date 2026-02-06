@@ -1,8 +1,9 @@
 Mostrar o estado atual do projeto de forma concisa.
 
-1. Leia `.claude/knowledge/context/CURRENT_STATE.md`
-2. Leia `.claude/knowledge/priorities/PRIORITY_MATRIX.md`
-3. Verifique `git status` e `git log --oneline -5`
+1. Consulte o cérebro: `python3 .claude/brain/recall.py --recent 7d --top 10`
+2. Verifique saúde: `python3 .claude/brain/cognitive.py health`
+3. Leia `.claude/knowledge/priorities/PRIORITY_MATRIX.md`
+4. Verifique `git status` e `git log --oneline -5`
 
 Apresente em formato compacto:
 

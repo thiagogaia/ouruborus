@@ -4,7 +4,7 @@ Registrar conhecimento adquirido nesta sessão e evoluir o sistema.
 
 1. Execute `git diff --stat HEAD~5` (ou desde o último /learn) para ver o que mudou
 2. Execute `git log --oneline -10` para ver commits recentes
-3. Leia `.claude/knowledge/context/CURRENT_STATE.md` para comparar com estado anterior
+3. Consulte o cérebro: `python3 .claude/brain/recall.py --recent 3d --type Commit --top 10 --format json`
 
 ## Fase 2: Introspecção
 
@@ -89,9 +89,7 @@ brain.save()
 
 Os .md são o espelho legível do cérebro — mantidos em sincronia para fallback, git diffs e leitura humana.
 
-**Boot files (sempre atualizados):**
-- **CURRENT_STATE.md** — atualizar status geral, fase, saúde, mudanças recentes
-- **PRIORITY_MATRIX.md** — desprioritizar tarefas completadas, adicionar novas
+**PRIORITY_MATRIX.md** — desprioritizar tarefas completadas, adicionar novas
 
 **Knowledge files (atualizados quando houver conteúdo novo):**
 - **PATTERNS.md** — patterns novos ou refinados
@@ -178,5 +176,5 @@ Apresentar:
 - Sugestões evolutivas (novos skills, archives, composições)
 - Próxima ação recomendada
 
-Lembrete: se o `.claude/knowledge/context/CURRENT_STATE.md` foi modificado,
-o Claude da próxima sessão saberá exatamente onde retomar.
+Lembrete: o cérebro é a fonte primária. O recall temporal (`--recent 7d`) dá
+ao Claude da próxima sessão o contexto de onde retomar.

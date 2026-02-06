@@ -14,7 +14,6 @@ Gerencia o ciclo de retroalimentação — o coração do Engram.
 
 | Arquivo | Propósito | Quando Atualizar |
 |---------|-----------|------------------|
-| `CURRENT_STATE.md` | Estado vivo do projeto | Toda sessão |
 | `PRIORITY_MATRIX.md` | Tarefas com ICE Score | Ao completar/criar tarefas |
 | `PATTERNS.md` | Padrões e anti-padrões | Ao descobrir padrões |
 | `ADR_LOG.md` | Decisões arquiteturais | Ao tomar decisões |
@@ -25,7 +24,7 @@ Gerencia o ciclo de retroalimentação — o coração do Engram.
 
 ### 1. Identificar Tipo de Conhecimento
 Classifique o que foi aprendido/decidido/feito:
-- **Estado** → CURRENT_STATE.md
+- **Estado** → cérebro via `brain.add_memory()` (labels: ["State"])
 - **Padrão** → PATTERNS.md (incluir: contexto, solução, exemplo)
 - **Decisão** → ADR_LOG.md (incluir: contexto, alternativas, trade-offs)
 - **Prioridade** → PRIORITY_MATRIX.md (incluir: ICE Score)
@@ -64,6 +63,6 @@ Exemplo: Feature com alto impacto (8), boa confiança (7), esforço médio (5) =
 - NUNCA delete conhecimento — marque como obsoleto
 - SEMPRE inclua data em cada entrada
 - SEMPRE mantenha o formato do schema
-- Se em dúvida sobre onde registrar: registre em CURRENT_STATE.md
+- Se em dúvida sobre onde registrar: registre no cérebro via `brain.add_memory()`
 - Desprioritização é tão importante quanto priorização
 - Máximo 50 entradas em EXPERIENCE_LIBRARY.md (manter as mais úteis)

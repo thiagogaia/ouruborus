@@ -104,11 +104,39 @@ Ativar o skill `engram-genesis`. Para cada componente aprovado:
 
 Preencher knowledge files com dados reais:
 
-### CURRENT_STATE.md
+### CURRENT_STATE.md + Cérebro (população inicial)
+A análise profunda vai para **ambos** — é a única vez que CURRENT_STATE.md é populado:
 - Analisar o codebase em profundidade
 - Mapear módulos, dependências, estado de cada área
 - Identificar dívidas técnicas
 - Listar bloqueios conhecidos
+
+**Escrever no CURRENT_STATE.md** (snapshot legível para git e leitura humana):
+- Status geral, fase, saúde, stack, bloqueios, próximo marco
+
+**Registrar no cérebro** via `brain.add_memory()` (fonte primária a partir daqui):
+```python
+import sys
+sys.path.insert(0, '.claude/brain')
+from brain import Brain, get_current_developer
+
+brain = Brain()
+brain.load()
+dev = get_current_developer()
+
+# Estado inicial do projeto
+brain.add_memory(
+    title="Estado Inicial: [nome do projeto]",
+    content="## Status\n[fase, saúde, stack]\n\n## Módulos\n[...]\n\n## Dívidas Técnicas\n[...]\n\n## Bloqueios\n[...]",
+    labels=["State", "Genesis"],
+    author=dev["author"],
+    props={"phase": "genesis", "date": "[YYYY-MM-DD]"}
+)
+
+brain.save()
+```
+
+**Nota**: após o genesis, CURRENT_STATE.md não é mais atualizado — o cérebro assume via recall temporal (`--recent 7d`)
 
 ### PATTERNS.md
 - Inspecionar código existente

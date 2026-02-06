@@ -30,16 +30,11 @@ knowledge/
 5. Cada entrada DEVE ter data de registro
 6. Knowledge files são git-tracked (versionados com o projeto)
 
-## CURRENT_STATE.md
+## CURRENT_STATE.md (genesis-only)
 
-O arquivo mais consultado. Estado atual do projeto.
-
-### Seções Obrigatórias
-- **Status Geral**: fase, saúde (🟢🟡🔴), próximo marco
-- **O Que Mudou Recentemente**: últimas N mudanças com data e impacto
-- **Stack**: tecnologias em uso
-- **Bloqueios Conhecidos**: o que está impedindo progresso
-- **Contexto Para Próxima Sessão**: o que o Claude precisa saber
+Criado pelo genesis como bootstrap inicial do projeto. Após o cérebro ser
+populado, o estado vive no grafo e é consultado via recall temporal.
+Não é mais lido nem atualizado em sessões regulares.
 
 ## PRIORITY_MATRIX.md
 

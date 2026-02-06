@@ -876,10 +876,16 @@ class Brain:
         labels: List[str] = None,
         author: str = None,
         top_k: int = 20,
-        spread_depth: int = 2
+        spread_depth: int = 2,
+        since: str = None,
+        sort_by: str = "score"
     ) -> List[Dict]:
         """
         Busca completa: embedding + spreading activation + filtros.
+
+        Args:
+            since: Ignored in JSON fallback (no temporal indexing).
+            sort_by: "score" (default) or "date".
         """
         results = {}
 

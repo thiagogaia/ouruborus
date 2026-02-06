@@ -38,7 +38,7 @@ ICE = (Impacto × Confiança) / Esforço
 Tão importante quanto priorizar:
 - Tarefa completada → mover para Cemitério com data e resultado
 - Tarefa irrelevante → mover para Cemitério com justificativa
-- Tarefa bloqueada → marcar status e registrar bloqueio em CURRENT_STATE.md
+- Tarefa bloqueada → marcar status e registrar bloqueio em PRIORITY_MATRIX.md
 
 ### Reavaliação
 Ao final de cada sessão (via /learn):

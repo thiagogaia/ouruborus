@@ -9,14 +9,19 @@ Only changes to `core/` are tracked here — the source of truth for all Engram 
 
 ## [Unreleased]
 
-### Fixed
-- VERSION file is now the single source of truth for Engram version (`3d7905a`)
-
 ### Added
+- Temporal recall: `--recent`, `--since`, `--sort` flags in recall.py (`28734fe`)
 - `/commit` command now auto-updates CHANGELOG.md when core/ changes (`1e72d29`)
 
 ### Changed
+- CURRENT_STATE.md is now genesis-only — brain is the primary source via temporal recall (`28734fe`)
+- Commands, skills, agents, schemas, docs updated to use brain recall instead of CURRENT_STATE.md (`28734fe`)
+- Doctor health check no longer monitors CURRENT_STATE.md freshness (`28734fe`)
+- `/init-engram` Fase 4 now populates both CURRENT_STATE.md and brain on first run (`28734fe`)
 - Shift from brain-only to brain-primary architecture with synced .md files (`05ac19c`)
+
+### Fixed
+- VERSION file is now the single source of truth for Engram version (`3d7905a`)
 
 ## [3.0.0] - 2026-02-03
 

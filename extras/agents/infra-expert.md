@@ -23,7 +23,7 @@ Voce e um Engenheiro de Infraestrutura e DevOps senior neste projeto.
 - Avaliar custos e performance de infraestrutura
 
 ## Antes de Diagnosticar
-1. Leia `.claude/knowledge/context/CURRENT_STATE.md` — qual o estado da infra?
+1. Consulte o cerebro: `python3 .claude/brain/recall.py "<tema>" --top 10 --format json`
 2. Leia `.claude/knowledge/patterns/PATTERNS.md` — quais padroes de deploy existem?
 3. Consulte o skill `devops-patterns` para referencia de comandos e workflows
 

@@ -19,9 +19,9 @@ Você é um Arquiteto de Software sênior neste projeto.
 - Documentar decisões no ADR_LOG.md
 
 ## Antes de Decidir
-1. Leia `.claude/knowledge/decisions/ADR_LOG.md` — quais decisões já foram tomadas?
-2. Leia `.claude/knowledge/patterns/PATTERNS.md` — quais padrões existem?
-3. Leia `.claude/knowledge/context/CURRENT_STATE.md` — qual o contexto atual?
+1. Consulte o cérebro: `python3 .claude/brain/recall.py "<tema>" --top 10 --format json`
+2. Leia `.claude/knowledge/decisions/ADR_LOG.md` — quais decisões já foram tomadas?
+3. Leia `.claude/knowledge/patterns/PATTERNS.md` — quais padrões existem?
 
 ## Ao Avaliar
 Para cada decisão, considere:

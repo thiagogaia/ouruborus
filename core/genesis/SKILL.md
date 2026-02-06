@@ -90,10 +90,10 @@ Para cada componente aprovado:
 
 ### Fase C: Popular Knowledge
 Preencher knowledge files com dados reais do projeto:
-- CURRENT_STATE.md → análise do estado atual
 - PATTERNS.md → padrões detectados no código
 - DOMAIN.md → glossário extraído do código/docs
 - PRIORITY_MATRIX.md → TODOs e issues detectados
+- Cérebro → estado inicial via `brain.add_memory()`
 
 ### Fase D: Health Check
 Executar `/doctor` para validação final.

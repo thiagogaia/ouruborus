@@ -28,6 +28,7 @@ import re
 import os
 import site
 import sqlite3
+import sys
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Optional, List, Dict, Any, Tuple
@@ -202,7 +203,7 @@ class BrainSQLite:
         conn = self._get_conn()
         node_count = conn.execute("SELECT COUNT(*) FROM nodes").fetchone()[0]
         edge_count = conn.execute("SELECT COUNT(*) FROM edges").fetchone()[0]
-        print(f"Loaded: {node_count} nodes, {edge_count} edges")
+        sys.stderr.write(f"Loaded: {node_count} nodes, {edge_count} edges\n")
         return True
 
     def _ensure_embeddings(self):
@@ -216,7 +217,7 @@ class BrainSQLite:
             try:
                 loaded = np.load(emb_file)
                 self.embeddings = {k: loaded[k] for k in loaded.files}
-                print(f"Loaded: {len(self.embeddings)} embeddings")
+                sys.stderr.write(f"Loaded: {len(self.embeddings)} embeddings\n")
             except Exception as e:
                 print(f"Error loading embeddings: {e}")
 
@@ -793,13 +794,36 @@ class BrainSQLite:
         labels: List[str] = None,
         author: str = None,
         top_k: int = 20,
-        spread_depth: int = 2
+        spread_depth: int = 2,
+        since: str = None,
+        sort_by: str = "score"
     ) -> List[Dict]:
-        """Full search: embedding + spreading activation + FTS5 + filters."""
+        """Full search: embedding + spreading activation + FTS5 + filters.
+
+        Args:
+            since: ISO date or relative (e.g. "7d", "30d", "2026-02-01").
+                   Filters to nodes created after this date.
+            sort_by: "score" (default, semantic relevance) or "date" (newest first).
+        """
         results = {}
 
-        # 1. Embedding search
-        if query_embedding is not None and HAS_NUMPY:
+        # 0. Resolve temporal filter
+        since_dt = self._resolve_since(since) if since else None
+
+        # 1. Temporal-only query (no text/embedding — just "show me recent")
+        if not query and query_embedding is None:
+            conn = self._get_conn()
+            sql = "SELECT id FROM nodes"
+            params = []
+            if since_dt:
+                sql += " WHERE created_at >= ?"
+                params.append(since_dt)
+            rows = conn.execute(sql, params).fetchall()
+            for row in rows:
+                results[row["id"]] = 1.0
+
+        # 2. Embedding search (query + embedding vector)
+        elif query_embedding is not None and HAS_NUMPY:
             self._ensure_embeddings()
             seeds = self.search_by_embedding(query_embedding, top_k=5)
             seed_nodes = [node_id for node_id, _ in seeds]
@@ -815,11 +839,18 @@ class BrainSQLite:
                 else:
                     results[node_id] = act_score
 
-        # 2. Text search (FTS5 or fallback)
+        # 3. Text search (FTS5 or fallback)
         elif query:
             results = self._text_search(query)
 
-        # 3. Apply filters
+        # 4. Apply filters
+        if since_dt and (query or query_embedding is not None):
+            conn = self._get_conn()
+            results = {
+                nid: score for nid, score in results.items()
+                if self._created_after(nid, since_dt, conn)
+            }
+
         if labels:
             results = {
                 nid: score for nid, score in results.items()
@@ -832,14 +863,17 @@ class BrainSQLite:
                 if self._has_author(nid, author)
             }
 
-        # 4. Sort
-        sorted_results = sorted(results.items(), key=lambda x: x[1], reverse=True)
+        # 5. Sort
+        if sort_by == "date":
+            sorted_results = self._sort_by_date(results)
+        else:
+            sorted_results = sorted(results.items(), key=lambda x: x[1], reverse=True)
 
-        # 5. Reinforce accessed memories
+        # 6. Reinforce accessed memories
         for node_id, _ in sorted_results[:10]:
             self._reinforce(node_id)
 
-        # 6. Format output
+        # 7. Format output
         output = []
         conn = self._get_conn()
         for node_id, score in sorted_results[:top_k]:
@@ -848,6 +882,49 @@ class BrainSQLite:
                 output.append(self._row_to_legacy_dict(row, score))
 
         return output
+
+    @staticmethod
+    def _resolve_since(since: str) -> str:
+        """Convert relative or absolute since to ISO datetime string.
+
+        Accepts: "7d", "30d", "24h" (relative) or "2026-02-01" (absolute ISO date).
+        """
+        if not since:
+            return None
+        # Relative: Nd or Nh
+        m = re.match(r'^(\d+)([dh])$', since.strip())
+        if m:
+            amount = int(m.group(1))
+            unit = m.group(2)
+            if unit == 'd':
+                dt = datetime.now() - timedelta(days=amount)
+            else:
+                dt = datetime.now() - timedelta(hours=amount)
+            return dt.isoformat()
+        # Absolute ISO date
+        return since
+
+    def _created_after(self, node_id: str, since_dt: str, conn: sqlite3.Connection) -> bool:
+        """Check if node was created after the given ISO datetime."""
+        row = conn.execute(
+            "SELECT created_at FROM nodes WHERE id = ?", (node_id,)
+        ).fetchone()
+        if not row or not row["created_at"]:
+            return False
+        return row["created_at"] >= since_dt
+
+    def _sort_by_date(self, results: Dict[str, float]) -> List[tuple]:
+        """Sort results by created_at descending (newest first)."""
+        conn = self._get_conn()
+        dated = []
+        for nid, score in results.items():
+            row = conn.execute(
+                "SELECT created_at FROM nodes WHERE id = ?", (nid,)
+            ).fetchone()
+            created = row["created_at"] if row and row["created_at"] else ""
+            dated.append((nid, score, created))
+        dated.sort(key=lambda x: x[2], reverse=True)
+        return [(nid, score) for nid, score, _ in dated]
 
     def _text_search(self, query: str) -> Dict[str, float]:
         """Full-text search using FTS5 with fallback to LIKE."""

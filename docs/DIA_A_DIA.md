@@ -62,7 +62,7 @@ Depois disso, o projeto esta pronto para o ciclo.
 ```
 
 ### O que acontece:
-O Claude le CURRENT_STATE.md e PRIORITY_MATRIX.md e mostra:
+O Claude consulta o cerebro (`recall --recent 7d`) e PRIORITY_MATRIX.md e mostra:
 - Fase do projeto e saude do cerebro
 - Top prioridades com ICE Score
 - Bloqueios
@@ -229,7 +229,6 @@ Para cada tipo de conhecimento:
 Tudo vai para o grafo via `brain.add_memory()`.
 
 Atualiza tambem:
-- **CURRENT_STATE.md** — status, fase, saude, mudancas recentes
 - **PRIORITY_MATRIX.md** — completa tarefas, adiciona novas
 
 #### Fase 4 — Consolidar
@@ -279,9 +278,9 @@ Apresenta tudo ao dev:
 O Claude abre com todo o contexto:
 
 ```
-CURRENT_STATE.md → onde o projeto esta
+recall --recent 7d → onde o projeto esta (cerebro e fonte primaria)
 PRIORITY_MATRIX.md → o que fazer a seguir
-/recall → busca qualquer duvida no cerebro
+/recall "tema" → busca qualquer duvida no cerebro
 ```
 
 **Nada se perde entre sessoes.** Cada /learn e um snapshot completo.

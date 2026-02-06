@@ -7,6 +7,9 @@ Uso:
     python3 recall.py "arquitetura" --type ADR
     python3 recall.py "bug login" --author @thiago
     python3 recall.py "padrões" --depth 3 --top 10
+    python3 recall.py --recent 7d --top 10
+    python3 recall.py --recent 7d --type Episode --sort date
+    python3 recall.py "bug" --since 2026-02-01 --sort date
 """
 
 import argparse
@@ -34,21 +37,25 @@ except (ImportError, SystemExit):
 
 
 def search_brain(
-    query: str,
+    query: str = None,
     filter_type: str = None,
     filter_author: str = None,
     depth: int = 2,
-    top_k: int = 10
+    top_k: int = 10,
+    since: str = None,
+    sort_by: str = "score"
 ) -> dict:
     """
     Busca no cérebro organizacional.
 
     Args:
-        query: Pergunta ou tema para buscar
+        query: Pergunta ou tema para buscar (opcional se --recent/--since)
         filter_type: Filtrar por tipo (ADR, Concept, Pattern, etc)
         filter_author: Filtrar por autor (@nome)
         depth: Profundidade do spreading activation
         top_k: Número máximo de resultados
+        since: Filtro temporal ("7d", "30d", "24h", "2026-02-01")
+        sort_by: "score" (relevância) ou "date" (mais recente primeiro)
 
     Returns:
         Dict com query, results e total
@@ -76,14 +83,16 @@ def search_brain(
             "concept": ["Concept", "Glossary"],
             "pattern": ["Pattern", "ApprovedPattern"],
             "episode": ["Episode", "Commit", "BugFix"],
+            "commit": ["Commit"],
             "rule": ["Rule", "BusinessRule"],
-            "person": ["Person"]
+            "person": ["Person"],
+            "experience": ["Episode", "Experience"]
         }
         labels = type_map.get(filter_type.lower(), [filter_type])
 
-    # Gerar embedding da query
+    # Gerar embedding da query (only if we have a text query)
     query_embedding = None
-    if HAS_EMBEDDINGS:
+    if query and HAS_EMBEDDINGS:
         try:
             query_embedding = embeddings.get_embedding(query)
         except Exception as e:
@@ -96,7 +105,9 @@ def search_brain(
             labels=labels,
             author=filter_author,
             top_k=top_k,
-            spread_depth=depth
+            spread_depth=depth,
+            since=since,
+            sort_by=sort_by
         )
     else:
         results = brain.retrieve(
@@ -104,7 +115,9 @@ def search_brain(
             labels=labels,
             author=filter_author,
             top_k=top_k,
-            spread_depth=depth
+            spread_depth=depth,
+            since=since,
+            sort_by=sort_by
         )
 
     # Persist reinforcement — closes the self-feeding loop
@@ -166,11 +179,17 @@ def search_brain(
         # Boost score for well-connected nodes
         connection_boost = min(0.3, len(semantic_connections) * 0.05)
 
+        # Include date for temporal context
+        node_date = props.get("date", props.get("created_at", ""))
+        if node_date and "T" in str(node_date):
+            node_date = str(node_date).split("T")[0]
+
         formatted.append({
             "id": item.get("id"),
             "title": props.get("title", item.get("id", "Sem título")),
             "type": item_type,
             "labels": labels_list,
+            "date": node_date,
             "summary": props.get("summary", "")[:200],
             "content": node_content[:2000] if node_content else None,
             "score": round(item.get("score", 0) + connection_boost, 3),
@@ -178,14 +197,19 @@ def search_brain(
             "connections": semantic_connections[:10]
         })
 
-    # Re-sort after connection boost
-    formatted.sort(key=lambda x: x["score"], reverse=True)
+    # Re-sort after connection boost (only for score mode)
+    if sort_by == "date":
+        formatted.sort(key=lambda x: x.get("date", ""), reverse=True)
+    else:
+        formatted.sort(key=lambda x: x["score"], reverse=True)
 
     return {
-        "query": query,
+        "query": query or "(temporal)",
         "filters": {
             "type": filter_type,
             "author": filter_author,
+            "since": since,
+            "sort_by": sort_by,
             "depth": depth
         },
         "results": formatted,
@@ -200,6 +224,11 @@ def format_human_readable(data: dict) -> str:
 
     lines = []
     lines.append(f'🧠 Recall: "{data["query"]}"')
+    filters = data.get("filters", {})
+    if filters.get("since"):
+        lines.append(f'   📅 desde: {filters["since"]}')
+    if filters.get("sort_by") == "date":
+        lines.append(f'   🔃 ordenado por data')
     lines.append("═" * 50)
     lines.append("")
 
@@ -216,7 +245,8 @@ def format_human_readable(data: dict) -> str:
 
         for item in data["results"]:
             score_bar = "█" * int(item["score"] * 5) + "░" * (5 - int(item["score"] * 5))
-            lines.append(f"📋 [{score_bar}] {item['type']}: {item['title']}")
+            date_str = f" ({item['date']})" if item.get("date") else ""
+            lines.append(f"📋 [{score_bar}] {item['type']}: {item['title']}{date_str}")
             if item["summary"]:
                 lines.append(f"   {item['summary'][:100]}...")
             if item.get("content"):
@@ -245,12 +275,16 @@ Exemplos:
   python3 recall.py "arquitetura" --type ADR
   python3 recall.py "bug" --type Episode --top 5
   python3 recall.py "padrões" --format json
+  python3 recall.py --recent 7d --top 10
+  python3 recall.py --recent 7d --type Commit --sort date
+  python3 recall.py "bug" --since 2026-02-01 --sort date
         """
     )
 
-    parser.add_argument("query", help="Pergunta ou tema para buscar")
+    parser.add_argument("query", nargs="?", default=None,
+                        help="Pergunta ou tema para buscar (opcional com --recent/--since)")
     parser.add_argument("--type", "-t", dest="filter_type",
-                        help="Filtrar por tipo (ADR, Concept, Pattern, Episode, Rule)")
+                        help="Filtrar por tipo (ADR, Concept, Pattern, Episode, Commit, Rule, Experience)")
     parser.add_argument("--author", "-a", dest="filter_author",
                         help="Filtrar por autor (@nome)")
     parser.add_argument("--depth", "-d", type=int, default=2,
@@ -259,15 +293,35 @@ Exemplos:
                         help="Número máximo de resultados (default: 10)")
     parser.add_argument("--format", "-f", choices=["json", "human"], default="human",
                         help="Formato de saída (default: human)")
+    parser.add_argument("--recent", "-r", dest="recent",
+                        help="Filtro temporal relativo (ex: 7d, 30d, 24h)")
+    parser.add_argument("--since", "-s", dest="since",
+                        help="Filtro temporal absoluto (ex: 2026-02-01)")
+    parser.add_argument("--sort", dest="sort_by", choices=["score", "date"],
+                        default="score",
+                        help="Ordenar por relevância (score) ou data (date)")
 
     args = parser.parse_args()
+
+    # Resolve since: --recent takes precedence over --since
+    since = args.recent or args.since
+
+    # Validate: need either query or temporal filter
+    if not args.query and not since:
+        parser.error("Forneça uma query ou use --recent/--since para busca temporal")
+
+    # If temporal-only, default to sort by date
+    if not args.query and since and args.sort_by == "score":
+        args.sort_by = "date"
 
     result = search_brain(
         query=args.query,
         filter_type=args.filter_type,
         filter_author=args.filter_author,
         depth=args.depth,
-        top_k=args.top
+        top_k=args.top,
+        since=since,
+        sort_by=args.sort_by
     )
 
     if args.format == "json":

@@ -4,12 +4,12 @@ O tópico a planejar é: $ARGUMENTS
 
 ## Workflow
 
-1. Consulte os knowledge files para contexto:
-   - `CURRENT_STATE.md` — o que existe hoje
-   - `PATTERNS.md` — padrões a seguir
-   - `ADR_LOG.md` — decisões que restringem o design
-   - `DOMAIN.md` — termos e regras de negócio relevantes
-   - `EXPERIENCE_LIBRARY.md` — abordagens que funcionaram antes
+1. Consulte o cérebro para contexto:
+   ```bash
+   python3 .claude/brain/recall.py "$ARGUMENTS" --top 10 --format json
+   ```
+   O recall retorna ADRs, patterns, experiências e conexões relevantes.
+   Só leia os `.md` se o recall não cobrir.
 
 2. Analise o codebase para entender o que já existe:
    - Modules/components relevantes

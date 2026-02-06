@@ -28,7 +28,7 @@ O `/init-engram` roda 8 fases automaticas:
 1. **Analisa o projeto** — detecta stack (Next.js, Flask, NestJS, etc.)
 2. **Apresenta plano** — mostra o que sera gerado para aprovacao do dev
 3. **Auto-geracao via Genesis** — gera skills, agents, commands baseados na stack
-4. **Popula knowledge** — CURRENT_STATE.md, PRIORITY_MATRIX.md (boot files)
+4. **Popula knowledge** — PRIORITY_MATRIX.md, CURRENT_STATE.md (bootstrap inicial)
 5. **Popula o cerebro** — le commits, ADRs, patterns, regras de negocio → grafo via `brain.add_memory()`
 6. **Health check** — verifica saude do cerebro recem-populado
 7. **Cleanup e relatorio** — remove scaffolds ja usados, apresenta resumo
@@ -41,14 +41,7 @@ O `/init-engram` roda 8 fases automaticas:
 
 O dev abre o Claude Code e pede uma feature. O Claude automaticamente:
 
-### Passo 1: Le os Boot Files
-```
-CURRENT_STATE.md   → onde o projeto esta agora
-PRIORITY_MATRIX.md → prioridades atuais
-```
-Esses dois .md vem de `templates/knowledge/` (instalados pelo setup.sh). Sao pequenos por design — reescritos a cada /learn.
-
-### Passo 2: Consulta o Cerebro (fonte primaria)
+### Passo 1: Consulta o Cerebro (fonte primaria)
 ```
 /recall "tema da tarefa"
 ```
@@ -58,13 +51,16 @@ Retorna nos relevantes COM conexoes semanticas e conteudo completo:
 - Regras de negocio aplicaveis
 - Patterns aprovados
 
-### Passo 3: Fallback para .md (se necessario)
+### Passo 2: Le prioridades e fallback .md
+```
+PRIORITY_MATRIX.md → prioridades atuais
+```
 Se o recall nao cobrir, os `.md` de knowledge continuam disponiveis:
 ```
 PATTERNS.md, ADR_LOG.md, DOMAIN.md, EXPERIENCE_LIBRARY.md
 ```
 
-### Passo 4: Entende o contexto completo antes de codificar
+### Passo 3: Entende o contexto completo antes de codificar
 
 ---
 
@@ -127,8 +123,7 @@ O sono (sleep.py) enriquece com conexoes semanticas automaticamente.
 
 #### 3b. Knowledge files refletem o cerebro
 Os .md sao o espelho legivel — mantidos em sincronia para fallback, git diffs e leitura humana:
-- **CURRENT_STATE.md** → status atualizado (boot file)
-- **PRIORITY_MATRIX.md** → tarefas atualizadas (boot file)
+- **PRIORITY_MATRIX.md** → tarefas atualizadas
 - **PATTERNS.md** → patterns novos ou refinados
 - **ADR_LOG.md** → decisoes registradas
 - **DOMAIN.md** → regras de negocio e glossario
@@ -218,7 +213,7 @@ O Claude consulta o cerebro e **sabe tudo** da sessao anterior:
 
 ```
 cerebro (graph.json)  = FONTE PRIMARIA (busca, conexoes, conteudo em props.content)
-boot files (.md)      = CURRENT_STATE.md + PRIORITY_MATRIX.md (leitura rapida)
+boot file (.md)       = PRIORITY_MATRIX.md (leitura rapida de prioridades)
 knowledge files (.md) = espelho legivel do cerebro (fallback, git diffs, leitura humana)
 ```
 
@@ -260,13 +255,12 @@ O loop auto-alimentado:
 | Pesos de relevancia | Calibrate ajusta por frequencia de acesso |
 | Performance | Constante (~200ms) independente do tamanho do grafo |
 
-### Boot Files (.md)
+### Boot File (.md)
 
-Apenas dois .md sao mantidos ativamente:
-- **CURRENT_STATE.md** — snapshot do estado do projeto (leitura no inicio de sessao)
+Apenas um .md e mantido ativamente:
 - **PRIORITY_MATRIX.md** — tarefas priorizadas com ICE Score
 
-Sao pequenos por design. Todo o resto (ADRs, patterns, experiencias, dominio) vive no cerebro.
+O estado do projeto (antigo CURRENT_STATE.md) agora vive no cerebro e e consultado via recall temporal (`--recent 7d`). CURRENT_STATE.md e criado apenas no genesis como bootstrap inicial.
 
 ### Escalabilidade
 

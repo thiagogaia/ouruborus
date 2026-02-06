@@ -50,7 +50,7 @@ O conteúdo é a instrução que o Claude executa quando o dev invoca `/command`
 ```markdown
 Analise o estado atual do projeto:
 
-1. Leia `.claude/knowledge/context/CURRENT_STATE.md`
+1. Consulte o cérebro: `python3 .claude/brain/recall.py --recent 7d --top 10`
 2. Leia `.claude/knowledge/priorities/PRIORITY_MATRIX.md`
 3. Resuma: status geral, próxima prioridade, bloqueios
 4. Sugira a próxima ação concreta

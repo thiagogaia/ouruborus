@@ -112,7 +112,6 @@ def check_knowledge_freshness(project_dir: str) -> list:
     now = datetime.now()
 
     knowledge_files = {
-        ".claude/knowledge/context/CURRENT_STATE.md": "CURRENT_STATE",
         ".claude/knowledge/priorities/PRIORITY_MATRIX.md": "PRIORITY_MATRIX",
         ".claude/knowledge/patterns/PATTERNS.md": "PATTERNS",
         ".claude/knowledge/decisions/ADR_LOG.md": "ADR_LOG",

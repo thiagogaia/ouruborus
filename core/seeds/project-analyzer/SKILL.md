@@ -2,34 +2,32 @@
 name: project-analyzer
 description: Análise profunda do codebase para atualizar estado do projeto.
   Use no início de sessão, quando executar /status, ou quando o contexto
-  do projeto parecer desatualizado. Analisa código, dependências, estrutura
-  e atualiza CURRENT_STATE.md automaticamente.
+  do projeto parecer desatualizado. Analisa código, dependências e estrutura.
 ---
 
 # Project Analyzer
 
-Analisa o codebase e atualiza o conhecimento do projeto.
+Analisa o codebase e reporta o estado do projeto.
 
 ## Workflow
 
-1. **Ler estado anterior**: Consultar `.claude/knowledge/context/CURRENT_STATE.md`
-2. **Analisar codebase**:
+1. **Consultar cérebro**: `python3 .claude/brain/recall.py --recent 7d --top 10 --format json`
+2. **Verificar saúde**: `python3 .claude/brain/cognitive.py health`
+3. **Analisar codebase**:
    - Estrutura de diretórios (mudou desde última análise?)
    - Dependências (novas, removidas, atualizadas?)
    - Código recente: `git log --oneline -20` + `git diff --stat HEAD~5`
    - TODOs e FIXMEs: `grep -rn "TODO\|FIXME\|HACK\|XXX" --include="*.ts" --include="*.tsx" --include="*.py" --include="*.js"`
-3. **Detectar mudanças significativas**:
+4. **Detectar mudanças significativas**:
    - Novos módulos ou features
    - Mudanças de dependência
    - Migrações de banco
    - Mudanças de configuração
-4. **Atualizar CURRENT_STATE.md** com descobertas
-5. **Reportar** diferenças entre estado anterior e atual
+5. **Reportar** descobertas ao dev
 
 ## Regras
 - NUNCA invente informação — só reporte o que encontrar no código
-- SEMPRE compare com CURRENT_STATE.md anterior para detectar delta
-- Se encontrar dívidas técnicas, registre na seção correta
+- Se encontrar dívidas técnicas, registre no cérebro via `brain.add_memory()`
 - Priorize brevidade — seções com mais de 10 linhas devem ser resumidas
 - Marque data de cada atualização
 

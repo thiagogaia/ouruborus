@@ -11,22 +11,24 @@ O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposen
 ## Workflow Obrigatório
 
 ### Antes de Codificar
-1. Leia `.claude/knowledge/context/CURRENT_STATE.md` (sempre — é curto e dá contexto)
-2. **Consulte o cérebro PRIMEIRO**: rode `python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json` para encontrar ADRs, patterns, experiências e conexões relevantes
-3. Só leia os `.md` completos se o recall não cobrir — os arquivos vão crescer e não caberão no contexto
+1. **O que mudou recentemente**: `python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json`
+2. **Conhecimento relevante**: `python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json`
+3. **Saúde do cérebro** (se necessário): `python3 .claude/brain/cognitive.py health`
+4. Só leia os `.md` de knowledge se o recall não cobrir
 
-O cérebro é a **fonte primária**. O recall já retorna o conteúdo completo (campo `content`). Os `.md` de knowledge são mantidos em sincronia como fallback, para git diffs e leitura humana.
+O cérebro é a **fonte primária e única**. O recall retorna conteúdo completo (campo `content`) e suporta **busca temporal** (`--recent Nd`, `--since YYYY-MM-DD`, `--sort date`). Os `.md` de knowledge são mantidos em sincronia como fallback, para git diffs e leitura humana.
+
+> **Nota**: CURRENT_STATE.md é gerado pelo genesis como bootstrap. Após o cérebro ser populado, não é mais lido nem atualizado — o recall temporal o substitui.
 
 ### Ao Codificar
 - Validação de input em todas as APIs
 - Error handling em todas as rotas
 
 ### Depois de Codificar
-1. Atualize `CURRENT_STATE.md` (boot file)
-2. Registre padrões, decisões, experiências e domínio **direto no cérebro** via `brain.add_memory()`
-3. Atualize os `.md` de knowledge quando houver conteúdo novo (PATTERNS.md, ADR_LOG.md, DOMAIN.md, EXPERIENCE_LIBRARY.md)
-4. Reavalie `PRIORITY_MATRIX.md` (boot file)
-5. Execute `/learn` para consolidar
+1. Registre padrões, decisões, experiências e domínio **direto no cérebro** via `brain.add_memory()`
+2. Atualize os `.md` de knowledge quando houver conteúdo novo (PATTERNS.md, ADR_LOG.md, DOMAIN.md, EXPERIENCE_LIBRARY.md)
+3. Reavalie `PRIORITY_MATRIX.md`
+4. Execute `/learn` para consolidar
 
 ## Stack
 
@@ -75,8 +77,14 @@ Todo conteúdo é armazenado in-graph (props.content). Não depende de .md files
 **O recall retorna conteúdo completo.** Não precisa ler .md files — o cérebro contém tudo. O recall já retorna o campo `content` com texto completo de cada memória.
 
 ```bash
-# Forma rápida — output JSON parseável
+# Busca semântica — output JSON parseável
 python3 .claude/brain/recall.py "<pergunta>" --top 10 --format json
+
+# Busca temporal — o que mudou recentemente
+python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json
+
+# Combinado — busca semântica filtrada por período
+python3 .claude/brain/recall.py "<pergunta>" --since 2026-02-01 --sort date --format json
 
 # Ver conexões semânticas de forma legível
 python3 .claude/brain/recall.py "<pergunta>"
@@ -116,11 +124,17 @@ O Claude DEVE invocar `domain-analyst` ou seguir `domain-expert` quando:
 ### Exemplo de Uso
 
 ```bash
-# Busca geral — retorna nós + conexões semânticas
+# Busca semântica — retorna nós + conexões
 python3 .claude/brain/recall.py "autenticação" --format json
 
 # Filtrar por tipo
 python3 .claude/brain/recall.py "setup" --type ADR --top 5
+
+# O que mudou nos últimos 7 dias (substitui "O Que Mudou Recentemente" do antigo CURRENT_STATE.md)
+python3 .claude/brain/recall.py --recent 7d --type Commit --top 10
+
+# Busca temporal com query semântica
+python3 .claude/brain/recall.py "bug" --since 2026-02-01 --sort date --top 5
 
 # Ver saúde do cérebro
 python3 .claude/brain/cognitive.py health
