@@ -1,5 +1,5 @@
 # Priority Matrix
-> Ultima atualizacao: 2026-02-06 (/learn sessao 9 — ChromaDB vector store migration)
+> Ultima atualizacao: 2026-02-06 (/learn sessao 10 — ChromaDB pipeline hardening)
 > ICE = (Impacto x Confianca) / Esforco - todos 1-10
 
 ## Ativas

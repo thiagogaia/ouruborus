@@ -132,5 +132,5 @@
     "total_evolutions": 0,
     "total_archived": 0
   },
-  "notes": "Este é o repositório fonte do Engram v2. Seeds (project-analyzer, knowledge-manager, etc) existem em core/seeds/ e são instalados em projetos-alvo, não aqui."
+  "notes": "Este é o repositório fonte do Engram v3. Seeds (project-analyzer, knowledge-manager, etc) existem em core/seeds/ e são instalados em projetos-alvo, não aqui."
 }

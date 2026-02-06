@@ -21,7 +21,7 @@ e adaptados ao projeto atual.
 - Se existe similar: evoluir em vez de duplicar
 
 ### 2. Consultar Schema
-Ler o schema correspondente em `.claude/schemas/`:
+Ler o schema correspondente em `.claude/dna/`:
 - `skill.schema.md` para skills
 - `agent.schema.md` para agents
 - `command.schema.md` para commands

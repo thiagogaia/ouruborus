@@ -15,7 +15,7 @@ set -euo pipefail
 #
 # O que faz (v3 — com cérebro organizacional):
 #   1. Detecta a stack do projeto automaticamente
-#   2. Instala o DNA (schemas) + Genesis (motor de auto-geração)
+#   2. Instala o DNA + Genesis (motor de auto-geração)
 #   3. Instala seeds universais + Evolution (motor de evolução)
 #   4. Instala Brain (cérebro organizacional com grafo + embeddings)
 #   5. Gera CLAUDE.md customizado e settings.json
@@ -209,10 +209,10 @@ install_core() {
     print_step "Instalando core (DNA + Genesis + Seeds)..."
 
     local CLAUDE_DIR="$TARGET_DIR/.claude"
-    mkdir -p "$CLAUDE_DIR"/{skills,agents,commands,knowledge,schemas,versions}
+    mkdir -p "$CLAUDE_DIR"/{skills,agents,commands,knowledge,dna,versions}
 
     # 1. Schemas (DNA)
-    cp -r "$SCRIPT_DIR/core/schemas/"* "$CLAUDE_DIR/schemas/"
+    cp -r "$SCRIPT_DIR/core/dna/"* "$CLAUDE_DIR/dna/"
     print_done "Schemas instalados (DNA do sistema)"
 
     # 2. Genesis skill (motor de auto-geração)
@@ -592,7 +592,7 @@ O Engram gera seus próprios componentes:
 - \`/doctor\` — Health check do sistema
 - \`/learn\` — Retroalimentação + evolução
 
-Schemas em \`.claude/schemas/\`. Manifest em \`.claude/manifest.json\`.
+DNA em \`.claude/dna/\`. Manifest em \`.claude/manifest.json\`.
 
 ## Skills Disponíveis
 Consulte \`.claude/skills/\` — cada skill tem SKILL.md com instruções.
@@ -832,7 +832,7 @@ do_update() {
     backup_for_update
 
     # ── 4. Update schemas, genesis, evolution ──
-    cp -r "$SCRIPT_DIR/core/schemas/"* "$CLAUDE_DIR/schemas/"
+    cp -r "$SCRIPT_DIR/core/dna/"* "$CLAUDE_DIR/dna/"
     print_done "Schemas atualizados"
 
     cp -r "$SCRIPT_DIR/core/genesis" "$CLAUDE_DIR/skills/engram-genesis"
@@ -948,7 +948,7 @@ do_update() {
     echo -e "${BOLD}  ✅ Engram atualizado para v${VERSION}${NC}"
     echo -e "${CYAN}═══════════════════════════════════════════════════════════${NC}"
     echo ""
-    echo -e "  ${GREEN}✓${NC} Core (schemas, genesis, evolution, seeds)"
+    echo -e "  ${GREEN}✓${NC} Core (dna, genesis, evolution, seeds)"
     echo -e "  ${GREEN}✓${NC} Brain scripts (dados preservados)"
     echo -e "  ${GREEN}✓${NC} Agents, commands, templates"
     echo -e "  ${GREEN}✓${NC} manifest.json (versão e seeds)"
@@ -978,7 +978,7 @@ verify_installation() {
     echo -e "  ${BOLD}Estrutura (metacircular):${NC}"
     echo -e "  ${GREEN}├── CLAUDE.md${NC}                        (customizado)"
     echo -e "  ${GREEN}├── .claude/${NC}"
-    echo -e "  ${GREEN}│   ├── schemas/${NC}                     (DNA do sistema)"
+    echo -e "  ${GREEN}│   ├── dna/${NC}                          (DNA do sistema)"
     echo -e "  ${GREEN}│   ├── manifest.json${NC}                (registro de componentes)"
     echo -e "  ${GREEN}│   ├── settings.json${NC}                (permissões)"
     echo -e "  ${GREEN}│   ├── skills/${NC}                      (9 skills: genesis + evolution + 7 seeds)"

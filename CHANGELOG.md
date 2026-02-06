@@ -14,6 +14,7 @@ Only changes to `core/` are tracked here — the source of truth for all Engram 
 - `/commit` command now auto-updates CHANGELOG.md when core/ changes (`1e72d29`)
 
 ### Changed
+- Rename `core/schemas/` to `core/dna/` and `.claude/schemas/` to `.claude/dna/` — aligning folder name with DNA metaphor (`ac3e701`)
 - Commands (init-engram, learn) and base-ingester now use `brain_sqlite` instead of deprecated `brain.py` (`ed75a23`)
 - `/learn` error message includes chromadb and pydantic-settings (`ed75a23`)
 - `/doctor` now runs `cognitive.py health` to check vector_backend (`ed75a23`)

@@ -69,7 +69,7 @@ def check_structure(project_dir: str) -> list:
     required_dirs = {
         ".claude/skills": "Skills directory",
         ".claude/commands": "Commands directory",
-        ".claude/schemas": "Schema definitions (DNA)",
+        ".claude/dna": "DNA definitions (schemas)",
         ".claude/knowledge/context": "Context knowledge",
         ".claude/knowledge/priorities": "Priorities knowledge",
         ".claude/knowledge/patterns": "Patterns knowledge",

@@ -47,14 +47,14 @@ Ouroborus transforms Claude Code into an agent that **learns from each session**
 ```
 ┌─ INSTALL (setup.sh) ─────────────────────────────────┐
 │                                                       │
-│  Detects stack → installs DNA (schemas) + genesis    │
+│  Detects stack → installs DNA + genesis               │
 │  + seed skills + brain (graph + embeddings)          │
 │                                                       │
 ├─ GENESIS (/init-engram) ─────────────────────────────┤
 │                                                       │
 │  Analyzes project → generates custom skills/agents   │
 │  → populates brain with existing knowledge           │
-│  → validates against schemas → registers in manifest │
+│  → validates against DNA → registers in manifest     │
 │                                                       │
 ├─ USE (daily work) ───────────────────────────────────┤
 │                                                       │
@@ -211,7 +211,7 @@ your-project/
     │   ├── decisions/                 #    ADRs
     │   └── people/                    #    Team members
     │
-    ├── schemas/                       # 🧬 DNA — component definitions
+    ├── dna/                           # 🧬 DNA — component definitions
     │   ├── skill.schema.md
     │   ├── agent.schema.md
     │   ├── command.schema.md
@@ -252,7 +252,7 @@ Engram distributes itself across three layers, each with a clear rule:
 
 | What | Purpose | How it reaches the project |
 |------|---------|---------------------------|
-| `schemas/` | Formal contracts (skill, agent, command, knowledge) | `cp -r` directly |
+| `dna/` | Formal contracts (skill, agent, command, knowledge) | `cp -r` directly |
 | `genesis/` | Engine that analyzes project and generates components | Becomes `skills/engram-genesis/` |
 | `evolution/` | Engine that tracks usage and proposes improvements | Becomes `skills/engram-evolution/` |
 | `seeds/` (6) | Universal skills (project-analyzer, code-reviewer, etc.) | `cp -r` into `skills/` |

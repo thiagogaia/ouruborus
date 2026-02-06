@@ -34,7 +34,7 @@ Classifique o que foi aprendido/decidido/feito:
 ### 2. Registrar no Arquivo Correto
 - Ler o arquivo atual para evitar duplicação
 - Adicionar entrada com data
-- Manter formato consistente (ver schema em `.claude/schemas/knowledge.schema.md`)
+- Manter formato consistente (ver schema em `.claude/dna/knowledge.schema.md`)
 
 ### 3. Cross-Reference
 Se o registro impacta outros files, atualize-os também:

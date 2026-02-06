@@ -38,7 +38,7 @@ O Engram gera seus próprios componentes:
 - `/doctor` — Health check do sistema
 - `/learn` — Retroalimentação + evolução
 
-Schemas em `.claude/schemas/`. Manifest em `.claude/manifest.json`.
+DNA em `.claude/dna/`. Manifest em `.claude/manifest.json`.
 
 ## Skills Disponíveis
 Consulte `.claude/skills/` — cada skill tem SKILL.md com instruções.
