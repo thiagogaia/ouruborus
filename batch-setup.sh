@@ -15,8 +15,8 @@ set -euo pipefail
 # Para instalar em um único projeto, use diretamente: ./setup.sh
 # ═══════════════════════════════════════════════════════════════
 
-VERSION="3.0.0"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+VERSION=$(cat "$SCRIPT_DIR/VERSION")
 
 # ── Colors ────────────────────────────────────────────────────
 

@@ -22,7 +22,8 @@ set -euo pipefail
 #   6. O /init-engram popula o cérebro e gera componentes sob demanda
 # ═══════════════════════════════════════════════════════════════
 
-VERSION="3.0.0"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+VERSION=$(cat "$SCRIPT_DIR/VERSION")
 
 # ── Argument handling ─────────────────────────────────────────
 
@@ -67,7 +68,6 @@ done
 
 TARGET_DIR="${TARGET_DIR:-.}"
 TARGET_DIR="$(cd "$TARGET_DIR" && pwd)"
-SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # ── Colors ────────────────────────────────────────────────────
 

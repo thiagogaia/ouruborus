@@ -17,8 +17,39 @@ import sys
 from datetime import datetime
 
 
+DEFAULT_VERSION = "3.0.0"
+
+
+def get_engram_version(project_dir: str = ".") -> str:
+    """Read Engram version from VERSION file (root) or .claude/.engram-version."""
+    # 1. Walk up from project_dir looking for VERSION file
+    current = os.path.abspath(project_dir)
+    for _ in range(10):  # max 10 levels up
+        version_file = os.path.join(current, "VERSION")
+        if os.path.isfile(version_file):
+            with open(version_file) as f:
+                version = f.read().strip()
+                if version:
+                    return version
+        parent = os.path.dirname(current)
+        if parent == current:
+            break
+        current = parent
+
+    # 2. Try .claude/.engram-version relative to project_dir
+    engram_version_file = os.path.join(os.path.abspath(project_dir), ".claude", ".engram-version")
+    if os.path.isfile(engram_version_file):
+        with open(engram_version_file) as f:
+            version = f.read().strip()
+            if version:
+                return version
+
+    # 3. Fallback
+    return DEFAULT_VERSION
+
+
 MANIFEST_TEMPLATE = {
-    "engram_version": "2.0.0",
+    "engram_version": DEFAULT_VERSION,
     "installed_at": "",
     "last_updated": "",
     "components": {
@@ -43,8 +74,9 @@ def load_manifest(project_dir: str) -> dict:
     if os.path.isfile(path):
         with open(path) as f:
             return json.load(f)
-    # Initialize new manifest
+    # Initialize new manifest with dynamic version
     manifest = MANIFEST_TEMPLATE.copy()
+    manifest["engram_version"] = get_engram_version(project_dir)
     manifest["installed_at"] = datetime.now().isoformat()
     return manifest
 
