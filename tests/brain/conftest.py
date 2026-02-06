@@ -1,7 +1,7 @@
 """Shared fixtures for brain tests.
 
-Blocks networkx, numpy, and sentence_transformers BEFORE any brain import
-to guarantee all tests use FallbackGraph.
+Blocks networkx, numpy, sentence_transformers, and chromadb BEFORE any brain import
+to guarantee all tests use FallbackGraph and MockChromaDB.
 """
 
 import sys
@@ -16,13 +16,86 @@ import pytest
 _BLOCKED = ("networkx", "nx", "sentence_transformers")
 
 
+class MockChromaCollection:
+    """In-memory mock of a ChromaDB collection using brute-force cosine similarity."""
+
+    def __init__(self, name="test", metadata=None):
+        self.name = name
+        self.metadata = metadata or {}
+        self._store = {}  # {id: {"embedding": list, "metadata": dict}}
+
+    def count(self):
+        return len(self._store)
+
+    def upsert(self, ids, embeddings, metadatas=None):
+        for i, nid in enumerate(ids):
+            self._store[nid] = {
+                "embedding": embeddings[i] if embeddings else None,
+                "metadata": metadatas[i] if metadatas else {},
+            }
+
+    def get(self, ids, include=None):
+        found_ids = []
+        found_embeddings = []
+        for nid in ids:
+            if nid in self._store:
+                found_ids.append(nid)
+                found_embeddings.append(self._store[nid]["embedding"])
+        return {"ids": found_ids, "embeddings": found_embeddings}
+
+    def query(self, query_embeddings, n_results=10):
+        """Brute-force cosine distance search (mirrors ChromaDB behavior)."""
+        if not self._store:
+            return {"ids": [[]], "distances": [[]]}
+        qe = query_embeddings[0]
+        scored = []
+        for nid, data in self._store.items():
+            emb = data["embedding"]
+            if emb is None:
+                continue
+            dot = sum(a * b for a, b in zip(qe, emb))
+            norm_q = sum(x * x for x in qe) ** 0.5
+            norm_e = sum(x * x for x in emb) ** 0.5
+            if norm_q > 0 and norm_e > 0:
+                cos_sim = dot / (norm_q * norm_e)
+                distance = 1.0 - cos_sim
+            else:
+                distance = 2.0
+            scored.append((nid, distance))
+        scored.sort(key=lambda x: x[1])
+        top = scored[:n_results]
+        return {
+            "ids": [[nid for nid, _ in top]],
+            "distances": [[dist for _, dist in top]],
+        }
+
+    def delete(self, ids):
+        for nid in ids:
+            self._store.pop(nid, None)
+
+
+class MockChromaClient:
+    """In-memory mock of chromadb.PersistentClient."""
+
+    def __init__(self, path=None):
+        self.path = path
+        self._collections = {}
+
+    def get_or_create_collection(self, name, metadata=None):
+        if name not in self._collections:
+            self._collections[name] = MockChromaCollection(name, metadata)
+        return self._collections[name]
+
+
 @pytest.fixture(autouse=True, scope="session")
 def _block_heavy_deps():
-    """Block networkx/numpy/sentence_transformers for the entire test session.
+    """Block networkx/numpy/sentence_transformers/chromadb for the entire test session.
 
     numpy is replaced with a MagicMock that exposes the attrs brain.py/embeddings.py
     need at import time (ndarray, array, dot, linalg.norm) so the modules can be
     imported without sys.exit().
+
+    chromadb is replaced with a mock module exposing PersistentClient.
     """
     saved = {}
 
@@ -43,6 +116,12 @@ def _block_heavy_deps():
     saved["numpy"] = sys.modules.get("numpy")
     saved["np"] = sys.modules.get("np")
     sys.modules["numpy"] = np_mock
+
+    # Mock chromadb with our MockChromaClient
+    chromadb_mock = types.ModuleType("chromadb")
+    chromadb_mock.PersistentClient = MockChromaClient
+    saved["chromadb"] = sys.modules.get("chromadb")
+    sys.modules["chromadb"] = chromadb_mock
 
     yield
 

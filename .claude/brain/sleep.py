@@ -363,14 +363,22 @@ def phase_relate(brain: Brain, threshold: float = 0.75) -> Dict:
     if len(texts) < 2:
         return stats
 
-    # Try numpy embeddings first
-    if HAS_NUMPY and brain.embeddings:
+    # Try numpy embeddings first (via get_embedding_vectors for ChromaDB compat)
+    candidate_ids = list(texts.keys())
+    if HAS_NUMPY and hasattr(brain, 'get_embedding_vectors'):
+        emb_vectors = brain.get_embedding_vectors(candidate_ids)
+    elif HAS_NUMPY:
+        emb_vectors = {nid: brain.embeddings[nid] for nid in candidate_ids if nid in brain.embeddings}
+    else:
+        emb_vectors = {}
+
+    if emb_vectors:
         stats["method"] = "embeddings"
-        node_ids = [nid for nid in texts if nid in brain.embeddings]
+        node_ids = [nid for nid in candidate_ids if nid in emb_vectors]
 
         if len(node_ids) >= 2:
             # Build matrix
-            matrix = np.array([brain.embeddings[nid] for nid in node_ids])
+            matrix = np.array([emb_vectors[nid] for nid in node_ids])
             # Normalize rows
             norms = np.linalg.norm(matrix, axis=1, keepdims=True)
             norms[norms == 0] = 1

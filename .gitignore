@@ -29,6 +29,9 @@ Thumbs.db
 .claude/brain/brain.db-wal
 .claude/brain/brain.db-shm
 
+# ChromaDB persistent storage (auto-generated, can be rebuilt from embeddings)
+.claude/brain/chroma/
+
 # Environment
 .env
 .env.local

@@ -106,9 +106,43 @@ def _load_all_nodes(brain_path: Path) -> dict:
     return brain.get_all_nodes()
 
 
+def _get_brain(brain_path: Path):
+    """Get a BrainSQLite instance (loaded)."""
+    sys.path.insert(0, str(Path(__file__).parent))
+    from brain_sqlite import BrainSQLite
+    brain = BrainSQLite(base_path=brain_path)
+    brain.load()
+    return brain
+
+
+def _node_to_text(node_id: str, node_data: dict) -> str:
+    """Build embedding text from a node's data."""
+    props = node_data.get("props", {})
+    parts = []
+
+    title = props.get("title", "")
+    if title:
+        parts.append(title)
+
+    content = props.get("content", "")
+    if content:
+        parts.append(content[:1000])
+    else:
+        summary = props.get("summary", "")
+        if summary:
+            parts.append(summary)
+
+    labels = node_data.get("labels", [])
+    if labels:
+        parts.append(" ".join(labels))
+
+    return " ".join(parts)
+
+
 def build_embeddings(brain_path: Path = Path(__file__).parent):
-    """Gera embeddings para todos os nos do grafo."""
-    nodes = _load_all_nodes(brain_path)
+    """Build embeddings for all nodes, using ChromaDB (primary) or npz (fallback)."""
+    brain = _get_brain(brain_path)
+    nodes = brain.get_all_nodes()
 
     if not nodes:
         print("Error: No nodes found in brain")
@@ -116,52 +150,57 @@ def build_embeddings(brain_path: Path = Path(__file__).parent):
 
     print(f"Building embeddings for {len(nodes)} nodes...")
 
+    # Try ChromaDB via brain's vector store
+    brain._ensure_vector_store()
+    use_chroma = brain._use_chromadb and brain._chroma_collection is not None
+
     embeddings = {}
     count = 0
+    batch_ids = []
+    batch_embeddings = []
+    batch_size = 100
 
     for node_id, node_data in nodes.items():
-        props = node_data.get("props", {})
-
-        # Texto para embedding: titulo + content (or summary) + labels
-        # Uses full content (up to 1000 chars) for richer embeddings
-        parts = []
-
-        title = props.get("title", "")
-        if title:
-            parts.append(title)
-
-        content = props.get("content", "")
-        if content:
-            parts.append(content[:1000])
-        else:
-            summary = props.get("summary", "")
-            if summary:
-                parts.append(summary)
-
-        labels = node_data.get("labels", [])
-        if labels:
-            parts.append(" ".join(labels))
-
-        text = " ".join(parts)
-
+        text = _node_to_text(node_id, node_data)
         if not text.strip():
             continue
 
         try:
             emb = get_embedding(text)
-            embeddings[node_id] = emb
-            count += 1
 
+            if use_chroma:
+                emb_list = emb.tolist() if hasattr(emb, 'tolist') else list(emb)
+                batch_ids.append(node_id)
+                batch_embeddings.append(emb_list)
+
+                if len(batch_ids) >= batch_size:
+                    brain._chroma_collection.upsert(
+                        ids=batch_ids,
+                        embeddings=batch_embeddings
+                    )
+                    batch_ids = []
+                    batch_embeddings = []
+            else:
+                embeddings[node_id] = emb
+
+            count += 1
             if count % 10 == 0:
                 print(f"  Processed {count} nodes...")
         except Exception as e:
             print(f"  Error embedding {node_id}: {e}")
 
-    # Salva embeddings
-    emb_file = brain_path / "embeddings.npz"
-    np.savez_compressed(emb_file, **embeddings)
-
-    print(f"Done. Saved {count} embeddings to {emb_file}")
+    # Flush remaining ChromaDB batch
+    if use_chroma and batch_ids:
+        brain._chroma_collection.upsert(
+            ids=batch_ids,
+            embeddings=batch_embeddings
+        )
+        print(f"Done. Stored {count} embeddings in ChromaDB")
+    else:
+        # Fallback: save to npz
+        emb_file = brain_path / "embeddings.npz"
+        np.savez_compressed(emb_file, **embeddings)
+        print(f"Done. Saved {count} embeddings to {emb_file}")
 
 
 def search_embeddings(
@@ -169,51 +208,88 @@ def search_embeddings(
     brain_path: Path = Path(__file__).parent,
     top_k: int = 10
 ) -> List[dict]:
-    """Busca semantica no grafo."""
-    nodes = _load_all_nodes(brain_path)
+    """Semantic search using ChromaDB (primary) or npz fallback."""
+    brain = _get_brain(brain_path)
+    nodes = brain.get_all_nodes()
 
     if not nodes:
         print("Error: No nodes found in brain")
         return []
 
-    # Carrega embeddings
-    emb_file = brain_path / "embeddings.npz"
-    if not emb_file.exists():
-        print(f"Error: No embeddings found at {emb_file}")
-        print("Run: python embeddings.py build")
-        return []
-
-    loaded = np.load(emb_file)
-    embeddings = {k: loaded[k] for k in loaded.files}
-
-    # Gera embedding da query
+    # Generate query embedding
     query_emb = get_embedding(query)
 
-    # Calcula similaridade
+    # Use brain's search_by_embedding (handles ChromaDB vs npz)
+    pairs = brain.search_by_embedding(query_emb, top_k=top_k)
+
     results = []
+    for node_id, score in pairs:
+        node_data = nodes.get(node_id, {})
+        props = node_data.get("props", {})
+        results.append({
+            "id": node_id,
+            "score": float(score),
+            "title": props.get("title", "N/A"),
+            "labels": node_data.get("labels", []),
+            "summary": props.get("summary", "")[:100]
+        })
 
-    for node_id, emb in embeddings.items():
-        # Cosine similarity
-        dot = np.dot(query_emb, emb)
-        norm = np.linalg.norm(query_emb) * np.linalg.norm(emb)
+    return results
 
-        if norm > 0:
-            sim = dot / norm
-            node_data = nodes.get(node_id, {})
-            props = node_data.get("props", {})
 
-            results.append({
-                "id": node_id,
-                "score": float(sim),
-                "title": props.get("title", "N/A"),
-                "labels": node_data.get("labels", []),
-                "summary": props.get("summary", "")[:100]
-            })
+def migrate_embeddings(brain_path: Path = Path(__file__).parent):
+    """Migrate embeddings from npz to ChromaDB.
 
-    # Ordena por similaridade
-    results.sort(key=lambda x: x["score"], reverse=True)
+    Reads existing embeddings.npz and upserts all vectors into ChromaDB.
+    """
+    emb_file = brain_path / "embeddings.npz"
+    if not emb_file.exists():
+        print(f"No embeddings.npz found at {emb_file}")
+        return
 
-    return results[:top_k]
+    brain = _get_brain(brain_path)
+    brain._ensure_vector_store()
+
+    if not brain._use_chromadb or brain._chroma_collection is None:
+        print("Error: ChromaDB not available. Install: pip install chromadb")
+        return
+
+    # Load npz
+    loaded = np.load(emb_file)
+    node_ids = loaded.files
+    print(f"Migrating {len(node_ids)} embeddings from npz to ChromaDB...")
+
+    batch_ids = []
+    batch_embeddings = []
+    batch_size = 100
+    count = 0
+
+    for node_id in node_ids:
+        emb = loaded[node_id]
+        emb_list = emb.tolist() if hasattr(emb, 'tolist') else list(emb)
+        batch_ids.append(node_id)
+        batch_embeddings.append(emb_list)
+
+        if len(batch_ids) >= batch_size:
+            brain._chroma_collection.upsert(
+                ids=batch_ids,
+                embeddings=batch_embeddings
+            )
+            count += len(batch_ids)
+            print(f"  Migrated {count} embeddings...")
+            batch_ids = []
+            batch_embeddings = []
+
+    # Flush remaining
+    if batch_ids:
+        brain._chroma_collection.upsert(
+            ids=batch_ids,
+            embeddings=batch_embeddings
+        )
+        count += len(batch_ids)
+
+    print(f"Done. Migrated {count} embeddings to ChromaDB")
+    print(f"ChromaDB collection count: {brain._chroma_collection.count()}")
 
 
 if __name__ == "__main__":
@@ -222,6 +298,7 @@ if __name__ == "__main__":
         print("Commands:")
         print("  build              Build embeddings for all nodes")
         print("  search <query>     Semantic search")
+        print("  migrate            Migrate npz -> ChromaDB")
         print("")
         print(f"Current provider: {PROVIDER}")
         print("Set EMBEDDING_PROVIDER=openai for OpenAI embeddings")
@@ -247,6 +324,9 @@ if __name__ == "__main__":
             if r['summary']:
                 print(f"       {r['summary']}...")
             print()
+
+    elif cmd == "migrate":
+        migrate_embeddings()
 
     else:
         print(f"Unknown command: {cmd}")

@@ -47,6 +47,12 @@ try:
 except ImportError:
     HAS_NUMPY = False
 
+try:
+    import chromadb
+    HAS_CHROMADB = True
+except Exception:
+    HAS_CHROMADB = False
+
 
 # ══════════════════════════════════════════════════════════
 # SCHEMA v2 — Hybrid Property Graph with Generated Columns
@@ -146,8 +152,11 @@ class BrainSQLite:
         # Connection (lazy — opened on load())
         self._conn: Optional[sqlite3.Connection] = None
 
-        # Embeddings (loaded lazily)
-        self.embeddings: Dict[str, Any] = {}
+        # Vector store: ChromaDB (primary) or numpy dict (fallback)
+        self._chroma_client = None
+        self._chroma_collection = None
+        self._use_chromadb = False
+        self._npz_embeddings: Dict[str, Any] = {}  # fallback numpy store
         self._embeddings_dirty = False
 
         # Cache
@@ -206,30 +215,136 @@ class BrainSQLite:
         sys.stderr.write(f"Loaded: {node_count} nodes, {edge_count} edges\n")
         return True
 
-    def _ensure_embeddings(self):
-        """Load embeddings from disk if not already loaded."""
-        if self.embeddings:
-            return
+    def _ensure_vector_store(self):
+        """Initialize vector store: ChromaDB (primary) or npz fallback."""
+        if self._use_chromadb:
+            return  # already initialized
+        if self._npz_embeddings:
+            return  # fallback already loaded
+
+        # Try ChromaDB first
+        if HAS_CHROMADB:
+            try:
+                chroma_path = self.base_path / "chroma"
+                chroma_path.mkdir(parents=True, exist_ok=True)
+                self._chroma_client = chromadb.PersistentClient(
+                    path=str(chroma_path)
+                )
+                self._chroma_collection = self._chroma_client.get_or_create_collection(
+                    name="brain_embeddings",
+                    metadata={"hnsw:space": "cosine"}
+                )
+                self._use_chromadb = True
+                count = self._chroma_collection.count()
+                if count > 0:
+                    sys.stderr.write(f"Loaded: {count} embeddings (ChromaDB)\n")
+                return
+            except Exception as e:
+                sys.stderr.write(f"ChromaDB init failed, falling back to npz: {e}\n")
+                self._chroma_client = None
+                self._chroma_collection = None
+                self._use_chromadb = False
+
+        # Fallback: load from npz
         if not HAS_NUMPY:
             return
         emb_file = self.base_path / "embeddings.npz"
         if emb_file.exists():
             try:
                 loaded = np.load(emb_file)
-                self.embeddings = {k: loaded[k] for k in loaded.files}
-                sys.stderr.write(f"Loaded: {len(self.embeddings)} embeddings\n")
+                self._npz_embeddings = {k: loaded[k] for k in loaded.files}
+                sys.stderr.write(f"Loaded: {len(self._npz_embeddings)} embeddings (npz)\n")
             except Exception as e:
                 print(f"Error loading embeddings: {e}")
+
+    def _store_embedding(self, node_id: str, embedding, metadata: Dict[str, Any] = None):
+        """Store an embedding in the active vector store."""
+        self._ensure_vector_store()
+        if self._use_chromadb and self._chroma_collection is not None:
+            emb_list = embedding.tolist() if hasattr(embedding, 'tolist') else list(embedding)
+            meta = metadata or {}
+            # ChromaDB doesn't allow None values in metadata
+            meta = {k: v for k, v in meta.items() if v is not None}
+            self._chroma_collection.upsert(
+                ids=[node_id],
+                embeddings=[emb_list],
+                metadatas=[meta] if meta else None
+            )
+        elif HAS_NUMPY:
+            self._npz_embeddings[node_id] = np.array(embedding)
+            self._embeddings_dirty = True
+
+    def _remove_embedding(self, node_id: str):
+        """Remove an embedding from the active vector store."""
+        if self._use_chromadb and self._chroma_collection is not None:
+            try:
+                self._chroma_collection.delete(ids=[node_id])
+            except Exception:
+                pass  # ID might not exist
+        self._npz_embeddings.pop(node_id, None)
+
+    def _embedding_count(self) -> int:
+        """Count embeddings in the active vector store."""
+        self._ensure_vector_store()
+        if self._use_chromadb and self._chroma_collection is not None:
+            return self._chroma_collection.count()
+        return len(self._npz_embeddings)
+
+    def get_embedding_vectors(self, node_ids: List[str]) -> Dict[str, Any]:
+        """Batch fetch embeddings for given node IDs.
+
+        Used by sleep.py phase_relate() for matrix operations.
+        Returns {node_id: numpy_array} dict.
+        """
+        self._ensure_vector_store()
+        result = {}
+
+        if self._use_chromadb and self._chroma_collection is not None:
+            if not node_ids:
+                return result
+            try:
+                fetched = self._chroma_collection.get(
+                    ids=node_ids,
+                    include=["embeddings"]
+                )
+                if fetched and fetched.get("ids") and fetched.get("embeddings"):
+                    for nid, emb in zip(fetched["ids"], fetched["embeddings"]):
+                        if emb is not None and HAS_NUMPY:
+                            result[nid] = np.array(emb)
+            except Exception:
+                pass  # some IDs might not exist
+        else:
+            for nid in node_ids:
+                if nid in self._npz_embeddings:
+                    result[nid] = self._npz_embeddings[nid]
+
+        return result
+
+    @property
+    def embeddings(self) -> Dict[str, Any]:
+        """Backward-compat property for sleep.py and other consumers.
+
+        Returns the npz fallback dict. When ChromaDB is active, this may be
+        empty — consumers should use get_embedding_vectors() instead.
+        """
+        return self._npz_embeddings
+
+    @embeddings.setter
+    def embeddings(self, value: Dict[str, Any]):
+        """Backward-compat setter."""
+        self._npz_embeddings = value
 
     def save(self):
         """No-op for graph data (SQLite auto-persists).
 
-        Only saves embeddings.npz if they changed.
+        ChromaDB auto-persists too. Only saves npz fallback if dirty.
         """
-        if self._embeddings_dirty and HAS_NUMPY and self.embeddings:
+        if self._use_chromadb:
+            return  # ChromaDB PersistentClient auto-persists
+        if self._embeddings_dirty and HAS_NUMPY and self._npz_embeddings:
             self.base_path.mkdir(parents=True, exist_ok=True)
             emb_file = self.base_path / "embeddings.npz"
-            np.savez_compressed(emb_file, **self.embeddings)
+            np.savez_compressed(emb_file, **self._npz_embeddings)
             print(f"Saved: {emb_file}")
             self._embeddings_dirty = False
 
@@ -333,9 +448,8 @@ class BrainSQLite:
         conn.commit()
 
         # Embedding
-        if embedding is not None and HAS_NUMPY:
-            self.embeddings[node_id] = np.array(embedding)
-            self._embeddings_dirty = True
+        if embedding is not None:
+            self._store_embedding(node_id, embedding)
 
         # Author edge
         author_node = self._ensure_person_node(author)
@@ -403,9 +517,8 @@ class BrainSQLite:
         conn.commit()
 
         # Embedding
-        if embedding is not None and HAS_NUMPY:
-            self.embeddings[node_id] = np.array(embedding)
-            self._embeddings_dirty = True
+        if embedding is not None:
+            self._store_embedding(node_id, embedding)
 
         # New references
         if references:
@@ -699,15 +812,44 @@ class BrainSQLite:
         query_embedding: Any,
         top_k: int = 10
     ) -> List[Tuple[str, float]]:
-        """Semantic similarity search using embeddings."""
-        self._ensure_embeddings()
-        if not HAS_NUMPY or not self.embeddings:
+        """Semantic similarity search using embeddings.
+
+        Uses ChromaDB HNSW index (O(log n)) when available,
+        falls back to numpy brute-force (O(n)).
+        """
+        self._ensure_vector_store()
+
+        # ChromaDB path: HNSW search
+        if self._use_chromadb and self._chroma_collection is not None:
+            count = self._chroma_collection.count()
+            if count == 0:
+                return []
+            emb_list = query_embedding.tolist() if hasattr(query_embedding, 'tolist') else list(query_embedding)
+            n_results = min(top_k, count)
+            try:
+                result = self._chroma_collection.query(
+                    query_embeddings=[emb_list],
+                    n_results=n_results
+                )
+                if not result or not result.get("ids") or not result["ids"][0]:
+                    return []
+                # ChromaDB cosine distance -> similarity: sim = 1 - distance
+                pairs = []
+                for nid, dist in zip(result["ids"][0], result["distances"][0]):
+                    similarity = 1.0 - dist
+                    pairs.append((nid, float(similarity)))
+                return pairs
+            except Exception:
+                pass  # fall through to numpy fallback
+
+        # Numpy brute-force fallback
+        if not HAS_NUMPY or not self._npz_embeddings:
             return []
 
         query_emb = np.array(query_embedding)
         results = []
 
-        for node_id, emb in self.embeddings.items():
+        for node_id, emb in self._npz_embeddings.items():
             dot = np.dot(query_emb, emb)
             norm = np.linalg.norm(query_emb) * np.linalg.norm(emb)
             if norm > 0:
@@ -824,7 +966,7 @@ class BrainSQLite:
 
         # 2. Embedding search (query + embedding vector)
         elif query_embedding is not None and HAS_NUMPY:
-            self._ensure_embeddings()
+            self._ensure_vector_store()
             seeds = self.search_by_embedding(query_embedding, top_k=5)
             seed_nodes = [node_id for node_id, _ in seeds]
 
@@ -1289,7 +1431,7 @@ class BrainSQLite:
         # node_labels and edges are removed by ON DELETE CASCADE
         conn.execute("DELETE FROM nodes WHERE id = ?", (node_id,))
         conn.commit()
-        self.embeddings.pop(node_id, None)
+        self._remove_embedding(node_id)
 
     def get_edges_by_type(self, edge_type: str) -> List[Tuple[str, str, Dict]]:
         """Return all edges of a specific type."""
@@ -1311,7 +1453,7 @@ class BrainSQLite:
     def get_stats(self) -> Dict:
         """Brain statistics."""
         conn = self._get_conn()
-        self._ensure_embeddings()
+        self._ensure_vector_store()
 
         node_count = conn.execute("SELECT COUNT(*) FROM nodes").fetchone()[0]
         edge_count = conn.execute("SELECT COUNT(*) FROM edges").fetchone()[0]
@@ -1345,11 +1487,12 @@ class BrainSQLite:
             "nodes": node_count,
             "edges": edge_count,
             "semantic_edges": semantic_edges,
-            "embeddings": len(self.embeddings),
+            "embeddings": self._embedding_count(),
             "by_label": label_counts,
             "by_edge_type": edge_type_counts,
             "weak_memories": weak_count,
-            "avg_degree": avg_degree
+            "avg_degree": avg_degree,
+            "vector_backend": "chromadb" if self._use_chromadb else "npz"
         }
 
     def number_of_nodes(self) -> int:
