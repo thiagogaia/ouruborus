@@ -126,6 +126,10 @@ def health_check(brain: Brain) -> dict:
     - 30% weak memory ratio (fewer weak = better)
     - 40% semantic connectivity (more semantic edges = better)
     - 30% embedding coverage
+
+    Also reports:
+    - Code coverage: number of Code nodes (Module, Class, Function, Interface)
+    - Diff enrichment: percentage of Commit nodes with diff_enriched_at
     """
     stats = brain.get_stats()
 
@@ -165,15 +169,50 @@ def health_check(brain: Brain) -> dict:
     else:
         status = "critical"
 
+    # Code coverage report
+    by_label = stats.get("by_label", {})
+    code_coverage = {
+        "modules": by_label.get("Module", 0),
+        "classes": by_label.get("Class", 0),
+        "functions": by_label.get("Function", 0),
+        "interfaces": by_label.get("Interface", 0),
+        "total_code_nodes": sum(by_label.get(l, 0) for l in ("Module", "Class", "Function", "Interface")),
+    }
+
+    # Diff enrichment report
+    commit_count = by_label.get("Commit", 0)
+    enriched_count = 0
+    if commit_count > 0:
+        try:
+            conn = brain._get_conn()
+            row = conn.execute(
+                """SELECT COUNT(*) AS cnt FROM nodes n
+                   JOIN node_labels nl ON n.id = nl.node_id
+                   WHERE nl.label = 'Commit'
+                   AND json_extract(n.properties, '$.diff_enriched_at') IS NOT NULL"""
+            ).fetchone()
+            enriched_count = row["cnt"] if row else 0
+        except Exception:
+            pass
+
+    diff_enrichment = {
+        "total_commits": commit_count,
+        "enriched_commits": enriched_count,
+        "enrichment_pct": round(enriched_count / commit_count * 100, 1) if commit_count > 0 else 0,
+    }
+
     return {
         **stats,
         "health_score": round(health_score, 2),
         "status": status,
-        "recommendations": get_recommendations(stats, health_score)
+        "code_coverage": code_coverage,
+        "diff_enrichment": diff_enrichment,
+        "recommendations": get_recommendations(stats, health_score, code_coverage, diff_enrichment)
     }
 
 
-def get_recommendations(stats: dict, health_score: float) -> list:
+def get_recommendations(stats: dict, health_score: float,
+                        code_coverage: dict = None, diff_enrichment: dict = None) -> list:
     """Gera recomendacoes baseadas no estado do cerebro."""
     recommendations = []
 
@@ -212,6 +251,25 @@ def get_recommendations(stats: dict, health_score: float) -> list:
             "type": "connections",
             "message": "Grafo pouco conectado. Rode 'sleep.py connect' ou adicione [[links]]."
         })
+
+    # Code coverage recommendations
+    if code_coverage:
+        total_code = code_coverage.get("total_code_nodes", 0)
+        if total_code == 0:
+            recommendations.append({
+                "type": "ast",
+                "message": "Nenhum Code node encontrado. Rode 'populate.py ast' para ingerir estrutura do codigo."
+            })
+
+    # Diff enrichment recommendations
+    if diff_enrichment:
+        pct = diff_enrichment.get("enrichment_pct", 0)
+        total_commits = diff_enrichment.get("total_commits", 0)
+        if total_commits > 0 and pct < 50:
+            recommendations.append({
+                "type": "diffs",
+                "message": f"Apenas {pct}% dos commits tem diff analysis. Rode 'populate.py diffs --unenriched' para enriquecer."
+            })
 
     if not recommendations:
         recommendations.append({

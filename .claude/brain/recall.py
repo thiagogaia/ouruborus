@@ -90,7 +90,12 @@ def search_brain(
             "commit": ["Commit"],
             "rule": ["Rule", "BusinessRule"],
             "person": ["Person"],
-            "experience": ["Episode", "Experience"]
+            "experience": ["Episode", "Experience"],
+            "code": ["Code", "Module", "Class", "Function", "Interface"],
+            "module": ["Module"],
+            "class": ["Class"],
+            "function": ["Function"],
+            "interface": ["Interface"],
         }
         labels = type_map.get(filter_type.lower(), [filter_type])
 
@@ -142,12 +147,16 @@ def search_brain(
         labels_list = item.get("labels", [])
 
         # Determinar tipo principal
-        type_priority = ["ADR", "Decision", "Pattern", "Concept", "Rule", "Episode", "Commit", "Person"]
+        type_priority = ["ADR", "Decision", "Pattern", "Concept", "Rule",
+                         "Function", "Class", "Interface", "Module",
+                         "Episode", "Commit", "Person"]
         item_type = "Memory"
         for t in type_priority:
             if t in labels_list:
                 item_type = t
                 break
+        if item_type == "Memory" and "Code" in labels_list:
+            item_type = "Code"
 
         # Get content from in-graph storage (brain-only architecture)
         node_content = props.get("content", "")

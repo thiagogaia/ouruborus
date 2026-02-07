@@ -640,6 +640,103 @@ def populate_commits(brain: Brain, max_commits: int = 7000) -> int:
     return count
 
 
+def populate_diffs(
+    brain: Brain,
+    max_commits: int = 20,
+    since: str = None,
+    unenriched_only: bool = False
+) -> int:
+    """Enrich existing Commit nodes with diff analysis.
+
+    Parses unified diffs for recent commits, classifies symbols and change shapes,
+    and appends structured summaries to Commit node content.
+
+    Args:
+        brain: Brain instance.
+        max_commits: Maximum number of commits to process.
+        since: Date filter (ISO format, e.g. "2025-01-01").
+        unenriched_only: If True, only process commits without diff_enriched_at.
+
+    Returns:
+        Number of commits enriched.
+    """
+    from diff_parser import get_commits_with_diffs, analyze_diff
+
+    print(f"Getting commits with diffs (max {max_commits})...")
+    commits = get_commits_with_diffs(max_commits=max_commits, since=since)
+    print(f"Found {len(commits)} commits with diffs")
+
+    enriched = 0
+    conn = brain._get_conn()
+
+    for commit_hash, subject, diff_text in commits:
+        short_hash = commit_hash[:8]
+
+        # Find matching Commit node by commit_hash prop
+        row = conn.execute(
+            "SELECT id, properties FROM nodes WHERE json_extract(properties, '$.commit_hash') = ?",
+            (short_hash,)
+        ).fetchone()
+
+        if not row:
+            continue
+
+        node_id = row["id"]
+        props = json.loads(row["properties"])
+
+        # Skip already enriched
+        if unenriched_only and props.get("diff_enriched_at"):
+            continue
+
+        # Analyze diff
+        try:
+            result = analyze_diff(diff_text)
+        except Exception as e:
+            print(f"  Error analyzing diff for {short_hash}: {e}")
+            continue
+
+        # Build enrichment data
+        diff_summary = result.summary_text
+        diff_stats = result.diff_stats
+        symbols_added = [f"{s.kind}:{s.name}" for s in result.symbols_added]
+        symbols_modified = [f"{s.kind}:{s.name}" for s in result.symbols_modified]
+        symbols_deleted = [f"{s.kind}:{s.name}" for s in result.symbols_deleted]
+        change_shape = result.change_shape
+
+        # Append to content
+        content_append = f"\n--- Diff Summary ---\nShape: {change_shape} ({diff_stats['files_changed']} files, +{diff_stats['insertions']} -{diff_stats['deletions']})"
+        if symbols_added:
+            content_append += f"\nAdded: {', '.join(symbols_added[:10])}"
+        if symbols_modified:
+            content_append += f"\nModified: {', '.join(symbols_modified[:10])}"
+        if symbols_deleted:
+            content_append += f"\nDeleted: {', '.join(symbols_deleted[:10])}"
+
+        # Update node
+        extra_props = {
+            "diff_summary": diff_summary,
+            "diff_stats": json.dumps(diff_stats),
+            "symbols_added": json.dumps(symbols_added),
+            "symbols_modified": json.dumps(symbols_modified),
+            "symbols_deleted": json.dumps(symbols_deleted),
+            "change_shape": change_shape,
+            "diff_enriched_at": datetime.now().isoformat(),
+        }
+
+        brain.update_node_content(
+            node_id=node_id,
+            content_append=content_append,
+            extra_props=extra_props,
+            regenerate_embedding=True
+        )
+
+        enriched += 1
+        if enriched % 50 == 0:
+            print(f"  Enriched {enriched} commits...")
+
+    return enriched
+
+
 def populate_experiences(brain: Brain) -> int:
     """[MIGRATION ONLY] Adiciona experiências ao cérebro como memória episódica."""
     exp_file = Path(".claude/knowledge/experiences/EXPERIENCE_LIBRARY.md")
@@ -689,18 +786,220 @@ def populate_experiences(brain: Brain) -> int:
     return count
 
 
+def populate_ast(
+    brain: Brain,
+    root_dir: str = ".",
+    languages: Optional[set] = None,
+    dry_run: bool = False
+) -> int:
+    """Ingest code structure via AST parsing into the brain.
+
+    Creates Code nodes (Module, Class, Function, Interface) and edges
+    (DEFINES, IMPORTS, INHERITS, IMPLEMENTS, MEMBER_OF).
+
+    Args:
+        brain: Brain instance.
+        root_dir: Root directory to scan.
+        languages: Optional set of languages to filter.
+        dry_run: If True, preview without writing to brain.
+
+    Returns:
+        Number of Code nodes created/updated.
+    """
+    from ast_parser import (
+        scan_directory, generate_node_id, generate_content_text,
+        ParseResult, ModuleInfo, ClassInfo, FunctionInfo, InterfaceInfo
+    )
+
+    # Get existing Module hashes for skip-on-rerun
+    existing_hashes = {}
+    conn = brain._get_conn()
+    rows = conn.execute(
+        """SELECT n.id, json_extract(n.properties, '$.file_path') AS fp,
+                  json_extract(n.properties, '$.body_hash') AS bh
+           FROM nodes n
+           JOIN node_labels nl ON n.id = nl.node_id
+           WHERE nl.label = 'Module'"""
+    ).fetchall()
+    for row in rows:
+        if row["fp"] and row["bh"]:
+            existing_hashes[row["fp"]] = row["bh"]
+
+    print(f"Scanning {root_dir}" + (f" (languages: {languages})" if languages else ""))
+    print(f"Existing modules with hashes: {len(existing_hashes)}")
+
+    results = scan_directory(root_dir, languages=languages, existing_hashes=existing_hashes)
+    print(f"Found {len(results)} files to process")
+
+    if dry_run:
+        for r in results:
+            print(f"  {r.module.file_path}: {r.module.symbol_count} symbols")
+        return 0
+
+    created = 0
+
+    for result in results:
+        mod = result.module
+        mod_id = generate_node_id(mod.file_path, mod.file_path, "Module")
+
+        # Module node
+        mod_content = generate_content_text(mod)
+        brain.add_memory(
+            title=f"Module: {Path(mod.file_path).stem}",
+            content=mod_content,
+            labels=["Code", "Module"],
+            author="@ast-parser",
+            props={
+                "file_path": mod.file_path,
+                "language": mod.language,
+                "line_count": mod.line_count,
+                "import_count": mod.import_count,
+                "symbol_count": mod.symbol_count,
+                "body_hash": mod.body_hash,
+            },
+            node_id=mod_id,
+        )
+        created += 1
+
+        # Class nodes
+        for cls in result.classes:
+            cls_id = generate_node_id(cls.file_path, cls.qualified_name, "Class")
+            cls_content = generate_content_text(cls)
+            brain.add_memory(
+                title=f"Class: {cls.qualified_name}",
+                content=cls_content,
+                labels=["Code", "Class"],
+                author="@ast-parser",
+                props={
+                    "file_path": cls.file_path,
+                    "language": cls.language,
+                    "name": cls.name,
+                    "qualified_name": cls.qualified_name,
+                    "line_start": cls.line_start,
+                    "line_end": cls.line_end,
+                    "docstring": cls.docstring,
+                    "base_classes": json.dumps(cls.base_classes),
+                    "detected_pattern": cls.detected_pattern,
+                },
+                node_id=cls_id,
+            )
+            created += 1
+
+            # DEFINES edge: Module -> Class
+            brain.add_edge(mod_id, cls_id, "DEFINES", 0.8)
+
+            # INHERITS edges
+            for base in cls.base_classes:
+                # Try to find base class node
+                base_row = conn.execute(
+                    "SELECT id FROM nodes WHERE json_extract(properties, '$.name') = ? "
+                    "AND id IN (SELECT node_id FROM node_labels WHERE label = 'Class')",
+                    (base,)
+                ).fetchone()
+                if base_row:
+                    brain.add_edge(cls_id, base_row["id"], "INHERITS", 0.7)
+
+        # Function nodes
+        for fn in result.functions:
+            fn_id = generate_node_id(fn.file_path, fn.qualified_name, "Function")
+            fn_content = generate_content_text(fn)
+            brain.add_memory(
+                title=f"Function: {fn.qualified_name}",
+                content=fn_content,
+                labels=["Code", "Function"],
+                author="@ast-parser",
+                props={
+                    "file_path": fn.file_path,
+                    "language": fn.language,
+                    "name": fn.name,
+                    "qualified_name": fn.qualified_name,
+                    "signature": fn.signature,
+                    "line_start": fn.line_start,
+                    "line_end": fn.line_end,
+                    "docstring": fn.docstring,
+                    "is_method": fn.is_method,
+                    "param_count": fn.param_count,
+                    "complexity_hint": fn.complexity_hint,
+                },
+                node_id=fn_id,
+            )
+            created += 1
+
+            if fn.is_method:
+                # MEMBER_OF edge: Function -> Class
+                # Find parent class by qualified_name prefix
+                parts = fn.qualified_name.rsplit('.', 1)
+                if len(parts) == 2:
+                    class_qn = parts[0]
+                    cls_row = conn.execute(
+                        "SELECT id FROM nodes WHERE json_extract(properties, '$.qualified_name') = ? "
+                        "AND id IN (SELECT node_id FROM node_labels WHERE label = 'Class')",
+                        (class_qn,)
+                    ).fetchone()
+                    if cls_row:
+                        brain.add_edge(fn_id, cls_row["id"], "MEMBER_OF", 0.8)
+            else:
+                # DEFINES edge: Module -> Function
+                brain.add_edge(mod_id, fn_id, "DEFINES", 0.8)
+
+        # Interface nodes
+        for iface in result.interfaces:
+            iface_id = generate_node_id(iface.file_path, iface.qualified_name, "Interface")
+            iface_content = generate_content_text(iface)
+            brain.add_memory(
+                title=f"Interface: {iface.qualified_name}",
+                content=iface_content,
+                labels=["Code", "Interface"],
+                author="@ast-parser",
+                props={
+                    "file_path": iface.file_path,
+                    "language": iface.language,
+                    "name": iface.name,
+                    "qualified_name": iface.qualified_name,
+                    "line_start": iface.line_start,
+                    "line_end": iface.line_end,
+                    "method_signatures": json.dumps(iface.method_signatures),
+                },
+                node_id=iface_id,
+            )
+            created += 1
+
+            # DEFINES edge: Module -> Interface
+            brain.add_edge(mod_id, iface_id, "DEFINES", 0.8)
+
+        # IMPORTS edges: Module -> Module (by import name)
+        for imp in mod.imports:
+            # Try to find imported module
+            imp_row = conn.execute(
+                """SELECT n.id FROM nodes n
+                   JOIN node_labels nl ON n.id = nl.node_id
+                   WHERE nl.label = 'Module'
+                   AND (json_extract(n.properties, '$.file_path') LIKE ? OR n.title LIKE ?)""",
+                (f"%{imp}%", f"Module: {imp}")
+            ).fetchone()
+            if imp_row and imp_row["id"] != mod_id:
+                brain.add_edge(mod_id, imp_row["id"], "IMPORTS", 0.5)
+
+        if created % 100 == 0 and created > 0:
+            print(f"  Created {created} Code nodes...")
+
+    return created
+
+
 def main():
     if len(sys.argv) < 2:
         print("Usage: populate.py <command> [args]")
         print("Commands:")
         print("  migrate          [ONE-TIME] Migrate content from disk to in-graph")
-        print("  refresh          Shortcut: commits + cross-refs only")
+        print("  refresh          Shortcut: commits + diffs + cross-refs")
         print("  all              Process everything (migration only)")
         print("  adrs             Process ADRs only (migration only)")
         print("  domain           Process domain concepts only (migration only)")
         print("  patterns         Process patterns only (migration only)")
         print("  experiences      Process experiences only (migration only)")
         print("  commits [N]      Process last N commits (default: 7000)")
+        print("  diffs            Enrich commits with diff analysis")
+        print("  ast [dir]        Ingest code structure via AST parsing")
         print("  stats            Show current brain stats")
         sys.exit(1)
 
@@ -727,7 +1026,7 @@ def main():
         return
 
     if cmd == "refresh":
-        # Shortcut: only commits + cross-refs (the only external source)
+        # Shortcut: commits + diff enrichment + cross-refs
         max_commits = 20
         if len(sys.argv) > 2:
             try:
@@ -735,9 +1034,17 @@ def main():
             except:
                 pass
 
-        print(f"\n=== Refresh: Commits (max {max_commits}) + Cross-Refs ===")
+        print(f"\n=== Refresh: Commits (max {max_commits}) + Diffs + Cross-Refs ===")
         count = populate_commits(brain, max_commits)
         print(f"Added {count} commits")
+
+        # Enrich new commits with diffs
+        print(f"\n=== Diff Enrichment ===")
+        try:
+            diff_count = populate_diffs(brain, max_commits=max_commits, unenriched_only=True)
+            print(f"Enriched {diff_count} commits with diff analysis")
+        except Exception as e:
+            print(f"Diff enrichment skipped: {e}")
 
         if count > 0:
             print(f"\n=== Cross-Reference Pass ===")
@@ -746,6 +1053,69 @@ def main():
 
         brain.save()
         print(json.dumps(brain.get_stats(), indent=2))
+        return
+
+    if cmd == "diffs":
+        # Parse CLI args for diffs
+        max_commits = 20
+        since = None
+        unenriched = False
+
+        i = 2
+        while i < len(sys.argv):
+            arg = sys.argv[i]
+            if arg == "--since" and i + 1 < len(sys.argv):
+                since = sys.argv[i + 1]
+                i += 2
+            elif arg == "--max" and i + 1 < len(sys.argv):
+                try:
+                    max_commits = int(sys.argv[i + 1])
+                except ValueError:
+                    pass
+                i += 2
+            elif arg == "--unenriched":
+                unenriched = True
+                i += 1
+            else:
+                try:
+                    max_commits = int(arg)
+                except ValueError:
+                    pass
+                i += 1
+
+        print(f"\n=== Diff Enrichment (max {max_commits}" +
+              (f", since {since}" if since else "") +
+              (", unenriched only" if unenriched else "") + ") ===")
+        count = populate_diffs(brain, max_commits=max_commits, since=since, unenriched_only=unenriched)
+        print(f"Enriched {count} commits")
+        brain.save()
+        print(json.dumps(brain.get_stats(), indent=2))
+        return
+
+    if cmd == "ast":
+        # Parse CLI args for ast
+        root_dir = "."
+        languages = None
+        dry_run = "--dry-run" in sys.argv
+
+        args = [a for a in sys.argv[2:] if not a.startswith('--')]
+        if args:
+            root_dir = args[0]
+
+        for i, a in enumerate(sys.argv):
+            if a == '--lang' and i + 1 < len(sys.argv):
+                lang_filter = sys.argv[i + 1].split(',')
+                short_map = {'py': 'python', 'js': 'javascript', 'ts': 'typescript', 'rb': 'ruby'}
+                languages = {short_map.get(l, l) for l in lang_filter}
+
+        print(f"\n=== AST Ingestion ({root_dir})" +
+              (f" [languages: {languages}]" if languages else "") +
+              (" [DRY RUN]" if dry_run else "") + " ===")
+        count = populate_ast(brain, root_dir=root_dir, languages=languages, dry_run=dry_run)
+        print(f"Created {count} Code nodes")
+        if not dry_run:
+            brain.save()
+            print(json.dumps(brain.get_stats(), indent=2))
         return
 
     total = 0

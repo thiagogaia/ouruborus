@@ -224,7 +224,8 @@ def phase_connect(brain: Brain) -> Dict:
     - SAME_SCOPE: Commit <-> Commit with same scope
     - MODIFIES_SAME: Commit <-> Commit that touch same files
     """
-    stats = {"references": 0, "informed_by": 0, "applies": 0, "same_scope": 0, "modifies_same": 0}
+    stats = {"references": 0, "informed_by": 0, "applies": 0, "same_scope": 0,
+             "modifies_same": 0, "commit_module": 0, "commit_symbol": 0}
     all_nodes = brain.get_all_nodes()
 
     def _create_ref_edge(source_nid, source_labels, target_nid):
@@ -314,6 +315,81 @@ def phase_connect(brain: Brain) -> Dict:
                                    props={"file": filepath})
                     stats["modifies_same"] += 1
 
+    # Pass 4: Commit → Module via file paths
+    # For each Commit with files list, connect to Module nodes with matching file_path
+    if hasattr(brain, '_get_conn'):
+        conn = brain._get_conn()
+        # Get all Module nodes with file_path
+        module_rows = conn.execute(
+            """SELECT n.id, json_extract(n.properties, '$.file_path') AS fp
+               FROM nodes n
+               JOIN node_labels nl ON n.id = nl.node_id
+               WHERE nl.label = 'Module' AND fp IS NOT NULL"""
+        ).fetchall()
+        module_by_path = {}
+        for row in module_rows:
+            if row["fp"]:
+                module_by_path[row["fp"]] = row["id"]
+
+        if module_by_path:
+            for nid, ndata in all_nodes.items():
+                if "Commit" not in ndata.get("labels", []):
+                    continue
+                files = ndata.get("props", {}).get("files", [])
+                if not isinstance(files, list):
+                    continue
+                for fpath in files:
+                    mod_id = module_by_path.get(fpath)
+                    if mod_id and not brain.has_edge(nid, mod_id, "MODIFIES_SAME"):
+                        brain.add_edge(nid, mod_id, "MODIFIES_SAME", 0.5,
+                                       props={"file": fpath})
+                        stats["commit_module"] += 1
+
+    # Pass 5: Commit → Function/Class via diff symbols
+    # For each Commit with symbols_modified/symbols_added, connect to Code nodes by name
+    if hasattr(brain, '_get_conn'):
+        conn = brain._get_conn()
+        # Get all Code nodes with name prop
+        code_rows = conn.execute(
+            """SELECT n.id, json_extract(n.properties, '$.name') AS name,
+                      (SELECT GROUP_CONCAT(nl.label) FROM node_labels nl WHERE nl.node_id = n.id) AS labels_str
+               FROM nodes n
+               JOIN node_labels nl ON n.id = nl.node_id
+               WHERE nl.label IN ('Function', 'Class') AND name IS NOT NULL"""
+        ).fetchall()
+        code_by_name: Dict[str, List[str]] = defaultdict(list)
+        for row in code_rows:
+            if row["name"]:
+                code_by_name[row["name"]].append(row["id"])
+
+        if code_by_name:
+            for nid, ndata in all_nodes.items():
+                if "Commit" not in ndata.get("labels", []):
+                    continue
+                props = ndata.get("props", {})
+
+                # Parse JSON lists from props
+                sym_lists = []
+                for key in ("symbols_added", "symbols_modified", "symbols_deleted"):
+                    raw = props.get(key)
+                    if raw:
+                        try:
+                            parsed = json.loads(raw) if isinstance(raw, str) else raw
+                            if isinstance(parsed, list):
+                                sym_lists.extend(parsed)
+                        except (json.JSONDecodeError, TypeError):
+                            pass
+
+                for sym_str in sym_lists:
+                    # sym_str format: "kind:name"
+                    parts = sym_str.split(':', 1)
+                    name = parts[1] if len(parts) > 1 else parts[0]
+                    code_ids = code_by_name.get(name, [])
+                    for code_id in code_ids[:2]:  # max 2 matches per symbol
+                        if not brain.has_edge(nid, code_id, "MODIFIES"):
+                            brain.add_edge(nid, code_id, "MODIFIES", 0.7)
+                            stats["commit_symbol"] += 1
+
     return stats
 
 
@@ -381,6 +457,36 @@ def phase_relate(brain: Brain, threshold: float = 0.75) -> Dict:
     if emb_vectors:
         stats["method"] = "embeddings"
         node_ids = [nid for nid in candidate_ids if nid in emb_vectors]
+
+        # Stratified sampling: ensure all label types are represented
+        if len(node_ids) > 500:
+            import random
+            # Group by label type
+            label_groups: Dict[str, List[str]] = defaultdict(list)
+            for nid in node_ids:
+                ndata = all_nodes.get(nid, {})
+                labels = ndata.get("labels", [])
+                primary = labels[0] if labels else "Unknown"
+                label_groups[primary].append(nid)
+
+            # Stratified sample: min 10 per type, proportional to total, cap at 500
+            sampled = []
+            total_budget = 500
+            min_per_type = 10
+            # First: guarantee minimum per type
+            for label_type, nids_in_type in label_groups.items():
+                random.shuffle(nids_in_type)
+                take = min(min_per_type, len(nids_in_type))
+                sampled.extend(nids_in_type[:take])
+            # Then: fill remaining proportionally
+            remaining = total_budget - len(sampled)
+            sampled_set = set(sampled)
+            if remaining > 0:
+                unsampled = [nid for nid in node_ids if nid not in sampled_set]
+                random.shuffle(unsampled)
+                sampled.extend(unsampled[:remaining])
+            node_ids = list(dict.fromkeys(sampled))  # deduplicate, preserve order
+            stats["sampled"] = len(node_ids)
 
         if len(node_ids) >= 2:
             # Build matrix

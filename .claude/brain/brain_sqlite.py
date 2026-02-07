@@ -493,12 +493,19 @@ class BrainSQLite:
         author: str,
         props: Dict[str, Any] = None,
         references: List[str] = None,
-        embedding: Any = None
+        embedding: Any = None,
+        node_id: str = None
     ) -> str:
-        """Add a new memory to the brain. Same API as Brain.add_memory()."""
-        # Deterministic ID: md5(title|labels) for dedup
-        id_source = f"{title}|{'|'.join(sorted(labels))}"
-        node_id = hashlib.md5(id_source.encode()).hexdigest()[:8]
+        """Add a new memory to the brain. Same API as Brain.add_memory().
+
+        Args:
+            node_id: Optional explicit node ID (e.g. 16-char hex for Code nodes).
+                     If None, uses deterministic md5(title|labels)[:8].
+        """
+        # Deterministic ID: md5(title|labels) for dedup, or explicit
+        if node_id is None:
+            id_source = f"{title}|{'|'.join(sorted(labels))}"
+            node_id = hashlib.md5(id_source.encode()).hexdigest()[:8]
         now = datetime.now().isoformat()
 
         # Upsert: if node already exists, update
@@ -621,6 +628,70 @@ class BrainSQLite:
 
         return node_id
 
+    def update_node_content(
+        self,
+        node_id: str,
+        content_append: str = None,
+        extra_props: Dict[str, Any] = None,
+        regenerate_embedding: bool = False
+    ) -> bool:
+        """Update an existing node's content and/or properties.
+
+        Used by diff enrichment to append diff summary to Commit nodes
+        and by AST updates. Merges extra_props into existing properties.
+
+        Args:
+            node_id: ID of the node to update.
+            content_append: Text to append to existing content.
+            extra_props: Properties to merge into existing properties.
+            regenerate_embedding: If True, regenerate embedding after update.
+
+        Returns:
+            True if node was updated, False if node not found.
+        """
+        conn = self._get_conn()
+        row = conn.execute("SELECT properties FROM nodes WHERE id = ?", (node_id,)).fetchone()
+        if row is None:
+            return False
+
+        existing_props = json.loads(row["properties"])
+
+        # Append content
+        if content_append:
+            old_content = existing_props.get("content", "")
+            existing_props["content"] = f"{old_content}\n\n{content_append}".strip()
+            existing_props["summary"] = self._generate_summary(existing_props["content"])
+
+        # Merge extra props
+        if extra_props:
+            for k, v in extra_props.items():
+                existing_props[k] = v
+
+        existing_props["last_accessed"] = datetime.now().isoformat()
+
+        conn.execute(
+            "UPDATE nodes SET properties = ? WHERE id = ?",
+            (json.dumps(existing_props, default=str), node_id)
+        )
+        conn.commit()
+
+        # Regenerate embedding
+        if regenerate_embedding:
+            title = existing_props.get("title", "")
+            content = existing_props.get("content", "")
+            labels = self._get_labels(node_id)
+            embedding = self._generate_embedding(title, content, labels)
+            if embedding is not None:
+                emb_metadata = {
+                    "labels": ",".join(labels),
+                    "author": existing_props.get("author", ""),
+                    "created_at": existing_props.get("created_at", ""),
+                    "title": title[:200] if title else "",
+                }
+                self._store_embedding(node_id, embedding, metadata=emb_metadata)
+
+        return True
+
     def add_edge(
         self,
         source: str,
@@ -706,7 +777,10 @@ class BrainSQLite:
 
     def _get_decay_rate(self, labels: List[str]) -> float:
         """Decay rate per memory type."""
-        if "Decision" in labels:
+        code_labels = {"Code", "Module", "Class", "Function", "Interface"}
+        if code_labels & set(labels):
+            return 0.001  # Code structure changes slowly
+        elif "Decision" in labels:
             return 0.001
         elif "Pattern" in labels:
             return 0.005
@@ -1330,10 +1404,13 @@ class BrainSQLite:
     def _primary_type(labels: List[str]) -> str:
         """Determine the primary type from a list of labels."""
         priority = ["ADR", "Decision", "Pattern", "Concept", "Rule",
+                     "Function", "Class", "Interface", "Module",
                      "Episode", "Commit", "BugFix", "Experience", "Person"]
         for t in priority:
             if t in labels:
                 return t
+        if "Code" in labels:
+            return "Code"
         return "Memory"
 
     def expand_nodes(self, node_ids: List[str]) -> List[Dict]:

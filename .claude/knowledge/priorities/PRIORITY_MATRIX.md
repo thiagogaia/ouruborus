@@ -1,5 +1,5 @@
 # Priority Matrix
-> Ultima atualizacao: 2026-02-07 (bump v3→v4)
+> Ultima atualizacao: 2026-02-07 (audit completo do codebase)
 > ICE = (Impacto x Confianca) / Esforco - todos 1-10
 
 ## Ativas
@@ -12,6 +12,20 @@
 
 | # | Tarefa | I | C | E | ICE | Notas |
 |---|--------|---|---|---|-----|-------|
+| 11 | Limpar 6 orphans no manifest.json | 8 | 10 | 1 | 80.0 | Componentes fantasma quebram ativação |
+| 13 | requirements.txt / pyproject.toml | 7 | 10 | 1 | 70.0 | Deps só no .venv, CI não reproduz |
+| 17 | Fix Flask no setup.sh (1 linha) | 5 | 10 | 1 | 50.0 | Detecta no Python mas não mostra no setup |
+| 21 | Comando /help (discovery de commands) | 7 | 9 | 2 | 31.5 | Usuário novo não sabe o que existe |
+| 22 | Makefile com targets (test, validate, lint) | 5 | 9 | 2 | 22.5 | Sem runner local padronizado |
+| 14 | Brain prune + vacuum (hard delete Archived) | 6 | 8 | 3 | 16.0 | Decay marca mas nunca remove — brain.db só cresce |
+| 18 | Template SvelteKit + sugestão | 5 | 8 | 3 | 13.3 | Detecta sveltekit mas não sugere nem tem template |
+| 24 | Remover silent failures setup.sh (2>/dev/null) | 5 | 8 | 3 | 13.3 | Erros reais são engolidos |
+| 12 | Testes para genesis scripts (analyze, validate, generate, register) | 8 | 8 | 5 | 12.8 | 0 testes pro motor de geração |
+| 23 | Cross-platform setup.sh (detectar OS antes de apt-get) | 6 | 7 | 4 | 10.5 | Quebra em Alpine, RHEL, Fedora |
+| 19 | Template Fastify (hoje cai no Express) | 4 | 7 | 3 | 9.3 | Fastify != Express, padrões diferentes |
+| 20 | Template Nuxt (hoje cai no Vue genérico) | 4 | 7 | 3 | 9.3 | Nuxt tem SSR, useFetch — não é Vue puro |
+| 15 | Brain backup automatizado com rotação | 5 | 7 | 4 | 8.8 | Sem backup, sleep bugado corrompe tudo |
+| 16 | Brain merge entre projetos (import seletivo) | 6 | 5 | 7 | 4.3 | Hoje só copia tudo, sem filtro |
 | 10 | Métricas de uso agregadas | 4 | 5 | 7 | 2.9 | Futuro |
 
 ## Cemitério
