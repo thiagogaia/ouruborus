@@ -4,7 +4,7 @@
 Idioma padrão: Português brasileiro. Código e commits em inglês.
 
 ## Princípio Central: Auto-Alimentação (Ouroboros)
-Este projeto usa Engram v3.0.0 — um sistema metacircular de retroalimentação com cérebro organizacional.
+Este projeto usa Engram v4.0.0 — um sistema metacircular de retroalimentação com cérebro organizacional.
 Toda decisão, padrão, erro corrigido ou insight DEVE ser registrado **direto no cérebro** via `brain.add_memory()`.
 O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposenta o inútil.
 

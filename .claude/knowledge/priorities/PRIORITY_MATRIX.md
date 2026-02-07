@@ -1,5 +1,5 @@
 # Priority Matrix
-> Ultima atualizacao: 2026-02-06 (/learn sessao 10 — ChromaDB pipeline hardening)
+> Ultima atualizacao: 2026-02-07 (bump v3→v4)
 > ICE = (Impacto x Confianca) / Esforco - todos 1-10
 
 ## Ativas
@@ -62,6 +62,7 @@
 | Fix ghost brain.db path bug | ✅ Concluído — Path(__file__).parent em 4 scripts | 2026-02-06 |
 | Fix 5+1 parser bugs populate.py | ✅ Concluído — 227→331 nós, 0 dados perdidos | 2026-02-06 |
 | Migrar vector store para ChromaDB | ✅ Concluído — HNSW O(log n), fallback npz, 227 tests | 2026-02-06 |
+| Bump Engram v3→v4 | ✅ Concluído — 11 arquivos, ADR-023, Milestone v4.0.0 | 2026-02-07 |
 
 ## Como Priorizar
 

@@ -2,7 +2,7 @@
   <img src="logo.svg" width="180" alt="Engram"/>
 </p>
 
-<h1 align="center">Ouroborus v3</h1>
+<h1 align="center">Ouroborus v4</h1>
 
 <p align="center">
   <strong>Self-evolving persistent memory for Claude Code.</strong><br/>
@@ -10,7 +10,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/version-3.0.0-6366f1?style=flat-square" alt="Version"/>
+  <img src="https://img.shields.io/badge/version-4.0.0-6366f1?style=flat-square" alt="Version"/>
   <img src="https://img.shields.io/badge/brain-organizational-8b5cf6?style=flat-square" alt="Brain"/>
   <img src="https://img.shields.io/badge/seeds-6-a78bfa?style=flat-square" alt="Seeds"/>
   <img src="https://img.shields.io/badge/license-MIT-green?style=flat-square" alt="License"/>
@@ -28,19 +28,20 @@ Ouroborus transforms Claude Code into an agent that **learns from each session**
 |---------|----------|-------------|
 | v1 | Fixed | Static skills, manual evolution |
 | v2 | Metacircular | Self-generating skills with genesis/evolution engines |
-| **v3** | **Brain** | **Organizational memory with knowledge graph + embeddings** |
+| v3 | Brain | Organizational memory with knowledge graph + embeddings |
+| **v4** | **Brain-Only** | **SQLite graph + ChromaDB vectors + sleep consolidation** |
 
-### v2 → v3: What changed
+### v3 → v4: What changed
 
-| Aspect | v2 | v3 (with brain) |
-|--------|----|--------------------|
-| Memory | Knowledge files only | **Knowledge graph + embeddings** |
-| Search | Manual file reading | **Semantic search with /recall** |
-| Recall | None | **Spreading activation retrieval** |
-| Forgetting | None | **Ebbinghaus decay curve** |
-| Consolidation | None | **Automatic connection strengthening** |
-| Multi-project | One at a time | **Batch install via batch-setup.sh** |
-| Seeds | 6 | **6 seeds + 3 specialist agents** |
+| Aspect | v3 | v4 |
+|--------|----|----|
+| Storage | graph.json + embeddings.npz | **SQLite v2 + ChromaDB** |
+| Knowledge files | Actively updated | **Genesis-only (brain is source)** |
+| Embeddings | Batch (embeddings.py build) | **Inline (add_memory auto-embeds)** |
+| Consolidation | Manual cognitive.py | **Automatic 8-phase sleep cycle** |
+| Insights | Reported in stats | **Persistent graph nodes** |
+| Search | Semantic only | **Hybrid (semantic + keyword)** |
+| Display | Full output | **Progressive disclosure** |
 
 ## How it works
 
@@ -143,14 +144,14 @@ The brain in `.claude/brain/` is a **knowledge graph** with semantic search capa
 
 ```
 brain/
-├── brain.py          # Core (NetworkX graph + operations)
-├── embeddings.py     # Semantic search (sentence-transformers)
-├── cognitive.py      # Processes: consolidate, decay, archive
-├── recall.py         # Query interface
-├── populate.py       # Populate from existing data
-├── graph.json        # Serialized graph (nodes + edges)
-├── embeddings.npz    # Embedding vectors
-└── cognitive-log.jsonl  # Audit log
+├── brain_sqlite.py        # SQLite v2 property graph
+├── embeddings.py          # ChromaDB vector store
+├── sleep.py               # 8-phase consolidation cycle
+├── cognitive.py           # Health check, decay
+├── recall.py              # Hybrid search interface
+├── populate.py            # Populate from git/knowledge
+├── brain.db               # SQLite database
+└── chromadb/              # ChromaDB vector store
 ```
 
 ### Memory Types
@@ -196,13 +197,14 @@ your-project/
     ├── manifest.json                  # Component registry + metrics
     ├── settings.json                  # Permissions
     │
-    ├── brain/                         # 🧠 Organizational Brain (v3)
-    │   ├── brain.py                   #    Graph operations
-    │   ├── embeddings.py              #    Semantic search
-    │   ├── cognitive.py               #    Decay, consolidate, archive
-    │   ├── recall.py                  #    Query interface
-    │   ├── graph.json                 #    Knowledge graph
-    │   └── embeddings.npz             #    Vector embeddings
+    ├── brain/                         # 🧠 Organizational Brain (v4)
+    │   ├── brain_sqlite.py            #    SQLite v2 property graph
+    │   ├── embeddings.py              #    ChromaDB vector store
+    │   ├── sleep.py                   #    8-phase consolidation
+    │   ├── cognitive.py               #    Health check, decay
+    │   ├── recall.py                  #    Hybrid search interface
+    │   ├── brain.db                   #    SQLite database
+    │   └── chromadb/                  #    ChromaDB vectors
     │
     ├── memory/                        # 📝 Memories (markdown)
     │   ├── episodes/                  #    Commits, events
@@ -303,7 +305,7 @@ extras/
 
 ## Architectural Inspirations
 
-Engram v3 combines ideas from three research projects:
+Engram v4 combines ideas from three research projects:
 
 | Project | Concept | Implementation in Engram |
 |---------|---------|-------------------------|

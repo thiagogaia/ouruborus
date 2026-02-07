@@ -7,9 +7,23 @@ This project adheres to [Semantic Versioning](https://semver.org/).
 
 Only changes to `core/` are tracked here — the source of truth for all Engram installations.
 
-## [Unreleased]
+## [4.0.0] - 2026-02-07
+
+### Breaking Changes
+- JSON graph backend removed — SQLite v2 is the sole backend
+- Knowledge files (CURRENT_STATE, ADR_LOG, PATTERNS, DOMAIN, EXPERIENCE_LIBRARY) are genesis-only
+- `schemas/` renamed to `dna/` across source and install paths
+- Brain is the single source of truth (brain-only architecture)
 
 ### Added
+- SQLite v2 hybrid property graph with normalized labels
+- ChromaDB as primary vector store (numpy fallback)
+- 8-phase sleep cycle: connect, relate, themes, calibrate, promote, insights, gaps, decay
+- Inline embeddings generated during add_memory()
+- Hybrid search (semantic + keyword fusion) in recall.py
+- Progressive disclosure with compact/expand modes
+- Persistent Insight and GapSuggestion nodes in sleep cycle
+- Batch queries and 6 search optimizations in brain_sqlite
 - Temporal recall: `--recent`, `--since`, `--sort` flags in recall.py (`28734fe`)
 - `/commit` command now auto-updates CHANGELOG.md when core/ changes (`1e72d29`)
 
@@ -32,6 +46,8 @@ Only changes to `core/` are tracked here — the source of truth for all Engram 
 - `populate.py` parsers: ADR compact format, Anti-Padrões regex, domain entities/constraints, multi-section patterns (`de4a449`)
 - CWD-relative path bug in brain scripts creating ghost `.claude/brain/.claude/` directory (`de4a449`)
 - VERSION file is now the single source of truth for Engram version (`3d7905a`)
+
+## [Unreleased]
 
 ## [3.0.0] - 2026-02-03
 

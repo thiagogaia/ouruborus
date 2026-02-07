@@ -2,7 +2,7 @@
 set -euo pipefail
 
 # ═══════════════════════════════════════════════════════════════
-# 🐍 Engram v3 — Auto-Installer (Metacircular)
+# 🐍 Engram v4 — Auto-Installer (Metacircular)
 #    Sistema de memória persistente para Claude Code
 #    Com Cérebro Organizacional (grafo + embeddings)
 # ═══════════════════════════════════════════════════════════════
@@ -13,7 +13,7 @@ set -euo pipefail
 #   ./setup.sh --update /proj   → atualiza core sem tocar knowledge
 #   ./setup.sh --uninstall /proj → remove Engram
 #
-# O que faz (v3 — com cérebro organizacional):
+# O que faz (v4 — brain-only architecture):
 #   1. Detecta a stack do projeto automaticamente
 #   2. Instala o DNA + Genesis (motor de auto-geração)
 #   3. Instala seeds universais + Evolution (motor de evolução)
@@ -148,7 +148,7 @@ detect_stack() {
         echo "$PKG" | grep -q '"vue"' && [[ -z "$FRAMEWORK" ]] && FRAMEWORK="vue"
         echo "$PKG" | grep -q '"react"' && [[ -z "$FRAMEWORK" ]] && FRAMEWORK="react"
         echo "$PKG" | grep -q '"express"' && [[ -z "$FRAMEWORK" ]] && FRAMEWORK="express"
-        [[ "$FRAMEWORK" == "nextjs" ]] && FRAMEWORK_VERSION=$(echo "$PKG" | grep -oP '"next":\s*"[^"]*"' | grep -oP '[\d.]+' | head -1) || true
+        [[ "$FRAMEWORK" == "nextjs" ]] && FRAMEWORK_VERSION=$(echo "$PKG" | sed -n 's/.*"next"[[:space:]]*:[[:space:]]*"\([^"]*\)".*/\1/p' | sed 's/[\^~>=<]//g' | head -1) || true
     fi
     if $LANG_PHP && [[ -f "$TARGET_DIR/composer.json" ]]; then
         COMPOSER=$(cat "$TARGET_DIR/composer.json")
@@ -228,7 +228,10 @@ install_core() {
     # 4. Seeds (skills universais) — if they exist
     if [[ -d "$SCRIPT_DIR/core/seeds" ]]; then
         for seed in "$SCRIPT_DIR/core/seeds"/*/; do
-            [[ -d "$seed" ]] && cp -r "$seed" "$CLAUDE_DIR/skills/"
+            [[ -d "$seed" ]] || continue
+            local SEED_NAME
+            SEED_NAME=$(basename "$seed")
+            cp -r "${seed%/}" "$CLAUDE_DIR/skills/$SEED_NAME"
         done
         print_done "Seeds universais instalados"
     fi
@@ -260,7 +263,7 @@ install_core() {
         mkdir -p "$(dirname "$DEST")"
         if [[ ! -f "$DEST" ]]; then
             sed "s/\${DATE}/$TODAY/g" "$tmpl" > "$DEST"
-            ((TMPL_COUNT++))
+            ((TMPL_COUNT++)) || true
         fi
     done < <(find "$SCRIPT_DIR/templates/knowledge" -name "*.tmpl" -type f)
     print_done "Knowledge templates inicializados ($TMPL_COUNT arquivos)"
@@ -866,7 +869,7 @@ do_update() {
                 fi
             fi
 
-            cp -r "$seed" "$CLAUDE_DIR/skills/"
+            cp -r "${seed%/}" "$CLAUDE_DIR/skills/$SEED_NAME"
         done
         print_done "Seeds atualizados"
         for warn in "${SEED_WARNINGS[@]:-}"; do

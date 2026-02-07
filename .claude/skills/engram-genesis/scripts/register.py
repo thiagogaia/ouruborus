@@ -17,7 +17,7 @@ import sys
 from datetime import datetime
 
 
-DEFAULT_VERSION = "3.0.0"
+DEFAULT_VERSION = "4.0.0"
 
 
 def get_engram_version(project_dir: str = ".") -> str:
