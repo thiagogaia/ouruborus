@@ -173,6 +173,17 @@ def detect_stack(project_dir: str) -> dict:
             except (json.JSONDecodeError, KeyError):
                 pass
 
+    # Ruby frameworks (from Gemfile)
+    if "ruby" in stack["languages"]:
+        gemfile_path = p / "Gemfile"
+        if gemfile_path.exists():
+            try:
+                gemfile_text = gemfile_path.read_text()
+                if "rails" in gemfile_text or "railties" in gemfile_text:
+                    stack["framework"] = "rails"
+            except Exception:
+                pass
+
     # Python frameworks
     if "python" in stack["languages"]:
         if (p / "manage.py").exists():
@@ -273,6 +284,12 @@ def suggest_components(stack: dict) -> dict:
         suggestions["skills"].append({
             "name": "laravel-patterns",
             "reason": "Laravel detected — Eloquent, Form Requests, Services, Queues",
+            "priority": "high",
+        })
+    elif fw == "rails":
+        suggestions["skills"].append({
+            "name": "rails-patterns",
+            "reason": "Rails detected — ActiveRecord, Services, Jobs, Strong Parameters patterns",
             "priority": "high",
         })
     elif fw == "flask":

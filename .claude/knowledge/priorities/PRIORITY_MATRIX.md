@@ -12,8 +12,6 @@
 
 | # | Tarefa | I | C | E | ICE | Notas |
 |---|--------|---|---|---|-----|-------|
-| 8 | Template Ruby on Rails | 4 | 6 | 4 | 6.0 | Baixa demanda |
-| 9 | CI/CD para validar schemas | 5 | 7 | 6 | 5.8 | Nice to have |
 | 10 | Métricas de uso agregadas | 4 | 5 | 7 | 2.9 | Futuro |
 
 ## Cemitério
@@ -63,6 +61,8 @@
 | Bump Engram v3→v4 | ✅ Concluído — 11 arquivos, ADR-023, Milestone v4.0.0 | 2026-02-07 |
 | Adicionar template Laravel | ✅ Já existia — laravel-patterns.skill.tmpl criado em 2026-02-04 | 2026-02-07 |
 | Template Angular | ✅ Concluído — angular-patterns.skill.tmpl | 2026-02-07 |
+| Template Ruby on Rails | ✅ Concluído — rails-patterns.skill.tmpl + detecção | 2026-02-07 |
+| CI/CD para validar schemas | ✅ Concluído — .github/workflows/validate.yml | 2026-02-07 |
 
 ## Como Priorizar
 

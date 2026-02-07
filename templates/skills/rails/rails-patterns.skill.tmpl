@@ -1,0 +1,77 @@
+---
+name: rails-patterns
+description: Padrões e boas práticas para Ruby on Rails. Use quando criar controllers,
+  models, migrations, services, jobs, mailers, ou configurar routing e
+  ActiveRecord. Também para troubleshooting de N+1 queries, callbacks,
+  concerns e background jobs.
+---
+
+# Rails Patterns
+
+## Arquitetura
+- **Thin controllers**: Recebem request, delegam para service/model, retornam response
+- Service objects para lógica de negócio complexa (`app/services/`)
+- Form objects para validações multi-model (`app/forms/`)
+- Query objects para queries complexas reutilizáveis (`app/queries/`)
+- Value objects para dados imutáveis sem identidade
+
+## Models e ActiveRecord
+- Validações no model, lógica de negócio em services
+- `scope` para queries reutilizáveis — preferir sobre class methods
+- `has_many` com `dependent:` explícito (`:destroy`, `:nullify`)
+- Enums com prefixo para evitar conflitos: `enum status: { active: 0, archived: 1 }`
+- Callbacks com cautela — preferir service objects para side effects complexos
+
+## Queries
+- `includes()` para eager loading (prevenir N+1)
+- `select()` para limitar colunas em queries pesadas
+- `find_each` / `in_batches` para processar registros em massa
+- `explain` para analisar queries lentas
+
+## Migrations
+- Uma migration por mudança (nunca editar migration aplicada)
+- `change` reversível sempre que possível
+- Índices explícitos para colunas filtradas e foreign keys
+- `add_reference` com `foreign_key: true`
+
+```ruby
+class CreateOrders < ActiveRecord::Migration[7.1]
+  def change
+    create_table :orders do |t|
+      t.references :user, null: false, foreign_key: true
+      t.string :status, null: false, default: "pending"
+      t.monetize :total
+      t.timestamps
+    end
+
+    add_index :orders, :status
+  end
+end
+```
+
+## Controllers e Routing
+- RESTful resources — 7 actions padrão, custom actions via `member`/`collection`
+- Strong parameters via `permit` — nunca `params.permit!`
+- `before_action` para autenticação e carregamento de recursos
+- Respond com status codes corretos (`:created`, `:unprocessable_entity`)
+
+## Background Jobs
+- ActiveJob para jobs assíncronos (email, processamento, APIs externas)
+- Sidekiq/GoodJob como backend — nunca o default async adapter em produção
+- Jobs idempotentes — devem ser seguros para retry
+- `perform_later` para enfileirar, `perform_now` só em testes
+
+## Testing
+- RSpec ou Minitest — model specs, request specs, system specs
+- FactoryBot para fixtures dinâmicas
+- `let` e `let!` para setup, `before` para side effects
+- Request specs sobre controller specs (mais realistas)
+
+## Regras
+- NUNCA coloque lógica de negócio em controllers — use services
+- SEMPRE use strong parameters — nunca `params.permit!`
+- SEMPRE adicione índices para foreign keys e colunas filtradas
+- NUNCA faça queries em loops — use `includes` ou `preload`
+- SEMPRE use background jobs para operações lentas
+- Prefer `frozen_string_literal: true` em todos os arquivos Ruby
+- NUNCA commite secrets — use Rails credentials ou env vars

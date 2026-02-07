@@ -154,6 +154,7 @@ detect_stack() {
         COMPOSER=$(cat "$TARGET_DIR/composer.json")
         echo "$COMPOSER" | grep -q '"laravel/framework"' && FRAMEWORK="laravel"
     fi
+    $LANG_RUBY && [[ -f "$TARGET_DIR/Gemfile" ]] && grep -q "rails\|railties" "$TARGET_DIR/Gemfile" 2>/dev/null && FRAMEWORK="rails"
     $LANG_PYTHON && [[ -f "$TARGET_DIR/manage.py" ]] && FRAMEWORK="django"
     $LANG_PYTHON && grep -ql "fastapi" "$TARGET_DIR/requirements.txt" 2>/dev/null && FRAMEWORK="fastapi"
 
