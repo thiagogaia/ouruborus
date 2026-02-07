@@ -1,0 +1,80 @@
+name: Validate Engram Components
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.claude/skills/**'
+      - '.claude/agents/**'
+      - '.claude/commands/**'
+      - '.claude/manifest.json'
+      - 'core/**'
+      - 'templates/**'
+      - 'tests/**'
+  pull_request:
+    branches: [main]
+
+jobs:
+  validate-components:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Validate skills
+        run: |
+          ERRORS=0
+          for skill_dir in .claude/skills/*/; do
+            if [[ -f "${skill_dir}SKILL.md" ]]; then
+              python3 core/genesis/scripts/validate.py --type skill --path "$skill_dir" || ERRORS=$((ERRORS + 1))
+            fi
+          done
+          if [[ $ERRORS -gt 0 ]]; then
+            echo "::error::$ERRORS skill(s) failed validation"
+            exit 1
+          fi
+
+      - name: Validate agents
+        run: |
+          ERRORS=0
+          for agent_file in .claude/agents/*.md; do
+            [[ -f "$agent_file" ]] || continue
+            python3 core/genesis/scripts/validate.py --type agent --path "$agent_file" || ERRORS=$((ERRORS + 1))
+          done
+          if [[ $ERRORS -gt 0 ]]; then
+            echo "::error::$ERRORS agent(s) failed validation"
+            exit 1
+          fi
+
+      - name: Validate commands
+        run: |
+          ERRORS=0
+          for cmd_file in .claude/commands/*.md; do
+            [[ -f "$cmd_file" ]] || continue
+            python3 core/genesis/scripts/validate.py --type command --path "$cmd_file" || ERRORS=$((ERRORS + 1))
+          done
+          if [[ $ERRORS -gt 0 ]]; then
+            echo "::error::$ERRORS command(s) failed validation"
+            exit 1
+          fi
+
+      - name: Validate manifest
+        run: python3 core/genesis/scripts/validate.py --type manifest --path .claude/manifest.json
+
+  brain-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install test dependencies
+        run: pip install pytest
+
+      - name: Run brain tests
+        run: pytest tests/ -v --tb=short
