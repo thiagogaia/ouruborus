@@ -1,5 +1,5 @@
 # Priority Matrix
-> Ultima atualizacao: 2026-02-08 (learn post ADR-024 setup cleanup)
+> Ultima atualizacao: 2026-02-08 (learn post instruction reframing)
 > ICE = (Impacto x Confianca) / Esforco - todos 1-10
 
 ## Ativas
@@ -81,6 +81,7 @@
 | Domain command promovido para core | ✅ Concluído — core/commands/domain.md, manifest source=core, setup 16 commands, gap ANALISE #4 resolvido | 2026-02-07 |
 | Documentação MANIFEST_JSON.md | ✅ Concluído — docs/MANIFEST_JSON.md criado com estrutura, ciclo de vida, consumidores, fluxo | 2026-02-07 |
 | Remover memory/, consolidated/, archive/ do setup (ADR-024) | ✅ Concluído — afc7ecd, docs/ANALISE_PASTAS_CLAUDE.md para auditoria | 2026-02-08 |
+| Reframing instruções: brain.add_memory() como única entrada | ✅ Concluído — CLAUDE.md, learn, knowledge-manager, init-engram, claude_cerebro_section | 2026-02-08 |
 
 ## Como Priorizar
 
