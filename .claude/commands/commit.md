@@ -12,15 +12,13 @@ corpo opcional explicando o "porquê"
 
 Tipos: feat, fix, refactor, docs, test, chore, style, perf, ci, build
 
-3. Apresente a mensagem proposta ao dev e pergunte se quer ajustar
-
-4. Execute:
+3. Execute diretamente (sem pedir confirmação):
 ```bash
 git add -A
 git commit -m "mensagem"
 ```
 
-5. **Atualizar CHANGELOG.md** se algum arquivo em `core/` foi modificado:
+4. **Atualizar CHANGELOG.md** se algum arquivo em `core/` foi modificado:
    - Leia o `CHANGELOG.md` da raiz
    - Adicione a mudança na seção `[Unreleased]`, na categoria correta:
      - **Added** — funcionalidade nova
@@ -36,7 +34,7 @@ git commit -m "mensagem"
      ```
    - Se nenhum arquivo em `core/` mudou, pular este passo
 
-6. Se a mudança é relevante para o knowledge, sugerir: "Quer rodar /learn para registrar?"
+5. Se a mudança é relevante para o knowledge, sugerir: "Quer rodar /learn para registrar?"
 
 ## Regras
 - Mensagem SEMPRE em inglês

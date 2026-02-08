@@ -52,6 +52,9 @@ Only changes to `core/` are tracked here — the source of truth for all Engram 
 ### Added
 - `/domain` command promoted to core (was runtime-only) (`8717b83`)
 
+### Changed
+- `/commit` executes directly without confirmation prompt (`9dc6698`)
+
 ## [3.0.0] - 2026-02-03
 
 ### Added
