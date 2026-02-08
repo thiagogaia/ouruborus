@@ -1026,7 +1026,7 @@ def main():
         return
 
     if cmd == "refresh":
-        # Shortcut: commits + diff enrichment + cross-refs
+        # Shortcut: commits + diff enrichment + AST incremental + cross-refs
         max_commits = 20
         if len(sys.argv) > 2:
             try:
@@ -1034,7 +1034,7 @@ def main():
             except:
                 pass
 
-        print(f"\n=== Refresh: Commits (max {max_commits}) + Diffs + Cross-Refs ===")
+        print(f"\n=== Refresh: Commits (max {max_commits}) + Diffs + AST + Cross-Refs ===")
         count = populate_commits(brain, max_commits)
         print(f"Added {count} commits")
 
@@ -1045,6 +1045,21 @@ def main():
             print(f"Enriched {diff_count} commits with diff analysis")
         except Exception as e:
             print(f"Diff enrichment skipped: {e}")
+
+        # Incremental AST — only if already initialized (Code nodes exist)
+        conn = brain._get_conn()
+        code_count = conn.execute(
+            "SELECT COUNT(*) AS cnt FROM node_labels WHERE label = 'Module'"
+        ).fetchone()["cnt"]
+        if code_count > 0:
+            print(f"\n=== AST Incremental ({code_count} modules tracked) ===")
+            try:
+                ast_count = populate_ast(brain, root_dir=".")
+                print(f"Updated {ast_count} Code nodes")
+            except Exception as e:
+                print(f"AST incremental skipped: {e}")
+        else:
+            print(f"\n=== AST Skipped (no Code nodes yet — run 'populate.py ast' first) ===")
 
         if count > 0:
             print(f"\n=== Cross-Reference Pass ===")
@@ -1156,6 +1171,24 @@ def main():
         count = populate_commits(brain, max_commits)
         print(f"Added {count} commits")
         total += count
+
+    if cmd == "all":
+        # AST ingestion — mandatory in full population (used by /init-engram)
+        print(f"\n=== Processing AST (full codebase) ===")
+        try:
+            ast_count = populate_ast(brain, root_dir=".")
+            print(f"Created {ast_count} Code nodes")
+            total += ast_count
+        except Exception as e:
+            print(f"AST ingestion failed: {e}")
+
+        # Enrich commits with diff analysis
+        print(f"\n=== Diff Enrichment ===")
+        try:
+            diff_count = populate_diffs(brain, max_commits=200, unenriched_only=True)
+            print(f"Enriched {diff_count} commits with diff analysis")
+        except Exception as e:
+            print(f"Diff enrichment skipped: {e}")
 
     if total > 0:
         # Second pass: cross-reference now that all nodes exist

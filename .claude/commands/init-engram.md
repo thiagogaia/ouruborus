@@ -183,6 +183,8 @@ Isso irá:
 - Extrair conceitos do DOMAIN.md (glossário, regras, entidades)
 - Extrair patterns do PATTERNS.md
 - Processar últimos 7000 commits do git (memória episódica)
+- **Ingerir estrutura do código via AST** (módulos, classes, funções, interfaces)
+- **Enriquecer commits com análise de diff** (símbolos adicionados/modificados, change shape)
 
 ### 5.3 Gerar Embeddings para Busca Semântica
 ```bash

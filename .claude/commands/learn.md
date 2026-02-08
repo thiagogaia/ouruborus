@@ -19,11 +19,16 @@ Reflita sobre a sessão:
 
 O cérebro em `.claude/brain/` é a **fonte primária de conhecimento**. Todo aprendizado vai direto para o grafo.
 
-### 3.1 Processar Novos Commits
+### 3.1 Processar Novos Commits + Diffs + AST Incremental
 
 ```bash
 python3 .claude/brain/populate.py refresh 20
 ```
+
+O refresh agora inclui automaticamente:
+- Novos commits como memoria episodica
+- Enriquecimento de diffs (simbolos adicionados/modificados, change shape)
+- **AST incremental** (apenas arquivos modificados, via body_hash skip) — so roda se AST ja foi inicializado
 
 ### 3.2 Registrar Conhecimento Direto no Grafo
 
