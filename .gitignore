@@ -24,13 +24,16 @@ CLAUDE.md.bak
 .DS_Store
 Thumbs.db
 
-# Brain SQLite (binary; graph.json is the git-friendly export)
+# Brain v4 (SQLite + ChromaDB) — fonte primária, binário, não versionado
 .claude/brain/brain.db
 .claude/brain/brain.db-wal
 .claude/brain/brain.db-shm
 
 # ChromaDB persistent storage (auto-generated, can be rebuilt from embeddings)
 .claude/brain/chroma/
+
+# Legacy v3 (graph.json) — cérebro não usa mais; manter ignorado se existir
+.claude/brain/graph.json
 
 # Environment
 .env

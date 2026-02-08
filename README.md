@@ -349,18 +349,28 @@ During `/learn`, the evolution skill:
 
 ## Brain Maintenance
 
-For long-running projects, configure periodic cognitive processes:
+**Fluxo principal:** `/learn` — rode ao fim de cada sessão (encode + sleep + health).
+
+**Para períodos sem /learn** (projeto ocioso, férias), use `maintain.sh` via cron:
 
 ```bash
 # Manual
-python3 .claude/brain/cognitive.py health      # Check brain health
-python3 .claude/brain/cognitive.py decay       # Run decay (daily)
-python3 .claude/brain/cognitive.py consolidate # Run consolidation (weekly)
+.claude/brain/maintain.sh health      # Check brain health
+.claude/brain/maintain.sh daily       # Run decay (daily)
+.claude/brain/maintain.sh weekly     # Run consolidation (weekly)
+.claude/brain/maintain.sh monthly    # Archive weak memories
+.claude/brain/maintain.sh full       # Full maintenance + commit (manual use)
 
-# Via cron (recommended)
-0 2 * * * cd /project && python3 .claude/brain/cognitive.py decay
-0 3 * * 0 cd /project && python3 .claude/brain/cognitive.py consolidate
+# Via cron (recommended when not running /learn regularly)
+0 2 * * * cd /project && .claude/brain/maintain.sh daily
+0 3 * * 0 cd /project && .claude/brain/maintain.sh weekly
 ```
+
+| Command | Purpose |
+|---------|---------|
+| `/learn` | Main flow — run at end of each session |
+| `maintain.sh` | Cron for idle periods (decay, consolidate, archive) |
+| `maintain.sh full` | Full maintenance for manual or infrequent use |
 
 ## .gitignore Guidance
 
@@ -368,8 +378,6 @@ python3 .claude/brain/cognitive.py consolidate # Run consolidation (weekly)
 
 ```
 # DO commit:
-.claude/brain/graph.json      # Knowledge graph
-.claude/brain/embeddings.npz  # Embeddings (use Git LFS for large files)
 .claude/memory/               # All memories
 .claude/knowledge/            # Knowledge files
 .claude/skills/               # All skills
@@ -377,7 +385,10 @@ python3 .claude/brain/cognitive.py consolidate # Run consolidation (weekly)
 .claude/commands/             # All commands
 .claude/manifest.json         # Registry
 
-# DON'T commit:
+# DON'T commit (v4 brain uses SQLite + ChromaDB, not graph.json):
+.claude/brain/brain.db        # SQLite database (binary)
+.claude/brain/chroma/         # ChromaDB vectors
+.claude/brain/graph.json      # Legacy v3, brain does not use
 .claude/brain/.venv/          # Python virtual environment
 .claude/brain/__pycache__/    # Python cache
 .claude.bak/                  # Installation backup
