@@ -379,9 +379,7 @@ MANIFEST_EOF
     # 10. Install brain (organizational memory)
     if [[ -d "$SCRIPT_DIR/.claude/brain" ]]; then
         mkdir -p "$CLAUDE_DIR/brain/state"
-        mkdir -p "$CLAUDE_DIR/memory"/{episodes,concepts,patterns,decisions,people,domains}
-        mkdir -p "$CLAUDE_DIR/consolidated"
-        mkdir -p "$CLAUDE_DIR/archive"
+        # memory/, consolidated/, archive/ — deprecated (ADR-024), removidas em v4.1
         cp "$SCRIPT_DIR/.claude/brain/"*.py "$CLAUDE_DIR/brain/" 2>/dev/null || true
         cp "$SCRIPT_DIR/.claude/brain/"*.sh "$CLAUDE_DIR/brain/" 2>/dev/null || true
         cp "$SCRIPT_DIR/.claude/brain/"*.md "$CLAUDE_DIR/brain/" 2>/dev/null || true
