@@ -128,9 +128,9 @@ your-project/
 | Problem | Fix |
 |---------|-----|
 | Brain feels slow or inaccurate | `/doctor` |
-| Brain corrupted | `python3 .claude/brain/populate.py all` |
-| Low health score | `python3 .claude/brain/sleep.py` |
-| Missing Python deps | `pip install -r .claude/brain/requirements.txt` |
+| Brain corrupted | `.claude/brain/.venv/bin/python3 .claude/brain/populate.py all` |
+| Low health score | `.claude/brain/.venv/bin/python3 .claude/brain/sleep.py` |
+| Missing Python deps | `source .claude/brain/.venv/bin/activate && pip install networkx numpy sentence-transformers chromadb pydantic-settings` |
 | Want to start fresh | `./setup.sh --uninstall . && ./setup.sh .` |
 
 ## 10. Going Deeper

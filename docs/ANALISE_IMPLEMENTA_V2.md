@@ -47,7 +47,7 @@ A autoconsciencia e **impressionante**. O projeto mantem:
 | 1 | **VERSION diz 2.0.0, .engram-version diz 3.0.0** | Alta | Arquivo `VERSION` na raiz nunca foi atualizado para 3.0.0 |
 | 2 | **`.claude/templates/skills/` nao existe** | Alta | O MEMORY.md diz que setup.sh copia templates para la, mas o diretorio staging nao foi criado |
 | 3 | **Comando `ingest` dessinc** | Media | `core/commands/ingest.md` existe, mas nao foi copiado para `.claude/commands/` |
-| 4 | **Comando `domain` dessinc** | Media | `.claude/commands/domain.md` existe (runtime), mas nao foi retroportado para `core/commands/` |
+| 4 | ~~**Comando `domain` dessinc**~~ | ~~Media~~ | **Resolvido:** domain.md promovido para core/commands/ (2026-02-07) |
 | 5 | **`base-ingester` seed nao instalado** | Media | Existe em `core/seeds/` mas falta em `.claude/skills/` |
 | 6 | **CURRENT_STATE referencia `templates/stacks/`** | Baixa | Deveria ser `templates/skills/` apos a renomeacao |
 | 7 | **4 extras incompletos** | Media | `devops-patterns`, `execution-pipeline`, `fintech-domain`, `microservices-navigator` so tem `references/`, sem SKILL.md |

@@ -245,7 +245,7 @@ install_core() {
 
     # 6. Commands
     cp "$SCRIPT_DIR/core/commands/"*.md "$CLAUDE_DIR/commands/" 2>/dev/null || true
-    print_done "Commands instalados (13 commands)"
+    print_done "Commands instalados (16 commands)"
 
     # 7. Skill templates (staging area — /init-engram will evaluate and prune)
     if [[ -d "$SCRIPT_DIR/templates/skills" ]]; then
@@ -573,8 +573,8 @@ O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposen
 ## Workflow Obrigatório
 
 ### Antes de Codificar
-1. **O que mudou recentemente**: \`python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json\`
-2. **Conhecimento relevante**: \`python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json\`
+1. **O que mudou recentemente**: \`.claude/brain/.venv/bin/python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json\`
+2. **Conhecimento relevante**: \`.claude/brain/.venv/bin/python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json\`
 3. **Prioridades**: consulte \`PRIORITY_MATRIX.md\` (único .md ativamente atualizado)
 4. Só leia os \`.md\` de knowledge se o recall não cobrir
 
@@ -982,12 +982,13 @@ verify_installation() {
     echo -e "  ${BOLD}Estrutura (metacircular):${NC}"
     echo -e "  ${GREEN}├── CLAUDE.md${NC}                        (customizado)"
     echo -e "  ${GREEN}├── .claude/${NC}"
+    echo -e "  ${GREEN}│   ├── brain/${NC}                       (cérebro: grafo + embeddings, recall, sleep)"
     echo -e "  ${GREEN}│   ├── dna/${NC}                          (DNA do sistema)"
     echo -e "  ${GREEN}│   ├── manifest.json${NC}                (registro de componentes)"
     echo -e "  ${GREEN}│   ├── settings.json${NC}                (permissões)"
     echo -e "  ${GREEN}│   ├── skills/${NC}                      (9 skills: genesis + evolution + 7 seeds)"
     echo -e "  ${GREEN}│   ├── agents/${NC}                      (3 agents: architect, domain-analyst, db-expert)"
-    echo -e "  ${GREEN}│   ├── commands/${NC}                    (13 commands)"
+    echo -e "  ${GREEN}│   ├── commands/${NC}                    (16 commands)"
     echo -e "  ${GREEN}│   └── knowledge/${NC}                   (6 knowledge files)"
     echo ""
 

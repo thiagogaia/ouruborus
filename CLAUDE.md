@@ -77,21 +77,21 @@ Todo conteúdo é armazenado in-graph (props.content). Não depende de .md files
 
 ```bash
 # Busca semântica — output JSON parseável
-python3 .claude/brain/recall.py "<pergunta>" --top 10 --format json
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py "<pergunta>" --top 10 --format json
 
 # Busca temporal — o que mudou recentemente
-python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json
 
 # Combinado — busca semântica filtrada por período
-python3 .claude/brain/recall.py "<pergunta>" --since 2026-02-01 --sort date --format json
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py "<pergunta>" --since 2026-02-01 --sort date --format json
 
 # Ver conexões semânticas de forma legível
-python3 .claude/brain/recall.py "<pergunta>"
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py "<pergunta>"
 ```
 
 ### Quando Consultar o Cérebro
 
-Use `python3 .claude/brain/recall.py` automaticamente quando:
+Use `.claude/brain/.venv/bin/python3 .claude/brain/recall.py` automaticamente quando:
 - **Qualquer tarefa nova**: buscar padrões, ADRs e experiências relacionadas
 - Pergunta sobre arquitetura: "como funciona X?", "por que Y foi feito assim?"
 - Pergunta sobre domínio: "o que é X?", "qual a regra de Y?"
@@ -124,19 +124,19 @@ O Claude DEVE invocar `domain-analyst` ou seguir `domain-expert` quando:
 
 ```bash
 # Busca semântica — retorna nós + conexões
-python3 .claude/brain/recall.py "autenticação" --format json
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py "autenticação" --format json
 
 # Filtrar por tipo
-python3 .claude/brain/recall.py "setup" --type ADR --top 5
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py "setup" --type ADR --top 5
 
 # O que mudou nos últimos 7 dias (substitui "O Que Mudou Recentemente" do antigo CURRENT_STATE.md)
-python3 .claude/brain/recall.py --recent 7d --type Commit --top 10
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py --recent 7d --type Commit --top 10
 
 # Busca temporal com query semântica
-python3 .claude/brain/recall.py "bug" --since 2026-02-01 --sort date --top 5
+.claude/brain/.venv/bin/python3 .claude/brain/recall.py "bug" --since 2026-02-01 --sort date --top 5
 
 # Ver saúde do cérebro
-python3 .claude/brain/cognitive.py health
+.claude/brain/.venv/bin/python3 .claude/brain/cognitive.py health
 ```
 
 ### O que as Conexões Semânticas Revelam

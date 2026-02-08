@@ -49,6 +49,9 @@ Only changes to `core/` are tracked here — the source of truth for all Engram 
 
 ## [Unreleased]
 
+### Added
+- `/domain` command promoted to core (was runtime-only) (`8717b83`)
+
 ## [3.0.0] - 2026-02-03
 
 ### Added
