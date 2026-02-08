@@ -175,7 +175,7 @@ fi
 
 Processar ADRs, conceitos de domínio, patterns e commits:
 ```bash
-python3 .claude/brain/populate.py all
+.claude/brain/.venv/bin/python3 .claude/brain/populate.py all
 ```
 
 Isso irá:
@@ -188,7 +188,7 @@ Isso irá:
 
 ### 5.3 Gerar Embeddings para Busca Semântica
 ```bash
-python3 .claude/brain/embeddings.py build
+.claude/brain/.venv/bin/python3 .claude/brain/embeddings.py build
 ```
 
 Isso irá:
@@ -199,14 +199,14 @@ Isso irá:
 
 ### 5.4 Verificar Saúde do Cérebro
 ```bash
-python3 .claude/brain/cognitive.py health
+.claude/brain/.venv/bin/python3 .claude/brain/cognitive.py health
 ```
 
 Se `status: healthy`, continuar. Se não, seguir recomendações.
 Verificar que `vector_backend: chromadb` — se mostrar `npz`, reinstalar deps:
 ```bash
 source .claude/brain/.venv/bin/activate && pip install chromadb pydantic-settings
-python3 .claude/brain/patch_chromadb.py
+.claude/brain/.venv/bin/python3 .claude/brain/patch_chromadb.py
 ```
 
 ### 5.5 Reportar ao Dev

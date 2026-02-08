@@ -11,9 +11,9 @@ O sistema evolui a si mesmo: gera skills sob demanda, versiona mudanças, aposen
 ## Workflow Obrigatório
 
 ### Antes de Codificar
-1. **O que mudou recentemente**: `python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json`
-2. **Conhecimento relevante**: `python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json`
-3. **Saúde do cérebro** (se necessário): `python3 .claude/brain/cognitive.py health`
+1. **O que mudou recentemente**: `.claude/brain/.venv/bin/python3 .claude/brain/recall.py --recent 7d --type Commit --top 10 --format json`
+2. **Conhecimento relevante**: `.claude/brain/.venv/bin/python3 .claude/brain/recall.py "<tema da tarefa>" --top 10 --format json`
+3. **Saúde do cérebro** (se necessário): `.claude/brain/.venv/bin/python3 .claude/brain/cognitive.py health`
 4. Só leia os `.md` de knowledge se o recall não cobrir
 
 O cérebro é a **fonte primária e única**. O recall retorna conteúdo completo (campo `content`) e suporta **busca temporal** (`--recent Nd`, `--since YYYY-MM-DD`, `--sort date`). Os `.md` de knowledge são mantidos em sincronia como fallback, para git diffs e leitura humana.

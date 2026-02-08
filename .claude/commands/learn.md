@@ -1,10 +1,12 @@
 Registrar conhecimento adquirido nesta sessão e evoluir o sistema.
 
+> **Python do brain**: Use `.claude/brain/.venv/bin/python3` para scripts do cérebro (recall, populate, sleep, cognitive, embeddings). Garante ChromaDB e sentence-transformers. Ex: `python3 .claude/brain/recall.py` → `.claude/brain/.venv/bin/python3 .claude/brain/recall.py`
+
 ## Fase 1: Coleta de Mudanças
 
 1. Execute `git diff --stat HEAD~5` (ou desde o último /learn) para ver o que mudou
 2. Execute `git log --oneline -10` para ver commits recentes
-3. Consulte o cérebro: `python3 .claude/brain/recall.py --recent 3d --type Commit --top 10 --format json`
+3. Consulte o cérebro: `.claude/brain/.venv/bin/python3 .claude/brain/recall.py --recent 3d --type Commit --top 10 --format json`
 
 ## Fase 2: Introspecção
 
@@ -22,7 +24,7 @@ O cérebro em `.claude/brain/` é a **fonte primária de conhecimento**. Todo ap
 ### 3.1 Processar Novos Commits + Diffs + AST Incremental
 
 ```bash
-python3 .claude/brain/populate.py refresh 20
+.claude/brain/.venv/bin/python3 .claude/brain/populate.py refresh 20
 ```
 
 O refresh agora inclui automaticamente:
@@ -101,7 +103,7 @@ brain.save()
 ### 4.1 Ciclo de Sono (Consolidação Semântica)
 
 ```bash
-python3 .claude/brain/sleep.py
+.claude/brain/.venv/bin/python3 .claude/brain/sleep.py
 ```
 
 Roda 8 fases de inteligência: connect, relate, themes, calibrate, promote, insights, gaps, decay.
@@ -110,12 +112,12 @@ Roda 8 fases de inteligência: connect, relate, themes, calibrate, promote, insi
 - **gaps**: encontra nós isolados e domínios sem Patterns
 - **decay**: aplica curva de esquecimento de Ebbinghaus
 
-Fase `dedup` disponível sob demanda (`python3 .claude/brain/sleep.py dedup`) mas fora do ciclo padrão (IDs determinísticos já previnem duplicatas).
+Fase `dedup` disponível sob demanda (`.claude/brain/.venv/bin/python3 .claude/brain/sleep.py dedup`) mas fora do ciclo padrão (IDs determinísticos já previnem duplicatas).
 
 ### 4.2 Verificar Saúde do Cérebro
 
 ```bash
-python3 .claude/brain/cognitive.py health
+.claude/brain/.venv/bin/python3 .claude/brain/cognitive.py health
 ```
 
 Se `health_score < 0.8`, seguir recomendações exibidas.
@@ -123,7 +125,7 @@ Se `health_score < 0.8`, seguir recomendações exibidas.
 ### 4.3 Atualizar Embeddings (opcional)
 
 ```bash
-python3 .claude/brain/embeddings.py build 2>/dev/null || echo "⚠️ Embeddings: instale sentence-transformers chromadb pydantic-settings"
+.claude/brain/.venv/bin/python3 .claude/brain/embeddings.py build 2>/dev/null || echo "⚠️ Embeddings: instale sentence-transformers chromadb pydantic-settings no venv"
 ```
 
 **Nota**: embeddings agora são gerados inline no `brain.add_memory()` quando `sentence-transformers` está instalado. O `embeddings.py build` é opcional — útil para rebuild em massa ou migração de npz para ChromaDB.

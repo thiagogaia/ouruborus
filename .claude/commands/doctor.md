@@ -13,7 +13,7 @@ Isso valida: estrutura, knowledge freshness, componentes, consistência.
 
 Verificar estado do cérebro organizacional (grafo + vector store):
 ```bash
-python3 .claude/brain/cognitive.py health
+.claude/brain/.venv/bin/python3 .claude/brain/cognitive.py health
 ```
 
 Verificar que:

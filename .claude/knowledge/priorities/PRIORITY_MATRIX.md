@@ -77,7 +77,7 @@
 | Template Angular | ✅ Concluído — angular-patterns.skill.tmpl | 2026-02-07 |
 | Template Ruby on Rails | ✅ Concluído — rails-patterns.skill.tmpl + detecção | 2026-02-07 |
 | CI/CD para validar schemas | ✅ Concluído — .github/workflows/validate.yml | 2026-02-07 |
-| AST Ingestion + Diff Summary | ✅ Concluído — ast_parser.py, diff_parser.py, 5 arquivos modificados, 118 Code nodes | 2026-02-07 |
+| AST Ingestion + Diff Summary | ✅ Concluído — ast_parser.py, diff_parser.py, 451 Code nodes, 97% diffs enriched, integrado em /init-engram e /learn | 2026-02-07 |
 
 ## Como Priorizar
 
